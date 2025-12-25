@@ -8,7 +8,7 @@ import {
   isAllowedTransition,
 } from '@/lib/orders/workflow';
 
-export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user || (session.user.role !== 'ADMIN' && session.user.role !== 'EDITOR')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -23,7 +23,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
     );
   }
 
-  const id = ctx.params.id;
+  const { id } = await params;
   const { carrier, trackingCode, markShipped, markDelivered, force } = parsed.data;
 
   const result = await prisma.$transaction(async (tx) => {

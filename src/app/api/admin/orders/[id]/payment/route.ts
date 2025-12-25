@@ -5,7 +5,7 @@ import { updatePaymentSchema } from '@/lib/validation/admin-orders';
 import { legacyPaymentStatusFromPaymentState } from '@/lib/orders/workflow';
 import { recalculateOrderFinancials } from '@/lib/orders/finance';
 
-export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user || (session.user.role !== 'ADMIN' && session.user.role !== 'EDITOR')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -20,7 +20,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
     );
   }
 
-  const id = ctx.params.id;
+  const { id } = await params;
   const { paymentState, transactionRef } = parsed.data;
 
   const result = await prisma.$transaction(async (tx) => {

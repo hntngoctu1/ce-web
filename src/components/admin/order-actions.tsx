@@ -22,35 +22,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-
-type OrderStatus =
-  | 'DRAFT'
-  | 'PENDING_CONFIRMATION'
-  | 'CONFIRMED'
-  | 'PACKING'
-  | 'SHIPPED'
-  | 'DELIVERED'
-  | 'CANCELED'
-  | 'RETURN_REQUESTED'
-  | 'RETURNED'
-  | 'FAILED';
-
-type PaymentState = 'UNPAID' | 'PAID' | 'REFUNDED' | 'PARTIAL';
-
-type FulfillmentStatus = 'UNFULFILLED' | 'PACKING' | 'SHIPPED' | 'DELIVERED' | 'RETURNED';
-
-const ORDER_STATUS_FLOW: Record<OrderStatus, OrderStatus[]> = {
-  DRAFT: ['PENDING_CONFIRMATION', 'CANCELED'],
-  PENDING_CONFIRMATION: ['CONFIRMED', 'CANCELED', 'FAILED'],
-  CONFIRMED: ['PACKING', 'CANCELED', 'FAILED'],
-  PACKING: ['SHIPPED', 'CANCELED', 'FAILED'],
-  SHIPPED: ['DELIVERED', 'RETURN_REQUESTED'],
-  DELIVERED: ['RETURN_REQUESTED'],
-  RETURN_REQUESTED: ['RETURNED'],
-  RETURNED: [],
-  CANCELED: [],
-  FAILED: [],
-};
+import { ORDER_STATUS_FLOW } from '@/lib/orders/workflow';
+import type { OrderStatus, PaymentState, FulfillmentStatus } from '@prisma/client';
 
 export function OrderActions({
   orderId,

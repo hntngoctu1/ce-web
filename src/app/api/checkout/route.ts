@@ -31,7 +31,7 @@ const checkoutSchema = z.object({
   billing: addressInputSchema.partial().optional(),
 
   notes: z.string().optional(),
-  paymentMethod: z.enum(['cod', 'bank_transfer']),
+  paymentMethod: z.enum(['COD', 'BANK_TRANSFER']),
   items: z.array(orderItemSchema).min(1),
   subtotal: z.number().min(0),
   total: z.number().min(0),

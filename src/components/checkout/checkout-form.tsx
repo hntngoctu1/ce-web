@@ -53,7 +53,7 @@ type CheckoutFormData = {
   billingProvince?: string;
 
   notes?: string;
-  paymentMethod: 'cod' | 'bank_transfer';
+  paymentMethod: 'COD' | 'BANK_TRANSFER';
 };
 
 interface CheckoutFormProps {
@@ -150,7 +150,7 @@ export function CheckoutForm({ locale = 'en', user }: CheckoutFormProps) {
             }),
 
           notes: z.string().optional(),
-          paymentMethod: z.enum(['cod', 'bank_transfer']),
+          paymentMethod: z.enum(['COD', 'BANK_TRANSFER']),
         })
         .superRefine((val, ctx) => {
           if (val.customerType === 'BUSINESS') {
@@ -266,7 +266,7 @@ export function CheckoutForm({ locale = 'en', user }: CheckoutFormProps) {
         billingCity: defaultBilling?.city || '',
         billingProvince: defaultBilling?.province || '',
 
-        paymentMethod: 'cod',
+        paymentMethod: 'COD',
       } as CheckoutFormData;
     })(),
   });
@@ -768,19 +768,19 @@ export function CheckoutForm({ locale = 'en', user }: CheckoutFormProps) {
             </CardHeader>
             <CardContent>
               <RadioGroup
-                defaultValue="cod"
+                defaultValue="COD"
                 onValueChange={(val) => setValue('paymentMethod', val as any)}
                 disabled={isLoading}
               >
                 <div className="flex items-center space-x-2 rounded-md border p-4">
-                  <RadioGroupItem value="cod" id="cod" />
-                  <Label htmlFor="cod" className="flex-1 cursor-pointer">
+                  <RadioGroupItem value="COD" id="COD" />
+                  <Label htmlFor="COD" className="flex-1 cursor-pointer">
                     {t('paymentCod')}
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2 rounded-md border p-4">
-                  <RadioGroupItem value="bank_transfer" id="bank_transfer" />
-                  <Label htmlFor="bank_transfer" className="flex-1 cursor-pointer">
+                  <RadioGroupItem value="BANK_TRANSFER" id="BANK_TRANSFER" />
+                  <Label htmlFor="BANK_TRANSFER" className="flex-1 cursor-pointer">
                     {t('paymentBankTransfer')}
                   </Label>
                 </div>

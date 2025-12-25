@@ -176,12 +176,29 @@ export function movementPlanFromLine(params: {
   qty: Prisma.Decimal;
   createdBy?: string | null;
 }) {
-  const qtyChangeOnHand =
-    params.movementType === 'ISSUE' || params.movementType === 'DEDUCT'
-      ? params.qty.neg()
-      : params.movementType === 'ADJUSTMENT'
-        ? params.qty
-        : params.qty;
+  // Determine quantity change based on movement type:
+  // - ISSUE/DEDUCT: Always subtract (negate positive qty)
+  // - GRN/RESTOCK: Always add (keep positive qty)
+  // - ADJUSTMENT: Use qty as-is (can be positive or negative)
+  let qtyChangeOnHand: Prisma.Decimal;
+
+  switch (params.movementType) {
+    case 'ISSUE':
+    case 'DEDUCT':
+      // These always reduce stock - negate to ensure subtraction
+      qtyChangeOnHand = params.qty.abs().neg();
+      break;
+    case 'ADJUSTMENT':
+      // Adjustments can be positive or negative, use as provided
+      qtyChangeOnHand = params.qty;
+      break;
+    case 'GRN':
+    case 'RESTOCK':
+    default:
+      // These always add stock - ensure positive
+      qtyChangeOnHand = params.qty.abs();
+      break;
+  }
 
   return {
     documentId: params.documentId,

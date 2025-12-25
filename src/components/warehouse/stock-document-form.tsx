@@ -119,7 +119,13 @@ export function StockDocumentForm({ docType }: { docType: DocType }) {
 
   function updateLineQty(index: number, qty: number) {
     const updated = [...lines];
-    updated[index].qty = Math.max(1, qty);
+    // For ADJUSTMENT type, allow any non-zero value (including negative)
+    // For other types, enforce minimum of 1
+    if (docType === 'ADJUSTMENT') {
+      updated[index].qty = qty !== 0 ? qty : 1;
+    } else {
+      updated[index].qty = Math.max(1, qty);
+    }
     setLines(updated);
   }
 

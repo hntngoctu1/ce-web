@@ -7,8 +7,10 @@ import {
   legacyStatusFromOrderStatus,
   fulfillmentFromOrderStatus,
 } from '@/lib/orders/workflow';
+import { executeOrderStockAction, ensureDefaultWarehouse } from '@/lib/warehouse';
+import type { OrderStatus } from '@prisma/client';
 
-export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user || (session.user.role !== 'ADMIN' && session.user.role !== 'EDITOR')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -24,7 +26,7 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
   }
 
   const { newStatus, noteInternal, noteCustomer, force, cancelReason } = parsed.data;
-  const id = ctx.params.id;
+  const { id } = await params;
 
   const result = await prisma.$transaction(async (tx) => {
     const existing = await tx.order.findUnique({
@@ -86,8 +88,43 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
       },
     });
 
-    return { type: 'ok' as const, from, to };
+    return { type: 'ok' as const, from, to, orderId: id };
   });
+
+  // Auto stock operations based on status transition (outside transaction for better error handling)
+  if (result.type === 'ok' && result.from !== result.to) {
+    try {
+      const order = await prisma.order.findUnique({
+        where: { id: result.orderId },
+        include: { items: true },
+      });
+
+      if (order && order.items.length > 0) {
+        const defaultWarehouse = await ensureDefaultWarehouse(prisma);
+        const stockItems = order.items.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          productName: item.productName,
+        }));
+
+        // Determine stock action based on status transition
+        const stockAction = getStockActionForTransition(result.from as OrderStatus, result.to as OrderStatus);
+
+        if (stockAction) {
+          await executeOrderStockAction(prisma, {
+            orderId: result.orderId,
+            action: stockAction,
+            items: stockItems,
+            warehouseId: defaultWarehouse.id,
+            createdBy: session.user.id,
+          });
+        }
+      }
+    } catch (stockError) {
+      // Log but don't fail the status update - stock can be adjusted manually
+      console.error('Auto stock operation failed:', stockError);
+    }
+  }
 
   if (result.type === 'not_found') {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -111,4 +148,34 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
   }
 
   return NextResponse.json({ ok: true, changed: true, from: result.from, to: result.to });
+}
+
+/**
+ * Determine which stock action to take based on order status transition
+ */
+function getStockActionForTransition(
+  from: OrderStatus,
+  to: OrderStatus
+): 'RESERVE' | 'DEDUCT' | 'RELEASE' | 'RESTOCK' | null {
+  // CONFIRMED: Reserve stock (ready to ship)
+  if (to === 'CONFIRMED' && from !== 'CONFIRMED') {
+    return 'RESERVE';
+  }
+
+  // SHIPPED: Deduct stock (items left warehouse)
+  if (to === 'SHIPPED' && from !== 'SHIPPED') {
+    return 'DEDUCT';
+  }
+
+  // CANCELED/FAILED: Release reserved stock (if was in CONFIRMED/PACKING state)
+  if ((to === 'CANCELED' || to === 'FAILED') && (from === 'CONFIRMED' || from === 'PACKING')) {
+    return 'RELEASE';
+  }
+
+  // RETURNED: Restock items (items came back after being shipped)
+  if (to === 'RETURNED' && (from === 'SHIPPED' || from === 'DELIVERED' || from === 'RETURN_REQUESTED')) {
+    return 'RESTOCK';
+  }
+
+  return null;
 }

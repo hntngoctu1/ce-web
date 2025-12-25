@@ -7,6 +7,22 @@ import {
   legacyStatusFromOrderStatus,
   fulfillmentFromOrderStatus,
 } from '@/lib/orders/workflow';
+import { executeOrderStockAction, ensureDefaultWarehouse } from '@/lib/warehouse';
+import type { OrderStatus } from '@prisma/client';
+
+/**
+ * Determine which stock action to take based on order status transition
+ */
+function getStockActionForTransition(
+  from: OrderStatus,
+  to: OrderStatus
+): 'RESERVE' | 'DEDUCT' | 'RELEASE' | 'RESTOCK' | null {
+  if (to === 'CONFIRMED' && from !== 'CONFIRMED') return 'RESERVE';
+  if (to === 'SHIPPED' && from !== 'SHIPPED') return 'DEDUCT';
+  if ((to === 'CANCELED' || to === 'FAILED') && (from === 'CONFIRMED' || from === 'PACKING')) return 'RELEASE';
+  if (to === 'RETURNED' && (from === 'SHIPPED' || from === 'DELIVERED' || from === 'RETURN_REQUESTED')) return 'RESTOCK';
+  return null;
+}
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -36,6 +52,7 @@ export async function POST(req: NextRequest) {
 
     let updated = 0;
     const skipped: Array<{ id: string; reason: string }> = [];
+    const updatedOrders: Array<{ id: string; from: OrderStatus; to: OrderStatus }> = [];
 
     for (const o of orders) {
       if (o.orderStatus === newStatus) {
@@ -73,10 +90,49 @@ export async function POST(req: NextRequest) {
         },
       });
       updated += 1;
+      updatedOrders.push({ id: o.id, from: o.orderStatus, to: newStatus });
     }
 
-    return { updated, missing, skipped };
+    return { updated, missing, skipped, updatedOrders };
   });
 
-  return NextResponse.json({ ok: true, ...result });
+  // Auto stock operations for updated orders (outside transaction)
+  if (result.updatedOrders.length > 0) {
+    try {
+      const defaultWarehouse = await ensureDefaultWarehouse(prisma);
+
+      for (const { id: orderId, from, to } of result.updatedOrders) {
+        const stockAction = getStockActionForTransition(from, to);
+        if (!stockAction) continue;
+
+        const order = await prisma.order.findUnique({
+          where: { id: orderId },
+          include: { items: true },
+        });
+
+        if (order && order.items.length > 0) {
+          await executeOrderStockAction(prisma, {
+            orderId,
+            action: stockAction,
+            items: order.items.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+              productName: item.productName,
+            })),
+            warehouseId: defaultWarehouse.id,
+            createdBy: session.user.id,
+          });
+        }
+      }
+    } catch (stockError) {
+      console.error('Bulk auto stock operation failed:', stockError);
+    }
+  }
+
+  return NextResponse.json({
+    ok: true,
+    updated: result.updated,
+    missing: result.missing,
+    skipped: result.skipped,
+  });
 }

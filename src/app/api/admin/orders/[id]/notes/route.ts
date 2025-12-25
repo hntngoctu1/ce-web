@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { addNoteSchema } from '@/lib/validation/admin-orders';
 
-export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user || (session.user.role !== 'ADMIN' && session.user.role !== 'EDITOR')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
     );
   }
 
-  const id = ctx.params.id;
+  const { id } = await params;
   const { noteInternal, noteCustomer } = parsed.data;
 
   if (!noteInternal && !noteCustomer) {

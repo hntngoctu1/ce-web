@@ -13,13 +13,13 @@ const createPaymentSchema = z.object({
   note: z.string().max(500).optional(),
 });
 
-export async function GET(_req: NextRequest, ctx: { params: { id: string } }) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user || (session.user.role !== 'ADMIN' && session.user.role !== 'EDITOR')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const id = ctx.params.id;
+  const { id } = await params;
   const payments = await prisma.payment.findMany({
     where: { orderId: id },
     orderBy: [{ paymentDate: 'desc' }, { createdAt: 'desc' }],
@@ -37,7 +37,7 @@ export async function GET(_req: NextRequest, ctx: { params: { id: string } }) {
   return NextResponse.json({ payments });
 }
 
-export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
   if (!session?.user || (session.user.role !== 'ADMIN' && session.user.role !== 'EDITOR')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, ctx: { params: { id: string } }) {
     );
   }
 
-  const id = ctx.params.id;
+  const { id } = await params;
   const { amount, paymentMethod, note } = parsed.data;
   const paymentDate = parsed.data.paymentDate ? new Date(parsed.data.paymentDate) : new Date();
 

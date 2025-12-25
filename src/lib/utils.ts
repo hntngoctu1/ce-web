@@ -52,6 +52,11 @@ export function truncate(text: string, length: number): string {
   return text.slice(0, length).trim() + '...';
 }
 
+/**
+ * @deprecated Use allocateOrderCode from '@/lib/orders/order-code' instead.
+ * This generates a random order number, while allocateOrderCode provides
+ * sequential, human-friendly codes (CE-YYYY-000123).
+ */
 export function generateOrderNumber(): string {
   const timestamp = Date.now().toString(36).toUpperCase();
   const random = Math.random().toString(36).substring(2, 6).toUpperCase();
