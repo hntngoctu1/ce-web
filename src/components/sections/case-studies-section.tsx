@@ -23,7 +23,7 @@ const caseStudies = featuredUseCases.slice(0, 6).map((uc) => ({
   descriptionEn: uc.solutionEn.slice(0, 120) + '...',
   descriptionVi: uc.solutionVi.slice(0, 120) + '...',
   image: uc.image,
-  href: '/blog?category=case-studies',
+  href: '/case-studies',
   stats: uc.statsEn,
   statsVi: uc.statsVi,
   industryEn: uc.industryTagEn,
@@ -45,7 +45,7 @@ export function CaseStudiesSection({ className }: CaseStudiesSectionProps) {
             <p className="max-w-2xl text-muted-foreground">{tHome('caseStudiesSubtitle')}</p>
           </div>
           <Button variant="ce-outline" asChild>
-            <Link href="/blog?category=case-studies">
+            <Link href="/case-studies">
               {tCommon('viewAll')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

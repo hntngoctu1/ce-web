@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Tổng Quan - Creative Engineering Website</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary: #676E9F;
+      --primary-dark: #565D85;
+      --teal: #5BA3A0;
+      --coral: #E07B67;
+      --gold: #D4A84B;
+      --sage: #7BA387;
+      --text: #1a1a2e;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --bg-light: #f9fafb;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: white;
+      font-size: 11pt;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+    
+    /* Cover Page */
+    .cover {
+      page-break-after: always;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 60px;
+      margin: -40px -40px 40px -40px;
+    }
+    
+    .cover-logo {
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    
+    .cover h1 {
+      font-size: 36pt;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+    
+    .cover h2 {
+      font-size: 18pt;
+      font-weight: 400;
+      opacity: 0.9;
+      margin-bottom: 40px;
+    }
+    
+    .cover-meta {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .cover-meta p {
+      font-size: 12pt;
+      opacity: 0.8;
+      margin: 8px 0;
+    }
+    
+    /* Section Headers */
+    h1 {
+      font-size: 24pt;
+      color: var(--primary);
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--primary);
+    }
+    
+    h2 {
+      font-size: 16pt;
+      color: var(--primary-dark);
+      margin: 30px 0 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    h2::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: var(--teal);
+      border-radius: 2px;
+    }
+    
+    h3 {
+      font-size: 13pt;
+      color: var(--text);
+      margin: 20px 0 10px 0;
+    }
+    
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 10pt;
+    }
+    
+    th {
+      background: var(--primary);
+      color: white;
+      padding: 12px 15px;
+      text-align: left;
+      font-weight: 600;
+    }
+    
+    td {
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    tr:nth-child(even) {
+      background: var(--bg-light);
+    }
+    
+    /* Info Box */
+    .info-box {
+      background: var(--bg-light);
+      border-left: 4px solid var(--teal);
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .info-box.warning {
+      border-left-color: var(--gold);
+      background: #fffbeb;
+    }
+    
+    .info-box.success {
+      border-left-color: var(--sage);
+      background: #f0fdf4;
+    }
+    
+    /* Flow Diagram */
+    .flow {
+      background: var(--bg-light);
+      padding: 20px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 9pt;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 28pt;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 9pt;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Feature List */
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .feature-list li {
+      padding: 8px 0 8px 28px;
+      position: relative;
+    }
+    
+    .feature-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 700;
+    }
+    
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 9pt;
+      font-weight: 600;
+    }
+    
+    .badge-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+    
+    .badge-primary {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+    
+    /* Two Column */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    
+    /* Page Break */
+    .page-break {
+      page-break-after: always;
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 9pt;
+    }
+    
+    /* Print Styles */
+    @media print {
+      .container {
+        padding: 20px;
+      }
+      
+      .cover {
+        margin: -20px -20px 20px -20px;
+      }
+      
+      h1, h2 {
+        page-break-after: avoid;
+      }
+      
+      table, .info-box, .flow {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Cover Page -->
+    <div class="cover">
+      <div class="cover-logo">CE</div>
+      <h1>BÁO CÁO TỔNG QUAN</h1>
+      <h2>Creative Engineering Website v1.0.0</h2>
+      <p style="max-width: 500px; opacity: 0.8; line-height: 1.8;">
+        Tài liệu mô tả đầy đủ các tính năng, luồng hoạt động và kiến trúc hệ thống của website Creative Engineering
+      </p>
+      <div class="cover-meta">
+        <p><strong>Ngày tạo:</strong> 26/12/2024</p>
+        <p><strong>Phiên bản:</strong> 1.0.0</p>
+        <p><strong>Framework:</strong> Next.js 14 + Prisma + NextAuth</p>
+      </div>
+    </div>
+
+    <!-- Table of Contents -->
+    <h1>📑 MỤC LỤC</h1>
+    <ol style="font-size: 11pt; line-height: 2;">
+      <li><a href="#overview">Tổng Quan Hệ Thống</a></li>
+      <li><a href="#client">Tính Năng Client-Side</a></li>
+      <li><a href="#admin">Tính Năng Admin Panel</a></li>
+      <li><a href="#api">API Routes</a></li>
+      <li><a href="#database">Database Models</a></li>
+      <li><a href="#workflows">Luồng Hoạt Động Chính</a></li>
+      <li><a href="#statistics">Thống Kê & Trạng Thái</a></li>
+    </ol>
+
+    <div class="page-break"></div>
+
+    <!-- Section 1: Overview -->
+    <h1 id="overview">1. TỔNG QUAN HỆ THỐNG</h1>
+    
+    <h2>🛠️ Công Nghệ Sử Dụng</h2>
+    <table>
+      <tr><th>Thành phần</th><th>Công nghệ</th><th>Phiên bản</th></tr>
+      <tr><td>Framework</td><td>Next.js (App Router)</td><td>14.x</td></tr>
+      <tr><td>Database</td><td>SQLite + Prisma ORM</td><td>5.x</td></tr>
+      <tr><td>Authentication</td><td>NextAuth.js</td><td>5.x</td></tr>
+      <tr><td>Styling</td><td>Tailwind CSS + shadcn/ui</td><td>3.x</td></tr>
+      <tr><td>Internationalization</td><td>next-intl</td><td>3.x</td></tr>
+      <tr><td>State Management</td><td>React Context + Zustand</td><td>-</td></tr>
+    </table>
+
+    <h2>👥 Phân Quyền Người Dùng</h2>
+    <table>
+      <tr><th>Role</th><th>Quyền Hạn</th></tr>
+      <tr><td><span class="badge badge-primary">ADMIN</span></td><td>Toàn quyền quản trị (products, orders, blog, warehouse, users)</td></tr>
+      <tr><td><span class="badge badge-primary">EDITOR</span></td><td>Quản lý nội dung (blog, products)</td></tr>
+      <tr><td><span class="badge badge-success">CUSTOMER</span></td><td>Mua hàng, xem đơn, quản lý profile</td></tr>
+      <tr><td>Guest</td><td>Xem sản phẩm, đọc blog, liên hệ</td></tr>
+    </table>
+
+    <h2>🌐 Đa Ngôn Ngữ</h2>
+    <div class="info-box">
+      Website hỗ trợ <strong>5 ngôn ngữ</strong>: Tiếng Anh (EN), Tiếng Việt (VI), Tiếng Trung (ZH), Tiếng Hàn (KO), Tiếng Nhật (JA)
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Section 2: Client Features -->
+    <h1 id="client">2. TÍNH NĂNG CLIENT-SIDE</h1>
+
+    <h2>🏠 Trang Chủ (Homepage)</h2>
+    <table>
+      <tr><th>Component</th><th>Mô tả</th></tr>
+      <tr><td>Hero Slideshow</td><td>Carousel tự động với các slides giới thiệu chính</td></tr>
+      <tr><td>Case Studies Section</td><td>6 case studies nổi bật từ 39 dự án thực tế</td></tr>
+      <tr><td>Industries Showcase</td><td>13 ngành hàng với carousel tương tác</td></tr>
+      <tr><td>Featured Products</td><td>Sản phẩm nổi bật từ database</td></tr>
+      <tr><td>Partners Section</td><td>Logo các đối tác chiến lược</td></tr>
+      <tr><td>Contact Section</td><td>Form liên hệ nhanh</td></tr>
+    </table>
+
+    <h2>🛍️ Products (Sản Phẩm)</h2>
+    <div class="two-col">
+      <div>
+        <h3>Product List Page (PLP)</h3>
+        <ul class="feature-list">
+          <li>Filter theo ngành, nhóm sản phẩm</li>
+          <li>Search theo tên, SKU</li>
+          <li>Sort (giá, tên, mới nhất)</li>
+          <li>Grid/List view toggle</li>
+          <li>Quick filters</li>
+          <li>Pagination</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Product Detail Page (PDP)</h3>
+        <ul class="feature-list">
+          <li>Product Gallery với zoom</li>
+          <li>Key Facts badges</li>
+          <li>Specs Table chi tiết</li>
+          <li>Tabs (Description, Specs, Documents)</li>
+          <li>Purchase Panel (Add to Cart)</li>
+          <li>Sticky Quote Form</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>🏭 Industries (13 Ngành Hàng)</h2>
+    <table>
+      <tr><th>#</th><th>Ngành (EN)</th><th>Ngành (VI)</th></tr>
+      <tr><td>1</td><td>Industrial Tapes</td><td>Băng Keo Công Nghiệp</td></tr>
+      <tr><td>2</td><td>Virgin Silicone Rubber</td><td>Cao Su Silicone Nguyên Chất</td></tr>
+      <tr><td>3</td><td>Lubricants</td><td>Chất Bôi Trơn</td></tr>
+      <tr><td>4</td><td>Metalworking & Cleaning</td><td>Gia Công Kim Loại & Vệ Sinh</td></tr>
+      <tr><td>5</td><td>Electronic Coatings</td><td>Chất Phủ Điện Tử</td></tr>
+      <tr><td>6</td><td>Sandpaper & Abrasives</td><td>Giấy Nhám & Mài</td></tr>
+      <tr><td>7</td><td>Nukote Coatings</td><td>Chất Phủ Nukote</td></tr>
+      <tr><td>8</td><td>Industrial Adhesives</td><td>Keo Dán Công Nghiệp</td></tr>
+      <tr><td>9</td><td>Welding Machines</td><td>Máy Hàn</td></tr>
+      <tr><td>10</td><td>Industrial Printers</td><td>Máy In Công Nghiệp</td></tr>
+      <tr><td>11</td><td>Robotic Dosing</td><td>Định Lượng Robot</td></tr>
+      <tr><td>12</td><td>Fluid Transmission</td><td>Truyền Động Chất Lỏng</td></tr>
+      <tr><td>13</td><td>Thermal Materials</td><td>Vật Liệu Dẫn Nhiệt</td></tr>
+    </table>
+
+    <h2>📚 Case Studies</h2>
+    <div class="info-box success">
+      <strong>39 Case Studies</strong> chi tiết với Challenge, Solution, Results và Testimonial cho mỗi ngành hàng
+    </div>
+    <ul class="feature-list">
+      <li>Hero Section với thống kê ấn tượng</li>
+      <li>3 Featured Projects nổi bật</li>
+      <li>Filter theo ngành hàng</li>
+      <li>Search theo keyword</li>
+      <li>Expandable case cards với đầy đủ thông tin</li>
+    </ul>
+
+    <h2>🛒 Shopping Cart & Checkout</h2>
+    <div class="flow">
+Browse Products → Add to Cart → Cart Sheet → Checkout Form → Order Confirmation
+                                                    ↓
+                                          Payment Methods:
+                                          • COD (Cash on Delivery)
+                                          • Bank Transfer
+                                                    ↓
+                                          Order Code: CE-2024-XXXXXX</div>
+
+    <div class="page-break"></div>
+
+    <!-- Section 3: Admin Features -->
+    <h1 id="admin">3. TÍNH NĂNG ADMIN PANEL</h1>
+
+    <h2>📦 Order Management</h2>
+    <table>
+      <tr><th>Tính năng</th><th>Mô tả</th></tr>
+      <tr><td>Order List</td><td>Danh sách đơn hàng với Filter + Search + Pagination</td></tr>
+      <tr><td>Bulk Actions</td><td>Update status hàng loạt cho nhiều đơn</td></tr>
+      <tr><td>Order Detail</td><td>Chi tiết đơn hàng, items, history</td></tr>
+      <tr><td>Status Management</td><td>10 trạng thái với workflow tự động</td></tr>
+      <tr><td>Payment Tracking</td><td>Theo dõi và ghi nhận thanh toán</td></tr>
+      <tr><td>Shipping Updates</td><td>Cập nhật tracking info</td></tr>
+    </table>
+
+    <h3>Order Status Flow</h3>
+    <div class="flow">
+DRAFT → PENDING_CONFIRMATION → CONFIRMED → PACKING → SHIPPED → DELIVERED
+              ↓                    ↓          ↓         ↓
+          CANCELED              FAILED     FAILED   RETURN_REQUESTED
+                                                          ↓
+                                                      RETURNED</div>
+
+    <h3>Auto Stock Operations</h3>
+    <table>
+      <tr><th>Transition</th><th>Stock Action</th><th>Mô tả</th></tr>
+      <tr><td>→ CONFIRMED</td><td>RESERVE</td><td>Giữ hàng trong kho</td></tr>
+      <tr><td>→ SHIPPED</td><td>DEDUCT</td><td>Trừ hàng khỏi kho</td></tr>
+      <tr><td>→ CANCELED/FAILED</td><td>RELEASE</td><td>Hủy giữ hàng</td></tr>
+      <tr><td>→ RETURNED</td><td>RESTOCK</td><td>Nhập lại hàng vào kho</td></tr>
+    </table>
+
+    <h2>📝 Blog CMS</h2>
+    <ul class="feature-list">
+      <li>Rich Text Editor (TipTap) với formatting đầy đủ</li>
+      <li>Media Library - Upload và quản lý hình ảnh</li>
+      <li>AI Content Tools - Tạo nội dung với AI</li>
+      <li>Scheduling - Hẹn giờ đăng bài tự động</li>
+      <li>Revisions - Lịch sử chỉnh sửa</li>
+      <li>Bulk Actions - Archive, Delete nhiều bài</li>
+      <li>Categories: News, Insights, Case Studies, Tutorials</li>
+    </ul>
+
+    <h2>🏪 Warehouse & Inventory</h2>
+    <div class="two-col">
+      <div>
+        <h3>Stock Documents</h3>
+        <table>
+          <tr><th>Loại</th><th>Mô tả</th></tr>
+          <tr><td>GRN</td><td>Goods Receipt Note - Nhập kho</td></tr>
+          <tr><td>ISSUE</td><td>Xuất kho</td></tr>
+          <tr><td>ADJUSTMENT</td><td>Điều chỉnh (+/-)</td></tr>
+          <tr><td>TRANSFER</td><td>Chuyển kho</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Inventory Features</h3>
+        <ul class="feature-list">
+          <li>Inventory List với filter</li>
+          <li>Low Stock alerts</li>
+          <li>Quick Adjust số lượng</li>
+          <li>Reorder Report</li>
+          <li>CSV Export</li>
+          <li>Audit Log</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>📊 Revenue & Reports</h2>
+    <table>
+      <tr><th>Report</th><th>Mô tả</th></tr>
+      <tr><td>Revenue Summary</td><td>Tổng doanh thu, orders, avg order value</td></tr>
+      <tr><td>Revenue Chart</td><td>Line chart theo thời gian</td></tr>
+      <tr><td>Status Donut</td><td>Biểu đồ trạng thái đơn hàng</td></tr>
+      <tr><td>Top Products</td><td>Sản phẩm bán chạy nhất</td></tr>
+      <tr><td>Receivables</td><td>Công nợ khách hàng</td></tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- Section 4: API Routes -->
+    <h1 id="api">4. API ROUTES</h1>
+
+    <h2>🌐 Public APIs</h2>
+    <table>
+      <tr><th>Endpoint</th><th>Method</th><th>Mô tả</th></tr>
+      <tr><td>/api/products</td><td>GET</td><td>Lấy danh sách sản phẩm</td></tr>
+      <tr><td>/api/products/[slug]</td><td>GET</td><td>Chi tiết sản phẩm</td></tr>
+      <tr><td>/api/blog/posts</td><td>GET</td><td>Lấy blog posts</td></tr>
+      <tr><td>/api/blog/categories</td><td>GET</td><td>Blog categories</td></tr>
+      <tr><td>/api/checkout</td><td>POST</td><td>Tạo đơn hàng</td></tr>
+      <tr><td>/api/contact</td><td>POST</td><td>Gửi liên hệ</td></tr>
+    </table>
+
+    <h2>🔐 Admin APIs</h2>
+    <table>
+      <tr><th>Endpoint</th><th>Method</th><th>Mô tả</th></tr>
+      <tr><td>/api/admin/orders</td><td>GET, POST</td><td>Quản lý đơn hàng</td></tr>
+      <tr><td>/api/admin/orders/[id]/status</td><td>PATCH</td><td>Cập nhật trạng thái</td></tr>
+      <tr><td>/api/admin/orders/[id]/payment</td><td>PATCH</td><td>Cập nhật thanh toán</td></tr>
+      <tr><td>/api/admin/orders/bulk/status</td><td>PATCH</td><td>Bulk update status</td></tr>
+      <tr><td>/api/admin/products</td><td>GET, POST</td><td>Quản lý sản phẩm</td></tr>
+      <tr><td>/api/admin/blog</td><td>GET, POST</td><td>Quản lý blog</td></tr>
+      <tr><td>/api/inventory</td><td>GET</td><td>Inventory list</td></tr>
+      <tr><td>/api/warehouse/docs</td><td>GET, POST</td><td>Stock documents</td></tr>
+    </table>
+
+    <h2>👤 Customer APIs</h2>
+    <table>
+      <tr><th>Endpoint</th><th>Method</th><th>Mô tả</th></tr>
+      <tr><td>/api/customer/profile</td><td>GET, PATCH</td><td>Profile management</td></tr>
+      <tr><td>/api/customer/addresses</td><td>GET, POST</td><td>Address book</td></tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- Section 5: Database Models -->
+    <h1 id="database">5. DATABASE MODELS</h1>
+
+    <div class="info-box">
+      Hệ thống sử dụng <strong>39 database models</strong> được quản lý bởi Prisma ORM
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>Core Models</h3>
+        <table>
+          <tr><th>Model</th><th>Mô tả</th></tr>
+          <tr><td>User</td><td>Người dùng</td></tr>
+          <tr><td>CustomerProfile</td><td>Profile khách hàng</td></tr>
+          <tr><td>CustomerAddress</td><td>Địa chỉ giao hàng</td></tr>
+        </table>
+
+        <h3>Product Models</h3>
+        <table>
+          <tr><th>Model</th><th>Mô tả</th></tr>
+          <tr><td>Product</td><td>Sản phẩm</td></tr>
+          <tr><td>ProductGroup</td><td>Nhóm sản phẩm</td></tr>
+          <tr><td>ProductImage</td><td>Hình ảnh</td></tr>
+          <tr><td>ProductSpec</td><td>Thông số kỹ thuật</td></tr>
+          <tr><td>IndustryCategory</td><td>Ngành hàng</td></tr>
+        </table>
+
+        <h3>Order Models</h3>
+        <table>
+          <tr><th>Model</th><th>Mô tả</th></tr>
+          <tr><td>Order</td><td>Đơn hàng</td></tr>
+          <tr><td>OrderItem</td><td>Chi tiết đơn</td></tr>
+          <tr><td>OrderStatusHistory</td><td>Lịch sử trạng thái</td></tr>
+          <tr><td>OrderCounter</td><td>Auto-increment mã đơn</td></tr>
+          <tr><td>Payment</td><td>Thanh toán</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Inventory Models</h3>
+        <table>
+          <tr><th>Model</th><th>Mô tả</th></tr>
+          <tr><td>Warehouse</td><td>Kho hàng</td></tr>
+          <tr><td>WarehouseLocation</td><td>Vị trí trong kho</td></tr>
+          <tr><td>InventoryItem</td><td>Tồn kho</td></tr>
+          <tr><td>StockDocument</td><td>Chứng từ kho</td></tr>
+          <tr><td>StockMovement</td><td>Movement history</td></tr>
+          <tr><td>InventoryAuditLog</td><td>Audit log</td></tr>
+        </table>
+
+        <h3>Content Models</h3>
+        <table>
+          <tr><th>Model</th><th>Mô tả</th></tr>
+          <tr><td>BlogPost</td><td>Bài viết</td></tr>
+          <tr><td>BlogCategory</td><td>Danh mục blog</td></tr>
+          <tr><td>BlogTag</td><td>Tags</td></tr>
+          <tr><td>BlogPostRevision</td><td>Lịch sử chỉnh sửa</td></tr>
+          <tr><td>MediaAsset</td><td>Media files</td></tr>
+          <tr><td>AiContentJob</td><td>AI content jobs</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Section 6: Workflows -->
+    <h1 id="workflows">6. LUỒNG HOẠT ĐỘNG CHÍNH</h1>
+
+    <h2>🛒 Customer Purchase Flow</h2>
+    <div class="flow">
+[Guest/Customer]
+      │
+      ▼
+ Browse Products ──→ Add to Cart ──→ Checkout ──→ Order Created
+      │                                              │
+      ▼                                              ▼
+ View Product Details                     [Order: PENDING_CONFIRMATION]
+      │                                              │
+      ▼                                              ▼
+ Contact/Quote Request                    [Admin Reviews & Confirms]
+                                                     │
+                                                     ▼
+                                         [Order: CONFIRMED] → Stock RESERVED
+                                                     │
+                                                     ▼
+                                         [Order: PACKING]
+                                                     │
+                                                     ▼
+                                         [Order: SHIPPED] → Stock DEDUCTED
+                                                     │
+                                                     ▼
+                                         [Order: DELIVERED] ✓</div>
+
+    <h2>📦 Inventory Management Flow</h2>
+    <div class="flow">
+[Stock Document Created]
+        │
+        ▼
+   [DRAFT Status]
+        │
+        ▼
+   [Review Lines - Add Products & Quantities]
+        │
+        ▼
+   [POST Document]
+        │
+        ▼
+   [Stock Movements Applied to Inventory]
+        │
+        ▼
+   [Inventory Updated] → [Audit Log Created]</div>
+
+    <h2>📝 Blog Publishing Flow</h2>
+    <div class="flow">
+[Create Post]
+      │
+      ▼
+ [DRAFT Status]
+      │
+      ├──→ [Edit & Save Revisions]
+      │
+      ├──→ [Schedule for Later] ──→ [SCHEDULED] ──→ [Auto PUBLISHED at time]
+      │
+      └──→ [Publish Now] ──→ [PUBLISHED] ✓</div>
+
+    <div class="page-break"></div>
+
+    <!-- Section 7: Statistics -->
+    <h1 id="statistics">7. THỐNG KÊ & TRẠNG THÁI</h1>
+
+    <h2>📈 Thống Kê Hệ Thống</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">20+</div>
+        <div class="stat-label">Client Pages</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">25+</div>
+        <div class="stat-label">Admin Pages</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">50+</div>
+        <div class="stat-label">API Endpoints</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">80+</div>
+        <div class="stat-label">Components</div>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card" style="background: linear-gradient(135deg, #5BA3A0 0%, #4a8a88 100%);">
+        <div class="stat-value">39</div>
+        <div class="stat-label">Database Models</div>
+      </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, #D4A84B 0%, #b8923f 100%);">
+        <div class="stat-value">13</div>
+        <div class="stat-label">Industries</div>
+      </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, #E07B67 0%, #c46855 100%);">
+        <div class="stat-value">39</div>
+        <div class="stat-label">Case Studies</div>
+      </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, #7BA387 0%, #689272 100%);">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Languages</div>
+      </div>
+    </div>
+
+    <h2>✅ Trạng Thái Module</h2>
+    <table>
+      <tr><th>Module</th><th>Status</th><th>Ghi chú</th></tr>
+      <tr><td>Authentication</td><td><span class="badge badge-success">✓ Working</span></td><td>NextAuth với Credentials</td></tr>
+      <tr><td>Products</td><td><span class="badge badge-success">✓ Working</span></td><td>CRUD đầy đủ + Filter/Search</td></tr>
+      <tr><td>Orders</td><td><span class="badge badge-success">✓ Working</span></td><td>Full workflow + Auto stock</td></tr>
+      <tr><td>Checkout</td><td><span class="badge badge-success">✓ Working</span></td><td>Fixed FK constraint</td></tr>
+      <tr><td>Inventory</td><td><span class="badge badge-success">✓ Working</span></td><td>Documents + Movements</td></tr>
+      <tr><td>Blog CMS</td><td><span class="badge badge-success">✓ Working</span></td><td>Rich editor + AI tools</td></tr>
+      <tr><td>Industries</td><td><span class="badge badge-success">✓ Working</span></td><td>Redesigned UI</td></tr>
+      <tr><td>Case Studies</td><td><span class="badge badge-success">✓ Working</span></td><td>New dedicated page</td></tr>
+      <tr><td>i18n</td><td><span class="badge badge-success">✓ Working</span></td><td>5 languages</td></tr>
+      <tr><td>Admin Panel</td><td><span class="badge badge-success">✓ Working</span></td><td>Full CRUD operations</td></tr>
+    </table>
+
+    <div class="info-box success">
+      <strong>Phiên bản hiện tại:</strong> v1.0.0 - Production Ready<br>
+      <strong>Repository:</strong> https://github.com/hntngoctu1/ce-web.git<br>
+      <strong>Commit:</strong> e100e5c
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p><strong>Creative Engineering Vietnam</strong></p>
+      <p>Industrial Solutions Partner Since 1999</p>
+      <p style="margin-top: 10px;">Generated: December 26, 2024</p>
+    </div>
+  </div>
+</body>
+</html>
+

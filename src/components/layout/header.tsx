@@ -56,7 +56,7 @@ export function Header() {
           },
           {
             label: t('solutions.caseStudiesLabel'),
-            href: '/blog?category=case-studies',
+            href: '/case-studies',
             desc: t('solutions.caseStudiesDesc'),
           },
         ],
