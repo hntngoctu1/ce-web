@@ -1,9 +1,27 @@
 import { Metadata } from 'next';
 import { getLocale } from 'next-intl/server';
 import Link from 'next/link';
+import Image from 'next/image';
 import { prisma } from '@/lib/db';
 import { industries as staticIndustries } from '@/data/industries';
-import { ArrowRight, Package } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+
+// Industry images mapping
+const industryImages: Record<string, string> = {
+  'industrial-tapes': '/images/industries_img/Industrial Tapes.png',
+  'silicone-rubber': '/images/industries_img/Virgin Silicone Rubber.png',
+  'lubricants': '/images/industries_img/Lubricants.png',
+  'metalworking-coatings': '/images/industries_img/Coatings – Metalworking and Cleaning.png',
+  'electronic-coatings': '/images/industries_img/Electronic Surface Coatings.png',
+  'sandpaper-abrasives': '/images/industries_img/Sandpaper and Abrasives, Polishing.png',
+  'nukote-coatings': '/images/industries_img/Nukote – Protective Coatings.png',
+  'industrial-adhesives': '/images/industries_img/Industrial Adhesives.png',
+  'welding-equipment': '/images/industries_img/Welding Machines and Accessories.png',
+  'printers': '/images/industries_img/Printers.png',
+  'automatic-dosing': '/images/industries_img/Automatic Robotic Dosing Equipment.png',
+  'fluid-transmission': '/images/industries_img/Fluid Transmission and Shredding.png',
+  'heat-conducting': '/images/industries_img/Heat-Conducting Materials.png',
+};
 
 export const metadata: Metadata = {
   title: 'Industries & Product Categories - Creative Engineering',
@@ -55,6 +73,7 @@ export default async function IndustriesPage() {
       tagsEn: detail?.tags || [],
       tagsVi: detail?.tagsVi || [],
       stats: detail?.stats || [],
+      image: industryImages[c.slug] || '/images/industries_img/Industrial Tapes.png',
     };
   });
 
@@ -91,10 +110,14 @@ export default async function IndustriesPage() {
               >
                 {/* Image */}
                 <div className="relative h-48 w-full overflow-hidden bg-gradient-to-br from-ce-primary/10 to-ce-primary/5">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Package className="h-16 w-16 text-ce-primary/30" />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <Image
+                    src={industry.image}
+                    alt={isVi ? industry.nameVi : industry.nameEn}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                   {/* Tags */}
                   <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1">

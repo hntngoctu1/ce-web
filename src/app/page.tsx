@@ -6,6 +6,7 @@ import { ServicesSection } from '@/components/sections/services-section';
 import { PartnersSection } from '@/components/sections/partners-section';
 import { ContactSection } from '@/components/sections/contact-section';
 import { CaseStudiesSection } from '@/components/sections/case-studies-section';
+import { IndustriesShowcase } from '@/components/industries/industries-showcase';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -327,6 +328,9 @@ export default async function HomePage() {
 
       {/* Case Studies Section */}
       <CaseStudiesSection />
+
+      {/* Industries Showcase - Premium Industrial Categories */}
+      <IndustriesShowcase />
 
       {/* Featured products (Prostech-style grid) */}
       <section className="ce-section bg-white">

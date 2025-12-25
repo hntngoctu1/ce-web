@@ -6,68 +6,29 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLocale, useTranslations } from 'next-intl';
+import { getFeaturedUseCases } from '@/data/industry-use-cases';
 
 interface CaseStudiesSectionProps {
   className?: string;
 }
 
-// Placeholder case studies - in production, these would come from the database
-const caseStudies = [
-  {
-    id: '1',
-    titleEn: 'Automotive Assembly Line',
-    titleVi: 'Dây chuyền lắp ráp ô tô',
-    descriptionEn: 'Optimized adhesive dispensing for a high-volume assembly process',
-    descriptionVi: 'Tối ưu định lượng keo cho dây chuyền lắp ráp sản lượng lớn',
-    image: '/images/case-automotive.svg',
-    href: '/blog?category=case-studies',
-  },
-  {
-    id: '2',
-    titleEn: 'Electronics Manufacturing',
-    titleVi: 'Sản xuất điện tử',
-    descriptionEn: 'Precision taping to improve yield and shorten cycle time',
-    descriptionVi: 'Dán băng keo chính xác giúp tăng tỷ lệ đạt và rút ngắn chu kỳ',
-    image: '/images/case-electronics.svg',
-    href: '/blog?category=case-studies',
-  },
-  {
-    id: '3',
-    titleEn: 'Food Processing',
-    titleVi: 'Chế biến thực phẩm',
-    descriptionEn: 'Food-safe coatings and packaging solutions with clean processes',
-    descriptionVi: 'Giải pháp lớp phủ an toàn thực phẩm và đóng gói theo chuẩn sạch',
-    image: '/images/case-food.svg',
-    href: '/blog?category=case-studies',
-  },
-  {
-    id: '4',
-    titleEn: 'Solar Panel Production',
-    titleVi: 'Sản xuất pin năng lượng mặt trời',
-    descriptionEn: 'High-performance bonding for reliability in harsh environments',
-    descriptionVi: 'Liên kết bền vững, đảm bảo độ tin cậy trong môi trường khắc nghiệt',
-    image: '/images/case-solar.svg',
-    href: '/blog?category=case-studies',
-  },
-  {
-    id: '5',
-    titleEn: 'Medical Devices',
-    titleVi: 'Thiết bị y tế',
-    descriptionEn: 'Precision converting for tight-tolerance components',
-    descriptionVi: 'Gia công chuyển đổi chính xác cho linh kiện dung sai chặt',
-    image: '/images/case-medical.svg',
-    href: '/blog?category=case-studies',
-  },
-  {
-    id: '6',
-    titleEn: 'Appliance Manufacturing',
-    titleVi: 'Sản xuất thiết bị gia dụng',
-    descriptionEn: 'Integrated labeling to standardize quality and reduce rework',
-    descriptionVi: 'Tích hợp dán nhãn giúp chuẩn hoá chất lượng và giảm rework',
-    image: '/images/case-appliance.svg',
-    href: '/blog?category=case-studies',
-  },
-];
+// Get featured use cases from our professional data
+const featuredUseCases = getFeaturedUseCases();
+
+// Transform use cases to case studies format for display
+const caseStudies = featuredUseCases.slice(0, 6).map((uc) => ({
+  id: uc.id,
+  titleEn: uc.titleEn,
+  titleVi: uc.titleVi,
+  descriptionEn: uc.solutionEn.slice(0, 120) + '...',
+  descriptionVi: uc.solutionVi.slice(0, 120) + '...',
+  image: uc.image,
+  href: '/blog?category=case-studies',
+  stats: uc.statsEn,
+  statsVi: uc.statsVi,
+  industryEn: uc.industryTagEn,
+  industryVi: uc.industryTagVi,
+}));
 
 export function CaseStudiesSection({ className }: CaseStudiesSectionProps) {
   const locale = useLocale();
@@ -116,13 +77,20 @@ export function CaseStudiesSection({ className }: CaseStudiesSectionProps) {
               <div className="absolute inset-0 bg-gradient-to-t from-ce-primary-900/75 via-ce-primary-900/20 to-transparent" />
               <div className="ce-hero-pattern absolute inset-0 opacity-10" />
 
+              {/* Industry tag */}
+              <div className="absolute left-4 top-4">
+                <span className="rounded-full bg-ce-accent-teal/90 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                  {isVi ? study.industryVi : study.industryEn}
+                </span>
+              </div>
+
               {/* Content (visible by default; stronger on hover) */}
               <div className="absolute inset-0 flex flex-col justify-end p-6 text-white transition-opacity duration-300">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="text-lg font-bold">{isVi ? study.titleVi : study.titleEn}</h3>
                   <ArrowRight className="h-5 w-5 opacity-80 transition-transform group-hover:translate-x-1" />
                 </div>
-                <p className="mt-2 text-sm text-white/85">
+                <p className="mt-2 line-clamp-2 text-sm text-white/85">
                   {isVi ? study.descriptionVi : study.descriptionEn}
                 </p>
               </div>

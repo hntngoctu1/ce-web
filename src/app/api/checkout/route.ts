@@ -64,10 +64,20 @@ export async function POST(request: NextRequest) {
     const sanitized = stripEmptyStrings(body);
     const data = checkoutSchema.parse(sanitized);
 
+    // Verify user exists in database to avoid FK constraint violations
+    let validUserId: string | null = null;
+    if (session?.user?.id) {
+      const userExists = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true },
+      });
+      validUserId = userExists?.id || null;
+    }
+
     // Best-effort snapshot: If logged in and buyerInfo missing, infer from CustomerProfile (keeps old UI working for B2B users).
-    const profile = session?.user?.id
+    const profile = validUserId
       ? await prisma.customerProfile.findUnique({
-          where: { userId: session.user.id },
+          where: { userId: validUserId },
           select: { customerType: true, companyName: true, taxId: true, companyEmail: true },
         })
       : null;
@@ -109,20 +119,22 @@ export async function POST(request: NextRequest) {
       const { orderCode } = await allocateOrderCode(tx as any);
 
       // Snapshot product details (avoid relying on future product changes)
+      // Also verify products exist to avoid FK constraint violations
       const itemsCreate = await Promise.all(
         data.items.map(async (item) => {
           const product = await tx.product.findUnique({
             where: { id: item.productId },
-            select: { nameEn: true, sku: true },
+            select: { id: true, nameEn: true, sku: true },
           });
 
           return {
-            productId: item.productId,
+            // Only set productId if product exists, otherwise null to avoid FK violation
+            productId: product?.id || null,
             quantity: item.quantity,
             unitPrice: item.price,
             totalPrice: item.price * item.quantity,
             productName: product?.nameEn || 'Unknown Product',
-            productSku: product?.sku,
+            productSku: product?.sku || null,
           };
         })
       );
@@ -132,7 +144,7 @@ export async function POST(request: NextRequest) {
           // Keep legacy field, but set to the human-friendly code for new orders
           orderNumber: orderCode,
           orderCode,
-          userId: session?.user?.id || null,
+          userId: validUserId,
 
           customerName: data.name,
           customerEmail: data.email,
@@ -196,17 +208,17 @@ export async function POST(request: NextRequest) {
         select: { id: true, orderNumber: true, orderCode: true },
       });
 
-      // Update customer loyalty points if logged in
-      if (session?.user?.id) {
+      // Update customer loyalty points if logged in with valid user
+      if (validUserId) {
         // 1 point per 10,000 VND (example)
         const pointsEarned = Math.floor(data.total / 10000);
 
         // Backward compatible: older users may not have a profile row yet
         await tx.customerProfile.upsert({
-          where: { userId: session.user.id },
+          where: { userId: validUserId },
           update: { loyaltyPoints: { increment: pointsEarned } },
           create: {
-            userId: session.user.id,
+            userId: validUserId,
             loyaltyPoints: pointsEarned,
           },
         });
