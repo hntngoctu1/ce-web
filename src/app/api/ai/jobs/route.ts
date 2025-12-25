@@ -89,20 +89,20 @@ export async function POST(request: NextRequest) {
       switch (type) {
         case 'GENERATE_DRAFT':
           output = await provider.generateDraft(
-            input as Parameters<typeof provider.generateDraft>[0]
+            input as unknown as Parameters<typeof provider.generateDraft>[0]
           );
           break;
         case 'TRANSLATE':
-          output = await provider.translate(input as Parameters<typeof provider.translate>[0]);
+          output = await provider.translate(input as unknown as Parameters<typeof provider.translate>[0]);
           break;
         case 'SUMMARIZE':
-          output = await provider.summarize(input as Parameters<typeof provider.summarize>[0]);
+          output = await provider.summarize(input as unknown as Parameters<typeof provider.summarize>[0]);
           break;
         case 'SEO_OPTIMIZE':
-          output = await provider.seoOptimize(input as Parameters<typeof provider.seoOptimize>[0]);
+          output = await provider.seoOptimize(input as unknown as Parameters<typeof provider.seoOptimize>[0]);
           break;
         case 'REWRITE':
-          output = await provider.rewrite(input as Parameters<typeof provider.rewrite>[0]);
+          output = await provider.rewrite(input as unknown as Parameters<typeof provider.rewrite>[0]);
           break;
         default:
           throw new Error(`Unknown job type: ${type}`);

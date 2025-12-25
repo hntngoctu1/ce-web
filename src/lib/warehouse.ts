@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, StockDocumentType } from '@prisma/client';
 import { nanoid } from 'nanoid';
 
 const DEFAULT_WAREHOUSE_CODE = 'MAIN';
@@ -9,7 +9,7 @@ export type StockMovementPlan = {
   productId: string;
   warehouseId: string;
   locationId?: string | null;
-  movementType: Prisma.StockDocumentType;
+  movementType: StockDocumentType;
   qtyChangeOnHand: Prisma.Decimal;
   qtyChangeReserved?: Prisma.Decimal;
   createdBy?: string | null;
@@ -50,10 +50,12 @@ async function getOrCreateInventoryItem(
   tx: Prisma.TransactionClient,
   params: { productId: string; warehouseId: string; locationId?: string | null }
 ) {
-  const { productId, warehouseId, locationId = null } = params;
-  const existing = await tx.inventoryItem.findUnique({
+  const { productId, warehouseId, locationId } = params;
+  const existing = await tx.inventoryItem.findFirst({
     where: {
-      productId_warehouseId_locationId: { productId, warehouseId, locationId },
+      productId,
+      warehouseId,
+      locationId: locationId ?? null,
     },
   });
 
@@ -63,7 +65,7 @@ async function getOrCreateInventoryItem(
     data: {
       productId,
       warehouseId,
-      locationId,
+      locationId: locationId ?? null,
       onHandQty: new Prisma.Decimal(0),
       reservedQty: new Prisma.Decimal(0),
       availableQty: new Prisma.Decimal(0),
@@ -97,7 +99,7 @@ export async function applyMovementsWithTransaction(
       const inventory = await getOrCreateInventoryItem(tx, {
         productId: mv.productId,
         warehouseId: mv.warehouseId,
-        locationId: mv.locationId ?? null,
+        locationId: mv.locationId ?? undefined,
       });
 
       const qtyChangeReserved = mv.qtyChangeReserved ?? new Prisma.Decimal(0);
@@ -127,13 +129,7 @@ export async function applyMovementsWithTransaction(
       });
 
       await tx.inventoryItem.update({
-        where: {
-          productId_warehouseId_locationId: {
-            productId: mv.productId,
-            warehouseId: mv.warehouseId,
-            locationId: mv.locationId ?? null,
-          },
-        },
+        where: { id: inventory.id },
         data: {
           onHandQty: newOnHand,
           reservedQty: newReserved,
@@ -176,7 +172,7 @@ export function movementPlanFromLine(params: {
   lineId: string;
   productId: string;
   warehouseId: string;
-  movementType: Prisma.StockDocumentType;
+  movementType: StockDocumentType;
   qty: Prisma.Decimal;
   createdBy?: string | null;
 }) {
@@ -231,7 +227,7 @@ export async function executeOrderStockAction(
   const { orderId, action, items, warehouseId, createdBy } = params;
 
   // Create a stock document for audit trail
-  const docType = action as Prisma.StockDocumentType;
+  const docType = action as StockDocumentType;
   const docCode = generateDocumentCode(action.slice(0, 3));
 
   const document = await prisma.stockDocument.create({

@@ -60,9 +60,9 @@ async function getProducts(searchParams: {
 
   if (searchParams.q) {
     where.OR = [
-      { nameEn: { contains: searchParams.q, mode: 'insensitive' } },
-      { nameVi: { contains: searchParams.q, mode: 'insensitive' } },
-      { sku: { contains: searchParams.q, mode: 'insensitive' } },
+      { nameEn: { contains: searchParams.q } },
+      { nameVi: { contains: searchParams.q } },
+      { sku: { contains: searchParams.q } },
     ];
   }
 
@@ -375,8 +375,7 @@ export default async function AdminProductsPage({ searchParams }: ProductsPagePr
                       const onHand = inv ? Number(inv.onHandQty) : 0;
                       const available = inv ? Number(inv.availableQty) : 0;
                       const warehouseId = inv?.warehouseId || defaultWarehouse?.id || '';
-                      const warehouseCode =
-                        inv?.warehouse?.code || defaultWarehouse?.code || 'MAIN';
+                      const warehouseCode = defaultWarehouse?.code || 'MAIN';
 
                       return (
                         <div className="flex items-center gap-2">

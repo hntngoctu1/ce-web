@@ -43,8 +43,18 @@ const servicesData = [
     tags: ['Precision', 'Automation'],
     tagsVi: ['Chính xác', 'Tự động hóa'],
     stats: [
-      { valueEn: '±1%', valueVi: '±1%', labelEn: 'Volume Accuracy', labelVi: 'Độ chính xác thể tích' },
-      { valueEn: '24/7', valueVi: '24/7', labelEn: 'Continuous Operation', labelVi: 'Hoạt động liên tục' },
+      {
+        valueEn: '±1%',
+        valueVi: '±1%',
+        labelEn: 'Volume Accuracy',
+        labelVi: 'Độ chính xác thể tích',
+      },
+      {
+        valueEn: '24/7',
+        valueVi: '24/7',
+        labelEn: 'Continuous Operation',
+        labelVi: 'Hoạt động liên tục',
+      },
       { valueEn: '50%', valueVi: '50%', labelEn: 'Waste Reduction', labelVi: 'Giảm lãng phí' },
       { valueEn: '3x', valueVi: '3x', labelEn: 'Faster Production', labelVi: 'Sản xuất nhanh hơn' },
     ],
@@ -60,7 +70,8 @@ Dù bạn đang làm việc với keo đơn thành phần, epoxy hai phần, sil
         titleEn: 'Automated Dispensing Systems',
         titleVi: 'Hệ thống Phân phối Tự động',
         descEn: 'Programmable dispensing robots and gantry systems with precision motion control.',
-        descVi: 'Robot phân phối và hệ thống gantry có thể lập trình với điều khiển chuyển động chính xác.',
+        descVi:
+          'Robot phân phối và hệ thống gantry có thể lập trình với điều khiển chuyển động chính xác.',
       },
       {
         icon: Layers,
@@ -95,10 +106,30 @@ Dù bạn đang làm việc với keo đơn thành phần, epoxy hai phần, sil
       { en: 'Construction sealant systems', vi: 'Hệ thống chất bịt kín xây dựng' },
     ],
     processSteps: [
-      { stepEn: 'Consultation', stepVi: 'Tư vấn', descEn: 'We analyze your material properties and production requirements.', descVi: 'Chúng tôi phân tích tính chất vật liệu và yêu cầu sản xuất của bạn.' },
-      { stepEn: 'System Design', stepVi: 'Thiết kế Hệ thống', descEn: 'Our engineers design a custom solution for your needs.', descVi: 'Các kỹ sư thiết kế giải pháp tùy chỉnh cho nhu cầu của bạn.' },
-      { stepEn: 'Testing & Validation', stepVi: 'Kiểm tra & Xác nhận', descEn: 'Rigorous testing with your materials to validate performance.', descVi: 'Kiểm tra nghiêm ngặt với vật liệu của bạn để xác nhận hiệu suất.' },
-      { stepEn: 'Installation & Training', stepVi: 'Cài đặt & Đào tạo', descEn: 'Professional installation, training, and ongoing support.', descVi: 'Cài đặt chuyên nghiệp, đào tạo và hỗ trợ liên tục.' },
+      {
+        stepEn: 'Consultation',
+        stepVi: 'Tư vấn',
+        descEn: 'We analyze your material properties and production requirements.',
+        descVi: 'Chúng tôi phân tích tính chất vật liệu và yêu cầu sản xuất của bạn.',
+      },
+      {
+        stepEn: 'System Design',
+        stepVi: 'Thiết kế Hệ thống',
+        descEn: 'Our engineers design a custom solution for your needs.',
+        descVi: 'Các kỹ sư thiết kế giải pháp tùy chỉnh cho nhu cầu của bạn.',
+      },
+      {
+        stepEn: 'Testing & Validation',
+        stepVi: 'Kiểm tra & Xác nhận',
+        descEn: 'Rigorous testing with your materials to validate performance.',
+        descVi: 'Kiểm tra nghiêm ngặt với vật liệu của bạn để xác nhận hiệu suất.',
+      },
+      {
+        stepEn: 'Installation & Training',
+        stepVi: 'Cài đặt & Đào tạo',
+        descEn: 'Professional installation, training, and ongoing support.',
+        descVi: 'Cài đặt chuyên nghiệp, đào tạo và hỗ trợ liên tục.',
+      },
     ],
     brandsEn: ['Henkel', 'Graco', 'Nordson', 'Scheugenpflug', 'ViscoTec'],
     brandsVi: ['Henkel', 'Graco', 'Nordson', 'Scheugenpflug', 'ViscoTec'],
@@ -108,18 +139,37 @@ Dù bạn đang làm việc với keo đơn thành phần, epoxy hai phần, sil
     slug: 'converting-services',
     nameEn: 'Converting Services',
     nameVi: 'Dịch vụ Chuyển đổi',
-    metaDescEn: 'Custom converting solutions for adhesive tapes, films, foams, and flexible materials.',
-    metaDescVi: 'Giải pháp gia công chuyển đổi tùy chỉnh cho băng keo, màng, xốp và vật liệu linh hoạt.',
-    heroDescEn: 'From raw materials to precision components—our converting services transform adhesive tapes, specialty films, and flexible materials into exactly what your application demands.',
-    heroDescVi: 'Từ nguyên liệu thô đến linh kiện chính xác—dịch vụ chuyển đổi của chúng tôi biến băng keo, màng đặc biệt và vật liệu linh hoạt thành chính xác những gì ứng dụng của bạn yêu cầu.',
+    metaDescEn:
+      'Custom converting solutions for adhesive tapes, films, foams, and flexible materials.',
+    metaDescVi:
+      'Giải pháp gia công chuyển đổi tùy chỉnh cho băng keo, màng, xốp và vật liệu linh hoạt.',
+    heroDescEn:
+      'From raw materials to precision components—our converting services transform adhesive tapes, specialty films, and flexible materials into exactly what your application demands.',
+    heroDescVi:
+      'Từ nguyên liệu thô đến linh kiện chính xác—dịch vụ chuyển đổi của chúng tôi biến băng keo, màng đặc biệt và vật liệu linh hoạt thành chính xác những gì ứng dụng của bạn yêu cầu.',
     imageSrc: '/images/services/CONVERTING SERVICES.png',
     icon: Scissors,
     tags: ['Custom', 'Flexible'],
     tagsVi: ['Tùy chỉnh', 'Linh hoạt'],
     stats: [
-      { valueEn: '±0.1mm', valueVi: '±0.1mm', labelEn: 'Cutting Tolerance', labelVi: 'Dung sai cắt' },
-      { valueEn: '48hr', valueVi: '48 giờ', labelEn: 'Prototype Turnaround', labelVi: 'Thời gian mẫu thử' },
-      { valueEn: '1000+', valueVi: '1000+', labelEn: 'Material Options', labelVi: 'Lựa chọn vật liệu' },
+      {
+        valueEn: '±0.1mm',
+        valueVi: '±0.1mm',
+        labelEn: 'Cutting Tolerance',
+        labelVi: 'Dung sai cắt',
+      },
+      {
+        valueEn: '48hr',
+        valueVi: '48 giờ',
+        labelEn: 'Prototype Turnaround',
+        labelVi: 'Thời gian mẫu thử',
+      },
+      {
+        valueEn: '1000+',
+        valueVi: '1000+',
+        labelEn: 'Material Options',
+        labelVi: 'Lựa chọn vật liệu',
+      },
       { valueEn: '99.5%', valueVi: '99.5%', labelEn: 'Quality Rate', labelVi: 'Tỷ lệ chất lượng' },
     ],
     overviewEn: `Creative Engineering's Converting Services division specializes in transforming raw adhesive materials into precision-engineered components.
@@ -129,10 +179,34 @@ Our converting facility processes everything from thin films (25 microns) to thi
 
 Cơ sở chuyển đổi của chúng tôi xử lý mọi thứ từ màng mỏng (25 micron) đến vật liệu xốp dày (50mm+), bao gồm keo nhạy áp, băng phủ đôi, vật liệu giao diện nhiệt, vật liệu che chắn EMI và xốp đặc biệt.`,
     features: [
-      { icon: Crosshair, titleEn: 'Precision Die-Cutting', titleVi: 'Cắt Khuôn Chính xác', descEn: 'Rotary and flatbed die-cutting with tolerances to ±0.1mm.', descVi: 'Cắt khuôn quay và phẳng với dung sai đến ±0.1mm.' },
-      { icon: Layers, titleEn: 'Multi-Layer Lamination', titleVi: 'Cán Nhiều Lớp', descEn: 'Combine multiple materials with precise registration.', descVi: 'Kết hợp nhiều vật liệu với độ chính xác đăng ký.' },
-      { icon: Settings, titleEn: 'Precision Slitting', titleVi: 'Cắt Dọc Chính xác', descEn: 'Width tolerances to ±0.25mm for all material types.', descVi: 'Dung sai chiều rộng đến ±0.25mm cho tất cả loại vật liệu.' },
-      { icon: Zap, titleEn: 'Rapid Prototyping', titleVi: 'Tạo mẫu Nhanh', descEn: 'From design to samples in 24-48 hours.', descVi: 'Từ thiết kế đến mẫu trong 24-48 giờ.' },
+      {
+        icon: Crosshair,
+        titleEn: 'Precision Die-Cutting',
+        titleVi: 'Cắt Khuôn Chính xác',
+        descEn: 'Rotary and flatbed die-cutting with tolerances to ±0.1mm.',
+        descVi: 'Cắt khuôn quay và phẳng với dung sai đến ±0.1mm.',
+      },
+      {
+        icon: Layers,
+        titleEn: 'Multi-Layer Lamination',
+        titleVi: 'Cán Nhiều Lớp',
+        descEn: 'Combine multiple materials with precise registration.',
+        descVi: 'Kết hợp nhiều vật liệu với độ chính xác đăng ký.',
+      },
+      {
+        icon: Settings,
+        titleEn: 'Precision Slitting',
+        titleVi: 'Cắt Dọc Chính xác',
+        descEn: 'Width tolerances to ±0.25mm for all material types.',
+        descVi: 'Dung sai chiều rộng đến ±0.25mm cho tất cả loại vật liệu.',
+      },
+      {
+        icon: Zap,
+        titleEn: 'Rapid Prototyping',
+        titleVi: 'Tạo mẫu Nhanh',
+        descEn: 'From design to samples in 24-48 hours.',
+        descVi: 'Từ thiết kế đến mẫu trong 24-48 giờ.',
+      },
     ],
     applications: [
       { en: 'Gaskets and seals', vi: 'Gioăng và phớt' },
@@ -145,10 +219,30 @@ Cơ sở chuyển đổi của chúng tôi xử lý mọi thứ từ màng mỏn
       { en: 'Protective film applications', vi: 'Ứng dụng màng bảo vệ' },
     ],
     processSteps: [
-      { stepEn: 'Material Selection', stepVi: 'Chọn Vật liệu', descEn: 'We help identify the optimal material.', descVi: 'Chúng tôi giúp xác định vật liệu tối ưu.' },
-      { stepEn: 'Design Engineering', stepVi: 'Kỹ thuật Thiết kế', descEn: 'Our team optimizes part geometry.', descVi: 'Đội ngũ tối ưu hóa hình học linh kiện.' },
-      { stepEn: 'Tooling & Setup', stepVi: 'Dụng cụ & Thiết lập', descEn: 'Precision tooling creation.', descVi: 'Tạo dụng cụ chính xác.' },
-      { stepEn: 'Production & QC', stepVi: 'Sản xuất & QC', descEn: 'Full production with quality control.', descVi: 'Sản xuất với kiểm soát chất lượng.' },
+      {
+        stepEn: 'Material Selection',
+        stepVi: 'Chọn Vật liệu',
+        descEn: 'We help identify the optimal material.',
+        descVi: 'Chúng tôi giúp xác định vật liệu tối ưu.',
+      },
+      {
+        stepEn: 'Design Engineering',
+        stepVi: 'Kỹ thuật Thiết kế',
+        descEn: 'Our team optimizes part geometry.',
+        descVi: 'Đội ngũ tối ưu hóa hình học linh kiện.',
+      },
+      {
+        stepEn: 'Tooling & Setup',
+        stepVi: 'Dụng cụ & Thiết lập',
+        descEn: 'Precision tooling creation.',
+        descVi: 'Tạo dụng cụ chính xác.',
+      },
+      {
+        stepEn: 'Production & QC',
+        stepVi: 'Sản xuất & QC',
+        descEn: 'Full production with quality control.',
+        descVi: 'Sản xuất với kiểm soát chất lượng.',
+      },
     ],
     brandsEn: ['3M', 'Tesa', 'Nitto', 'Avery Dennison', 'Rogers Corporation'],
     brandsVi: ['3M', 'Tesa', 'Nitto', 'Avery Dennison', 'Rogers Corporation'],
@@ -158,16 +252,25 @@ Cơ sở chuyển đổi của chúng tôi xử lý mọi thứ từ màng mỏn
     slug: 'custom-labeling',
     nameEn: 'Custom Labeling',
     nameVi: 'Nhãn Tùy chỉnh',
-    metaDescEn: 'Professional industrial labeling solutions—durable labels for product identification, safety compliance, and asset tracking.',
-    metaDescVi: 'Giải pháp nhãn công nghiệp chuyên nghiệp—nhãn bền cho nhận dạng sản phẩm, tuân thủ an toàn và theo dõi tài sản.',
-    heroDescEn: 'Labels that perform under pressure. From extreme temperatures to harsh chemicals, our custom labeling solutions ensure your products remain clearly identified.',
-    heroDescVi: 'Nhãn hoạt động dưới áp lực. Từ nhiệt độ khắc nghiệt đến hóa chất mạnh, giải pháp nhãn tùy chỉnh của chúng tôi đảm bảo sản phẩm luôn được nhận dạng rõ ràng.',
+    metaDescEn:
+      'Professional industrial labeling solutions—durable labels for product identification, safety compliance, and asset tracking.',
+    metaDescVi:
+      'Giải pháp nhãn công nghiệp chuyên nghiệp—nhãn bền cho nhận dạng sản phẩm, tuân thủ an toàn và theo dõi tài sản.',
+    heroDescEn:
+      'Labels that perform under pressure. From extreme temperatures to harsh chemicals, our custom labeling solutions ensure your products remain clearly identified.',
+    heroDescVi:
+      'Nhãn hoạt động dưới áp lực. Từ nhiệt độ khắc nghiệt đến hóa chất mạnh, giải pháp nhãn tùy chỉnh của chúng tôi đảm bảo sản phẩm luôn được nhận dạng rõ ràng.',
     imageSrc: '/images/services/CUSTOM LABELING.png',
     icon: Tag,
     tags: ['Professional', 'Quality'],
     tagsVi: ['Chuyên nghiệp', 'Chất lượng'],
     stats: [
-      { valueEn: '-40°C to +150°C', valueVi: '-40°C đến +150°C', labelEn: 'Temperature Range', labelVi: 'Phạm vi nhiệt độ' },
+      {
+        valueEn: '-40°C to +150°C',
+        valueVi: '-40°C đến +150°C',
+        labelEn: 'Temperature Range',
+        labelVi: 'Phạm vi nhiệt độ',
+      },
       { valueEn: 'UL/CSA', valueVi: 'UL/CSA', labelEn: 'Certifications', labelVi: 'Chứng nhận' },
       { valueEn: '10+ Years', valueVi: '10+ Năm', labelEn: 'Durability', labelVi: 'Độ bền' },
       { valueEn: '100%', valueVi: '100%', labelEn: 'Scan Accuracy', labelVi: 'Độ chính xác quét' },
@@ -179,10 +282,34 @@ We offer comprehensive labeling solutions including UL/CSA recognized materials,
 
 Chúng tôi cung cấp giải pháp nhãn toàn diện bao gồm vật liệu UL/CSA, nhãn chống hóa chất, nhãn chịu nhiệt cao và nhãn số hóa với dữ liệu biến đổi.`,
     features: [
-      { icon: Shield, titleEn: 'Durable Materials', titleVi: 'Vật liệu Bền', descEn: 'Polyester, polyimide, vinyl that resist chemicals and temperatures.', descVi: 'Polyester, polyimide, vinyl chống hóa chất và nhiệt độ.' },
-      { icon: Award, titleEn: 'Compliance Ready', titleVi: 'Sẵn sàng Tuân thủ', descEn: 'UL, CSA, CE marking compliance.', descVi: 'Tuân thủ UL, CSA, đánh dấu CE.' },
-      { icon: Cpu, titleEn: 'Variable Data Printing', titleVi: 'In Dữ liệu Biến đổi', descEn: 'Barcodes, QR codes, serial numbers.', descVi: 'Mã vạch, mã QR, số sê-ri.' },
-      { icon: Settings, titleEn: 'Application Solutions', titleVi: 'Giải pháp Ứng dụng', descEn: 'Manual to high-speed automated systems.', descVi: 'Từ thủ công đến hệ thống tự động tốc độ cao.' },
+      {
+        icon: Shield,
+        titleEn: 'Durable Materials',
+        titleVi: 'Vật liệu Bền',
+        descEn: 'Polyester, polyimide, vinyl that resist chemicals and temperatures.',
+        descVi: 'Polyester, polyimide, vinyl chống hóa chất và nhiệt độ.',
+      },
+      {
+        icon: Award,
+        titleEn: 'Compliance Ready',
+        titleVi: 'Sẵn sàng Tuân thủ',
+        descEn: 'UL, CSA, CE marking compliance.',
+        descVi: 'Tuân thủ UL, CSA, đánh dấu CE.',
+      },
+      {
+        icon: Cpu,
+        titleEn: 'Variable Data Printing',
+        titleVi: 'In Dữ liệu Biến đổi',
+        descEn: 'Barcodes, QR codes, serial numbers.',
+        descVi: 'Mã vạch, mã QR, số sê-ri.',
+      },
+      {
+        icon: Settings,
+        titleEn: 'Application Solutions',
+        titleVi: 'Giải pháp Ứng dụng',
+        descEn: 'Manual to high-speed automated systems.',
+        descVi: 'Từ thủ công đến hệ thống tự động tốc độ cao.',
+      },
     ],
     applications: [
       { en: 'Electrical safety labels', vi: 'Nhãn an toàn điện' },
@@ -195,10 +322,30 @@ Chúng tôi cung cấp giải pháp nhãn toàn diện bao gồm vật liệu UL
       { en: 'Outdoor durable labels', vi: 'Nhãn bền ngoài trời' },
     ],
     processSteps: [
-      { stepEn: 'Requirements Analysis', stepVi: 'Phân tích Yêu cầu', descEn: 'Understand your environment and needs.', descVi: 'Hiểu môi trường và nhu cầu của bạn.' },
-      { stepEn: 'Material & Design', stepVi: 'Vật liệu & Thiết kế', descEn: 'Selection and design creation.', descVi: 'Chọn và tạo thiết kế.' },
-      { stepEn: 'Proofing & Testing', stepVi: 'Duyệt & Kiểm tra', descEn: 'Sample production and testing.', descVi: 'Sản xuất mẫu và kiểm tra.' },
-      { stepEn: 'Production & Delivery', stepVi: 'Sản xuất & Giao hàng', descEn: 'High-quality production.', descVi: 'Sản xuất chất lượng cao.' },
+      {
+        stepEn: 'Requirements Analysis',
+        stepVi: 'Phân tích Yêu cầu',
+        descEn: 'Understand your environment and needs.',
+        descVi: 'Hiểu môi trường và nhu cầu của bạn.',
+      },
+      {
+        stepEn: 'Material & Design',
+        stepVi: 'Vật liệu & Thiết kế',
+        descEn: 'Selection and design creation.',
+        descVi: 'Chọn và tạo thiết kế.',
+      },
+      {
+        stepEn: 'Proofing & Testing',
+        stepVi: 'Duyệt & Kiểm tra',
+        descEn: 'Sample production and testing.',
+        descVi: 'Sản xuất mẫu và kiểm tra.',
+      },
+      {
+        stepEn: 'Production & Delivery',
+        stepVi: 'Sản xuất & Giao hàng',
+        descEn: 'High-quality production.',
+        descVi: 'Sản xuất chất lượng cao.',
+      },
     ],
     brandsEn: ['Brady', '3M', 'Avery Dennison', 'CILS', 'Polyonics'],
     brandsVi: ['Brady', '3M', 'Avery Dennison', 'CILS', 'Polyonics'],
@@ -208,17 +355,31 @@ Chúng tôi cung cấp giải pháp nhãn toàn diện bao gồm vật liệu UL
     slug: 'laser-die-cutting',
     nameEn: 'Laser & Die Cutting',
     nameVi: 'Cắt Laser & Khuôn',
-    metaDescEn: 'High-precision laser cutting and die cutting services for complex geometries. Tolerances to ±0.05mm.',
-    metaDescVi: 'Dịch vụ cắt laser và cắt khuôn độ chính xác cao cho hình học phức tạp. Dung sai đến ±0.05mm.',
-    heroDescEn: "When standard cutting methods can't deliver, our advanced laser and precision die cutting technologies step in.",
-    heroDescVi: 'Khi các phương pháp cắt tiêu chuẩn không thể đáp ứng, công nghệ cắt laser và cắt khuôn chính xác tiên tiến của chúng tôi sẵn sàng.',
+    metaDescEn:
+      'High-precision laser cutting and die cutting services for complex geometries. Tolerances to ±0.05mm.',
+    metaDescVi:
+      'Dịch vụ cắt laser và cắt khuôn độ chính xác cao cho hình học phức tạp. Dung sai đến ±0.05mm.',
+    heroDescEn:
+      "When standard cutting methods can't deliver, our advanced laser and precision die cutting technologies step in.",
+    heroDescVi:
+      'Khi các phương pháp cắt tiêu chuẩn không thể đáp ứng, công nghệ cắt laser và cắt khuôn chính xác tiên tiến của chúng tôi sẵn sàng.',
     imageSrc: '/images/services/laser_die cutting.png',
     icon: Crosshair,
     tags: ['High-Precision', 'Advanced'],
     tagsVi: ['Độ chính xác cao', 'Tiên tiến'],
     stats: [
-      { valueEn: '±0.05mm', valueVi: '±0.05mm', labelEn: 'Laser Tolerance', labelVi: 'Dung sai laser' },
-      { valueEn: '0.1mm', valueVi: '0.1mm', labelEn: 'Min Feature Size', labelVi: 'Kích thước tối thiểu' },
+      {
+        valueEn: '±0.05mm',
+        valueVi: '±0.05mm',
+        labelEn: 'Laser Tolerance',
+        labelVi: 'Dung sai laser',
+      },
+      {
+        valueEn: '0.1mm',
+        valueVi: '0.1mm',
+        labelEn: 'Min Feature Size',
+        labelVi: 'Kích thước tối thiểu',
+      },
       { valueEn: '24hr', valueVi: '24 giờ', labelEn: 'Rapid Prototypes', labelVi: 'Mẫu thử nhanh' },
       { valueEn: '50+', valueVi: '50+', labelEn: 'Material Types', labelVi: 'Loại vật liệu' },
     ],
@@ -229,10 +390,34 @@ Our CO2 and fiber laser systems handle intricate patterns in thin films, plastic
 
 Hệ thống laser CO2 và sợi của chúng tôi xử lý các mẫu phức tạp trong màng mỏng, nhựa, vải, xốp và kim loại với độ chính xác cấp micron.`,
     features: [
-      { icon: Zap, titleEn: 'Laser Cutting Systems', titleVi: 'Hệ thống Cắt Laser', descEn: 'CO2 and fiber lasers for clean cuts.', descVi: 'Laser CO2 và sợi cho vết cắt sạch.' },
-      { icon: Target, titleEn: 'Precision Die Cutting', titleVi: 'Cắt Khuôn Chính xác', descEn: 'Steel-rule and solid dies for high-volume.', descVi: 'Khuôn thép và khuôn rắn cho sản xuất lớn.' },
-      { icon: Clock, titleEn: 'Rapid Turnaround', titleVi: 'Xử lý Nhanh', descEn: 'Same-day prototypes available.', descVi: 'Mẫu thử trong ngày.' },
-      { icon: Layers, titleEn: 'Multi-Material Capability', titleVi: 'Khả năng Đa vật liệu', descEn: 'From films to foam to metals.', descVi: 'Từ màng đến xốp đến kim loại.' },
+      {
+        icon: Zap,
+        titleEn: 'Laser Cutting Systems',
+        titleVi: 'Hệ thống Cắt Laser',
+        descEn: 'CO2 and fiber lasers for clean cuts.',
+        descVi: 'Laser CO2 và sợi cho vết cắt sạch.',
+      },
+      {
+        icon: Target,
+        titleEn: 'Precision Die Cutting',
+        titleVi: 'Cắt Khuôn Chính xác',
+        descEn: 'Steel-rule and solid dies for high-volume.',
+        descVi: 'Khuôn thép và khuôn rắn cho sản xuất lớn.',
+      },
+      {
+        icon: Clock,
+        titleEn: 'Rapid Turnaround',
+        titleVi: 'Xử lý Nhanh',
+        descEn: 'Same-day prototypes available.',
+        descVi: 'Mẫu thử trong ngày.',
+      },
+      {
+        icon: Layers,
+        titleEn: 'Multi-Material Capability',
+        titleVi: 'Khả năng Đa vật liệu',
+        descEn: 'From films to foam to metals.',
+        descVi: 'Từ màng đến xốp đến kim loại.',
+      },
     ],
     applications: [
       { en: 'Precision gaskets & seals', vi: 'Gioăng & phớt chính xác' },
@@ -245,10 +430,30 @@ Hệ thống laser CO2 và sợi của chúng tôi xử lý các mẫu phức t�
       { en: 'Prototype parts', vi: 'Linh kiện mẫu thử' },
     ],
     processSteps: [
-      { stepEn: 'Design Review', stepVi: 'Xem xét Thiết kế', descEn: 'We analyze your CAD files.', descVi: 'Chúng tôi phân tích file CAD của bạn.' },
-      { stepEn: 'Process Selection', stepVi: 'Chọn Quy trình', descEn: 'Laser vs. die cutting decision.', descVi: 'Quyết định laser so với cắt khuôn.' },
-      { stepEn: 'First Article', stepVi: 'Mẫu Đầu tiên', descEn: 'Sample production and inspection.', descVi: 'Sản xuất mẫu và kiểm tra.' },
-      { stepEn: 'Production', stepVi: 'Sản xuất', descEn: 'Full production run.', descVi: 'Chạy sản xuất đầy đủ.' },
+      {
+        stepEn: 'Design Review',
+        stepVi: 'Xem xét Thiết kế',
+        descEn: 'We analyze your CAD files.',
+        descVi: 'Chúng tôi phân tích file CAD của bạn.',
+      },
+      {
+        stepEn: 'Process Selection',
+        stepVi: 'Chọn Quy trình',
+        descEn: 'Laser vs. die cutting decision.',
+        descVi: 'Quyết định laser so với cắt khuôn.',
+      },
+      {
+        stepEn: 'First Article',
+        stepVi: 'Mẫu Đầu tiên',
+        descEn: 'Sample production and inspection.',
+        descVi: 'Sản xuất mẫu và kiểm tra.',
+      },
+      {
+        stepEn: 'Production',
+        stepVi: 'Sản xuất',
+        descEn: 'Full production run.',
+        descVi: 'Chạy sản xuất đầy đủ.',
+      },
     ],
     brandsEn: ['TRUMPF', 'Mitsubishi', 'BOBST', 'Atom', 'Gerber'],
     brandsVi: ['TRUMPF', 'Mitsubishi', 'BOBST', 'Atom', 'Gerber'],
@@ -283,7 +488,8 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   const currentIndex = servicesData.findIndex((s) => s.slug === slug);
   const prevService = currentIndex > 0 ? servicesData[currentIndex - 1] : null;
-  const nextService = currentIndex < servicesData.length - 1 ? servicesData[currentIndex + 1] : null;
+  const nextService =
+    currentIndex < servicesData.length - 1 ? servicesData[currentIndex + 1] : null;
 
   const name = isVi ? service.nameVi : service.nameEn;
   const heroDesc = isVi ? service.heroDescVi : service.heroDescEn;
@@ -298,7 +504,10 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className="relative overflow-hidden bg-gradient-to-br from-ce-primary-800 via-ce-primary to-ce-primary-600 py-16 lg:py-24">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#ffffff_0.5px,transparent_0.5px)] opacity-10 [background-size:24px_24px]" />
         <div className="ce-container relative">
-          <Link href="/services" className="mb-8 inline-flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white">
+          <Link
+            href="/services"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
+          >
             <ArrowLeft className="h-4 w-4" />
             <span>{isVi ? 'Tất cả dịch vụ' : 'All Services'}</span>
           </Link>
@@ -311,7 +520,10 @@ export default async function ServiceDetailPage({ params }: Props) {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag) => (
-                    <span key={tag} className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
+                    <span
+                      key={tag}
+                      className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm"
+                    >
                       {tag}
                     </span>
                   ))}
@@ -324,15 +536,26 @@ export default async function ServiceDetailPage({ params }: Props) {
               <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {service.stats.map((stat, i) => (
                   <div key={i} className="rounded-xl bg-white/10 p-4 backdrop-blur-sm">
-                    <div className="text-2xl font-bold text-white">{isVi ? stat.valueVi : stat.valueEn}</div>
-                    <div className="mt-1 text-xs text-white/70">{isVi ? stat.labelVi : stat.labelEn}</div>
+                    <div className="text-2xl font-bold text-white">
+                      {isVi ? stat.valueVi : stat.valueEn}
+                    </div>
+                    <div className="mt-1 text-xs text-white/70">
+                      {isVi ? stat.labelVi : stat.labelEn}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/20">
-              <Image src={service.imageSrc} alt={name} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" priority />
+              <Image
+                src={service.imageSrc}
+                alt={name}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+                priority
+              />
             </div>
           </div>
         </div>
@@ -347,7 +570,9 @@ export default async function ServiceDetailPage({ params }: Props) {
             </h2>
             <div className="prose prose-lg mx-auto text-muted-foreground">
               {overview.split('\n\n').map((paragraph, i) => (
-                <p key={i} className="leading-relaxed">{paragraph}</p>
+                <p key={i} className="leading-relaxed">
+                  {paragraph}
+                </p>
               ))}
             </div>
           </div>
@@ -367,12 +592,19 @@ export default async function ServiceDetailPage({ params }: Props) {
             {service.features.map((feature, index) => {
               const FeatureIcon = feature.icon;
               return (
-                <div key={index} className="group rounded-2xl border border-black/5 bg-white p-8 shadow-sm transition-all duration-300 hover:border-ce-primary/20 hover:shadow-xl">
+                <div
+                  key={index}
+                  className="group rounded-2xl border border-black/5 bg-white p-8 shadow-sm transition-all duration-300 hover:border-ce-primary/20 hover:shadow-xl"
+                >
                   <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-ce-primary/10 transition-colors group-hover:bg-ce-primary">
                     <FeatureIcon className="h-7 w-7 text-ce-primary transition-colors group-hover:text-white" />
                   </div>
-                  <h3 className="mb-3 text-xl font-bold text-ce-primary-800">{isVi ? feature.titleVi : feature.titleEn}</h3>
-                  <p className="leading-relaxed text-muted-foreground">{isVi ? feature.descVi : feature.descEn}</p>
+                  <h3 className="mb-3 text-xl font-bold text-ce-primary-800">
+                    {isVi ? feature.titleVi : feature.titleEn}
+                  </h3>
+                  <p className="leading-relaxed text-muted-foreground">
+                    {isVi ? feature.descVi : feature.descEn}
+                  </p>
                 </div>
               );
             })}
@@ -395,7 +627,9 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-ce-primary text-2xl font-bold text-white">
                   {index + 1}
                 </div>
-                <h3 className="mb-2 text-lg font-bold text-ce-primary-800">{isVi ? step.stepVi : step.stepEn}</h3>
+                <h3 className="mb-2 text-lg font-bold text-ce-primary-800">
+                  {isVi ? step.stepVi : step.stepEn}
+                </h3>
                 <p className="text-sm text-muted-foreground">{isVi ? step.descVi : step.descEn}</p>
               </div>
             ))}
@@ -408,7 +642,9 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="ce-container">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
-              <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">{isVi ? 'Ứng dụng' : 'Applications'}</h2>
+              <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">
+                {isVi ? 'Ứng dụng' : 'Applications'}
+              </h2>
               <ul className="grid gap-3 sm:grid-cols-2">
                 {service.applications.map((app, i) => (
                   <li key={i} className="flex items-center gap-3 text-white">
@@ -420,18 +656,31 @@ export default async function ServiceDetailPage({ params }: Props) {
             </div>
 
             <div className="rounded-2xl bg-white p-8 shadow-2xl lg:p-10">
-              <h3 className="mb-4 text-2xl font-bold text-ce-primary-800">{isVi ? 'Bắt đầu Dự án' : 'Start Your Project'}</h3>
+              <h3 className="mb-4 text-2xl font-bold text-ce-primary-800">
+                {isVi ? 'Bắt đầu Dự án' : 'Start Your Project'}
+              </h3>
               <p className="mb-6 text-muted-foreground">
-                {isVi ? 'Liên hệ với đội ngũ chuyên gia để nhận tư vấn miễn phí.' : 'Contact our expert team for a free consultation.'}
+                {isVi
+                  ? 'Liên hệ với đội ngũ chuyên gia để nhận tư vấn miễn phí.'
+                  : 'Contact our expert team for a free consultation.'}
               </p>
-              <Link href="/contact" className="flex w-full items-center justify-center gap-2 rounded-full bg-ce-primary px-6 py-4 text-sm font-semibold text-white transition-all hover:bg-ce-primary-600">
+              <Link
+                href="/contact"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-ce-primary px-6 py-4 text-sm font-semibold text-white transition-all hover:bg-ce-primary-600"
+              >
                 {isVi ? 'Yêu cầu Báo giá' : 'Request Quote'} <ArrowRight className="h-4 w-4" />
               </Link>
               <div className="flex flex-col gap-4 pt-4 text-sm sm:flex-row sm:justify-center">
-                <a href="tel:+84123456789" className="flex items-center justify-center gap-2 text-muted-foreground hover:text-ce-primary">
+                <a
+                  href="tel:+84123456789"
+                  className="flex items-center justify-center gap-2 text-muted-foreground hover:text-ce-primary"
+                >
                   <Phone className="h-4 w-4" /> +84 123 456 789
                 </a>
-                <a href="mailto:info@ce-vietnam.com" className="flex items-center justify-center gap-2 text-muted-foreground hover:text-ce-primary">
+                <a
+                  href="mailto:info@ce-vietnam.com"
+                  className="flex items-center justify-center gap-2 text-muted-foreground hover:text-ce-primary"
+                >
                   <Mail className="h-4 w-4" /> info@ce-vietnam.com
                 </a>
               </div>
@@ -448,43 +697,65 @@ export default async function ServiceDetailPage({ params }: Props) {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-8">
             {brands.map((brand, i) => (
-              <span key={i} className="text-lg font-semibold text-ce-primary/60">{brand}</span>
+              <span key={i} className="text-lg font-semibold text-ce-primary/60">
+                {brand}
+              </span>
             ))}
           </div>
         </div>
       </section>
 
       {/* Navigation */}
-      <section className="border-t bg-ce-neutral-50 py-8">
+      <section className="bg-ce-neutral-50 border-t py-8">
         <div className="ce-container">
           <div className="flex items-center justify-between">
             {prevService ? (
-              <Link href={`/services/${prevService.slug}`} className="group flex items-center gap-3 text-muted-foreground hover:text-ce-primary">
+              <Link
+                href={`/services/${prevService.slug}`}
+                className="group flex items-center gap-3 text-muted-foreground hover:text-ce-primary"
+              >
                 <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1" />
                 <div>
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground/60">{isVi ? 'Trước' : 'Previous'}</div>
-                  <div className="font-semibold">{isVi ? prevService.nameVi : prevService.nameEn}</div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground/60">
+                    {isVi ? 'Trước' : 'Previous'}
+                  </div>
+                  <div className="font-semibold">
+                    {isVi ? prevService.nameVi : prevService.nameEn}
+                  </div>
                 </div>
               </Link>
-            ) : <div />}
+            ) : (
+              <div />
+            )}
 
-            <Link href="/services" className="hidden rounded-full border-2 border-ce-primary/20 px-6 py-2 text-sm font-semibold text-ce-primary hover:bg-ce-primary hover:text-white sm:block">
+            <Link
+              href="/services"
+              className="hidden rounded-full border-2 border-ce-primary/20 px-6 py-2 text-sm font-semibold text-ce-primary hover:bg-ce-primary hover:text-white sm:block"
+            >
               {isVi ? 'Tất cả Dịch vụ' : 'All Services'}
             </Link>
 
             {nextService ? (
-              <Link href={`/services/${nextService.slug}`} className="group flex items-center gap-3 text-right text-muted-foreground hover:text-ce-primary">
+              <Link
+                href={`/services/${nextService.slug}`}
+                className="group flex items-center gap-3 text-right text-muted-foreground hover:text-ce-primary"
+              >
                 <div>
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground/60">{isVi ? 'Tiếp theo' : 'Next'}</div>
-                  <div className="font-semibold">{isVi ? nextService.nameVi : nextService.nameEn}</div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground/60">
+                    {isVi ? 'Tiếp theo' : 'Next'}
+                  </div>
+                  <div className="font-semibold">
+                    {isVi ? nextService.nameVi : nextService.nameEn}
+                  </div>
                 </div>
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1" />
               </Link>
-            ) : <div />}
+            ) : (
+              <div />
+            )}
           </div>
         </div>
       </section>
     </>
   );
 }
-

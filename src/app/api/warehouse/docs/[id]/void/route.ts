@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
-import { logInventoryAudit } from '@/lib/inventory-audit';
+import { writeInventoryAuditLog } from '@/lib/inventory-audit';
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         data: { status: 'VOID' },
       });
 
-      await logInventoryAudit(prisma, {
+      await writeInventoryAuditLog(prisma, {
         entityType: 'StockDocument',
         entityId: id,
         action: 'VOID_DRAFT',
@@ -61,13 +61,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         if (existingReversal) continue;
 
         // Get current inventory
-        const inventory = await tx.inventoryItem.findUnique({
+        const inventory = await tx.inventoryItem.findFirst({
           where: {
-            productId_warehouseId_locationId: {
-              productId: mv.productId,
-              warehouseId: mv.warehouseId,
-              locationId: mv.locationId ?? null,
-            },
+            productId: mv.productId,
+            warehouseId: mv.warehouseId,
+            locationId: mv.locationId ?? null,
           },
         });
 
@@ -101,18 +99,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
         // Update inventory
         await tx.inventoryItem.update({
-          where: {
-            productId_warehouseId_locationId: {
-              productId: mv.productId,
-              warehouseId: mv.warehouseId,
-              locationId: mv.locationId ?? null,
-            },
-          },
-          data: {
-            onHandQty: newOnHand,
-            reservedQty: newReserved,
-            availableQty: newAvailable,
-          },
+          where: { id: inventory.id },
+          data: { onHandQty: newOnHand, reservedQty: newReserved, availableQty: newAvailable },
         });
 
         // Sync Product.stockQuantity for backward compatibility
@@ -136,7 +124,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       });
     });
 
-    await logInventoryAudit(prisma, {
+    await writeInventoryAuditLog(prisma, {
       entityType: 'StockDocument',
       entityId: id,
       action: 'VOID_POSTED',

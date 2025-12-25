@@ -23,9 +23,9 @@ export async function GET(req: NextRequest) {
   if (q) {
     where.product = {
       OR: [
-        { nameEn: { contains: q, mode: 'insensitive' } },
-        { nameVi: { contains: q, mode: 'insensitive' } },
-        { sku: { contains: q, mode: 'insensitive' } },
+        { nameEn: { contains: q } },
+        { nameVi: { contains: q } },
+        { sku: { contains: q } },
       ],
     };
   }

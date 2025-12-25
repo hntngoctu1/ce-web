@@ -28,8 +28,6 @@ export default async function IndustriesPage() {
   const isVi = locale.toLowerCase().startsWith('vi');
   const categories = await getIndustryCategories();
 
-  // DB is the source of truth for what appears & ordering.
-  // Static data provides richer content (tags/stats) when available.
   const display = (
     categories.length > 0
       ? categories

@@ -2,68 +2,95 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Search, Tag } from 'lucide-react';
+import { useLocale } from 'next-intl';
+import { Search, Tag, Package, ArrowRight } from 'lucide-react';
 import { industries, Industry } from '@/data/industries';
 import { cn } from '@/lib/utils';
 
-const allTags = Array.from(new Set(industries.flatMap((i) => i.tags))).sort();
+function IndustryCard({ item, isVi }: { item: Industry; isVi: boolean }) {
+  const name = isVi ? item.nameVi : item.name;
+  const summary = isVi ? item.summaryVi : item.summary;
+  const tags = isVi ? item.tagsVi : item.tags;
+  const keyOutcomes = isVi ? item.keyOutcomesVi : item.keyOutcomes;
 
-function IndustryCard({ item }: { item: Industry }) {
   return (
-    <div className="bg-white/5/10 via-white/3 group flex h-full flex-col overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-br from-white/5 to-white/5 text-white shadow-lg shadow-black/10 backdrop-blur-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20">
-      <div
-        className="relative h-44 w-full overflow-hidden"
-        style={{
-          backgroundImage: `linear-gradient(135deg, rgba(103,110,159,0.28), rgba(67,74,107,0.28)), url(${item.heroImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      />
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-          <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400/80" />
-          {item.tags.slice(0, 3).join(' • ')}
+    <Link
+      href={`/industries/${item.slug}`}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10 hover:shadow-xl"
+    >
+      {/* Image/Icon area */}
+      <div className="relative h-40 w-full overflow-hidden bg-gradient-to-br from-white/10 to-white/5">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Package className="h-16 w-16 text-white/20" />
         </div>
-        <h3 className="text-xl font-semibold text-white">{item.name}</h3>
-        <p className="line-clamp-3 text-sm text-white/70">{item.summary}</p>
-        <div className="mt-auto flex flex-wrap gap-2">
-          {item.keyOutcomes.slice(0, 3).map((o) => (
+        <div className="absolute inset-0 bg-gradient-to-t from-ce-primary-900/80 to-transparent" />
+
+        {/* Tags on image */}
+        <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1">
+          {tags.slice(0, 2).map((tag) => (
             <span
-              key={o}
-              className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs text-white/75"
+              key={tag}
+              className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-medium text-white backdrop-blur-sm"
             >
-              {o}
+              {tag}
             </span>
           ))}
         </div>
-        <div className="pt-2">
-          <Link
-            href={`/industries/${item.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/80"
-          >
-            View details
-            <span className="transition group-hover:translate-x-1">→</span>
-          </Link>
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-1 flex-col gap-3 p-5">
+        <h3 className="text-lg font-bold text-white group-hover:text-ce-accent-teal">{name}</h3>
+        <p className="line-clamp-2 text-sm text-white/70">{summary}</p>
+
+        {/* Stats preview */}
+        {item.stats && item.stats.length > 0 && (
+          <div className="mt-auto flex items-center gap-3 border-t border-white/10 pt-3">
+            <div className="text-center">
+              <div className="text-sm font-bold text-ce-accent-teal">{item.stats[0].value}</div>
+              <div className="text-xs text-white/50">
+                {isVi ? item.stats[0].labelVi : item.stats[0].label}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="flex items-center gap-1 text-sm font-semibold text-white/80 group-hover:text-white">
+          {isVi ? 'Xem chi tiết' : 'View details'}
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
 export function IndustriesExplorer() {
+  const locale = useLocale();
+  const isVi = locale.toLowerCase().startsWith('vi');
+
   const [query, setQuery] = useState('');
-  const [tag, setTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  // Get all unique tags
+  const allTags = useMemo(() => {
+    const tags = industries.flatMap((i) => (isVi ? i.tagsVi : i.tags));
+    return Array.from(new Set(tags)).sort();
+  }, [isVi]);
 
   const filtered = useMemo(() => {
     return industries.filter((item) => {
+      const name = isVi ? item.nameVi : item.name;
+      const summary = isVi ? item.summaryVi : item.summary;
+      const tags = isVi ? item.tagsVi : item.tags;
+
       const matchesQuery =
         !query ||
-        item.name.toLowerCase().includes(query.toLowerCase()) ||
-        item.summary.toLowerCase().includes(query.toLowerCase());
-      const matchesTag = !tag || item.tags.includes(tag);
+        name.toLowerCase().includes(query.toLowerCase()) ||
+        summary.toLowerCase().includes(query.toLowerCase());
+      const matchesTag = !selectedTag || tags.includes(selectedTag);
       return matchesQuery && matchesTag;
     });
-  }, [query, tag]);
+  }, [query, selectedTag, isVi]);
 
   return (
     <div className="space-y-6">
@@ -75,49 +102,56 @@ export function IndustriesExplorer() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search industries..."
+              placeholder={isVi ? 'Tìm kiếm danh mục...' : 'Search categories...'}
               className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-white/30 focus:outline-none md:w-72"
             />
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="text-sm text-white/60">
+            {filtered.length} {isVi ? 'danh mục' : 'categories'}
+          </div>
+        </div>
+
+        {/* Tags filter */}
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setSelectedTag(null)}
+            className={cn(
+              'inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold transition',
+              !selectedTag
+                ? 'border-white/40 bg-white/15 text-white'
+                : 'border-white/15 bg-white/5 text-white/70 hover:border-white/30'
+            )}
+          >
+            {isVi ? 'Tất cả' : 'All'}
+          </button>
+          {allTags.slice(0, 10).map((tag) => (
             <button
-              onClick={() => setTag(null)}
+              key={tag}
+              onClick={() => setSelectedTag(tag === selectedTag ? null : tag)}
               className={cn(
                 'inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold transition',
-                !tag
+                selectedTag === tag
                   ? 'border-white/40 bg-white/15 text-white'
                   : 'border-white/15 bg-white/5 text-white/70 hover:border-white/30'
               )}
             >
-              All
+              <Tag className="h-3 w-3" />
+              {tag}
             </button>
-            {allTags.map((t) => (
-              <button
-                key={t}
-                onClick={() => setTag(t === tag ? null : t)}
-                className={cn(
-                  'inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold transition',
-                  tag === t
-                    ? 'border-white/40 bg-white/15 text-white'
-                    : 'border-white/15 bg-white/5 text-white/70 hover:border-white/30'
-                )}
-              >
-                <Tag className="h-3 w-3" />
-                {t}
-              </button>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
 
       {/* Grid */}
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filtered.map((item) => (
-          <IndustryCard key={item.slug} item={item} />
+          <IndustryCard key={item.slug} item={item} isVi={isVi} />
         ))}
         {filtered.length === 0 && (
-          <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-6 text-center text-white/70">
-            No industries found. Try another keyword or tag.
+          <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-8 text-center text-white/70">
+            {isVi
+              ? 'Không tìm thấy danh mục. Thử từ khóa hoặc tag khác.'
+              : 'No categories found. Try another keyword or tag.'}
           </div>
         )}
       </div>

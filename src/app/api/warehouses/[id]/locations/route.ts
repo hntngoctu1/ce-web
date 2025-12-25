@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
-import { logInventoryAudit } from '@/lib/inventory-audit';
+import { writeInventoryAuditLog } from '@/lib/inventory-audit';
 
 const createLocationSchema = z.object({
   code: z.string().min(1).max(50),
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       },
     });
 
-    await logInventoryAudit(prisma, {
+    await writeInventoryAuditLog(prisma, {
       entityType: 'WarehouseLocation',
       entityId: location.id,
       action: 'CREATE',

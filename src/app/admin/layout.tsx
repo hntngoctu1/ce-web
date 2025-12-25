@@ -90,6 +90,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 {[
                   { href: '/admin/products', label: t('sidebar.products'), icon: Package },
                   {
+                    href: '/admin/industry-categories',
+                    label: t('sidebar.industryCategories'),
+                    icon: FolderTree,
+                  },
+                  {
                     href: '/admin/product-groups',
                     label: t('sidebar.productGroups'),
                     icon: FolderTree,

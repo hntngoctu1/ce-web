@@ -20,9 +20,11 @@ export async function GET() {
     }),
     prisma.inventoryItem.count({
       where: {
-        availableQty: { gt: new Prisma.Decimal(0) },
-        reorderPointQty: { gt: new Prisma.Decimal(0) },
-        availableQty: { lt: new Prisma.Decimal(1000000000) },
+        AND: [
+          { availableQty: { gt: new Prisma.Decimal(0) } },
+          { reorderPointQty: { gt: new Prisma.Decimal(0) } },
+          { availableQty: { lt: new Prisma.Decimal(1000000000) } },
+        ],
       },
     }),
     prisma.inventoryItem.count({

@@ -345,7 +345,7 @@ export function ProductForm({ product, groups, brands, industries }: ProductForm
                       setUploading(true);
                       setError(null);
                       try {
-                        const uploaded = [];
+                        const uploaded: string[] = [];
                         for (const file of files) {
                           const formData = new FormData();
                           formData.append('file', file);

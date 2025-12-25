@@ -400,69 +400,150 @@ async function main() {
   console.log('✅ Service categories created');
 
   // Create industry categories
+  // Industry categories (13 items) - canonical list (DB source of truth)
   const industries = [
     {
-      slug: 'electricity-electronics',
-      nameEn: 'Electricity, Electronics, Household Appliances',
-      nameVi: 'Điện, Điện tử, Thiết bị Gia dụng',
-      descriptionEn: 'Solutions for electrical insulation, EMI shielding, and component assembly.',
-      descriptionVi: 'Giải pháp cách điện, che chắn EMI và lắp ráp linh kiện.',
-      imageUrl: img.industry['electricity-electronics'],
+      slug: 'industrial-tapes',
+      nameEn: 'Industrial Tapes',
+      nameVi: 'Băng Keo Công Nghiệp',
+      descriptionEn:
+        'High-performance industrial tapes for bonding, masking, insulation, and surface protection across manufacturing.',
+      descriptionVi:
+        'Băng keo công nghiệp hiệu suất cao cho kết dính, che chắn, cách điện và bảo vệ bề mặt trong sản xuất.',
+      imageUrl: img.group['industrial-tapes'],
       order: 0,
     },
     {
-      slug: 'automotive-transportation',
-      nameEn: 'Automotive & Transportation',
-      nameVi: 'Ô tô & Vận tải',
-      descriptionEn: 'High-performance adhesives and coatings for automotive manufacturing.',
-      descriptionVi: 'Keo dán và lớp phủ hiệu suất cao cho sản xuất ô tô.',
-      imageUrl: img.industry['automotive-transportation'],
+      slug: 'silicone-rubber',
+      nameEn: 'Virgin Silicone Rubber',
+      nameVi: 'Cao Su Silicone Nguyên Chất',
+      descriptionEn:
+        'Premium virgin silicone rubber for sealing, gasketing, and high-temperature applications with excellent flexibility.',
+      descriptionVi:
+        'Cao su silicone nguyên chất cao cấp cho làm kín, gioăng và ứng dụng chịu nhiệt cao với độ linh hoạt tuyệt vời.',
+      imageUrl: img.group['silicone-rubber'],
       order: 1,
     },
     {
-      slug: 'printing-packaging',
-      nameEn: 'Printing, Packaging & Advertising',
-      nameVi: 'In ấn, Bao bì & Quảng cáo',
-      descriptionEn: 'Specialty tapes and adhesives for printing and packaging industries.',
-      descriptionVi: 'Băng keo và chất kết dính đặc biệt cho ngành in ấn và bao bì.',
-      imageUrl: img.industry['printing-packaging'],
+      slug: 'lubricants',
+      nameEn: 'Lubricants',
+      nameVi: 'Chất Bôi Trơn',
+      descriptionEn:
+        'Industrial lubricants and greases for maintenance, friction reduction, wear protection, and corrosion prevention.',
+      descriptionVi:
+        'Chất bôi trơn và mỡ công nghiệp cho bảo trì, giảm ma sát, chống mài mòn và chống ăn mòn.',
+      imageUrl: img.group.lubricants,
       order: 2,
     },
     {
-      slug: 'automation-measurement',
-      nameEn: 'Automation and Measurement',
-      nameVi: 'Tự động hóa và Đo lường',
-      descriptionEn: 'Precision products for automation systems and measurement equipment.',
-      descriptionVi: 'Sản phẩm chính xác cho hệ thống tự động hóa và thiết bị đo lường.',
-      imageUrl: img.industry['automation-measurement'],
+      slug: 'metalworking-coatings',
+      nameEn: 'Coatings – Metalworking and Cleaning',
+      nameVi: 'Chất Phủ – Gia Công Kim Loại và Vệ Sinh',
+      descriptionEn:
+        'Specialized coatings, coolants, and cleaning solutions for metalworking processes including cutting, grinding, and surface treatment.',
+      descriptionVi:
+        'Chất phủ, dung dịch làm mát và vệ sinh chuyên dụng cho gia công kim loại: cắt, mài và xử lý bề mặt.',
+      imageUrl: img.group['metalworking-coatings'],
       order: 3,
     },
     {
-      slug: 'waterproofing-coating',
-      nameEn: 'Waterproofing – Protective Coating',
-      nameVi: 'Chống thấm – Lớp phủ Bảo vệ',
-      descriptionEn: 'Advanced waterproofing and protective coating solutions.',
-      descriptionVi: 'Giải pháp chống thấm và lớp phủ bảo vệ tiên tiến.',
-      imageUrl: img.industry['waterproofing-coating'],
+      slug: 'electronic-coatings',
+      nameEn: 'Electronic Surface Coatings',
+      nameVi: 'Chất Phủ Bề Mặt Điện Tử',
+      descriptionEn:
+        'Conformal coatings, potting compounds, and encapsulants for protecting electronic assemblies from moisture and contamination.',
+      descriptionVi:
+        'Chất phủ bảo vệ, hợp chất đổ khuôn và chất bọc bảo vệ cụm lắp ráp điện tử khỏi ẩm và ô nhiễm.',
+      imageUrl: img.group['electronic-coatings'],
       order: 4,
     },
     {
-      slug: 'furniture-wood',
-      nameEn: 'Furniture and Wood',
-      nameVi: 'Nội thất và Gỗ',
-      descriptionEn: 'Adhesives and finishes for furniture and woodworking industries.',
-      descriptionVi: 'Keo dán và hoàn thiện cho ngành nội thất và chế biến gỗ.',
-      imageUrl: img.industry['furniture-wood'],
+      slug: 'sandpaper-abrasives',
+      nameEn: 'Sandpaper and Abrasives, Polishing',
+      nameVi: 'Giấy Nhám và Vật Liệu Mài, Đánh Bóng',
+      descriptionEn:
+        'A complete range of abrasives for surface preparation, finishing, grinding, and polishing across industries.',
+      descriptionVi:
+        'Danh mục vật liệu mài mòn cho chuẩn bị bề mặt, hoàn thiện, mài và đánh bóng trong nhiều ngành.',
+      imageUrl: img.group['sandpaper-abrasives'],
       order: 5,
     },
     {
-      slug: 'food-pharmaceuticals',
-      nameEn: 'Food and Pharmaceuticals',
-      nameVi: 'Thực phẩm và Dược phẩm',
-      descriptionEn: 'Food-safe and pharmaceutical-grade materials and solutions.',
-      descriptionVi: 'Vật liệu và giải pháp an toàn thực phẩm và cấp dược phẩm.',
-      imageUrl: img.industry['food-pharmaceuticals'],
+      slug: 'nukote-coatings',
+      nameEn: 'Nukote – Protective Coatings',
+      nameVi: 'Nukote – Chất Phủ Bảo Vệ',
+      descriptionEn:
+        'Nukote polyurea and hybrid protective coatings for abrasion, corrosion, impact, and chemical resistance.',
+      descriptionVi:
+        'Chất phủ bảo vệ Nukote polyurea/hybrid chống mài mòn, ăn mòn, va đập và kháng hoá chất.',
+      imageUrl: img.group['nukote-coatings'],
       order: 6,
+    },
+    {
+      slug: 'industrial-adhesives',
+      nameEn: 'Industrial Adhesives',
+      nameVi: 'Keo Dán Công Nghiệp',
+      descriptionEn:
+        'Structural and assembly adhesives for bonding metals, plastics, composites, and dissimilar materials with high reliability.',
+      descriptionVi:
+        'Keo kết cấu và lắp ráp cho kim loại, nhựa, composite và vật liệu khác nhau, độ tin cậy cao.',
+      imageUrl: img.group['industrial-adhesives'],
+      order: 7,
+    },
+    {
+      slug: 'welding-equipment',
+      nameEn: 'Welding Machines and Accessories',
+      nameVi: 'Máy Hàn và Phụ Kiện',
+      descriptionEn:
+        'Professional MIG/TIG/spot welding equipment, consumables, and safety accessories for fabrication and maintenance.',
+      descriptionVi:
+        'Thiết bị hàn MIG/TIG/hàn điểm, vật tư tiêu hao và phụ kiện an toàn cho chế tạo và bảo trì.',
+      imageUrl: img.group['welding-equipment'],
+      order: 8,
+    },
+    {
+      slug: 'printers',
+      nameEn: 'Printers',
+      nameVi: 'Máy In',
+      descriptionEn:
+        'Industrial printing solutions: inkjet coders, label printers, and marking systems for traceability and product identification.',
+      descriptionVi:
+        'Giải pháp in công nghiệp: in phun mã, máy in nhãn và hệ thống đánh dấu cho truy xuất và nhận dạng sản phẩm.',
+      imageUrl: img.group.printers,
+      order: 9,
+    },
+    {
+      slug: 'automatic-dosing',
+      nameEn: 'Automatic Robotic Dosing Equipment',
+      nameVi: 'Thiết Bị Định Lượng Tự Động Robot',
+      descriptionEn:
+        'Precision dispensing robots and automated dosing systems for adhesives, sealants, and fluid materials.',
+      descriptionVi:
+        'Robot phân phối chính xác và hệ thống định lượng tự động cho keo dán, chất bịt kín và vật liệu lỏng.',
+      imageUrl: img.group['automatic-dosing'],
+      order: 10,
+    },
+    {
+      slug: 'fluid-transmission',
+      nameEn: 'Fluid Transmission and Shredding',
+      nameVi: 'Truyền Động Chất Lỏng và Nghiền',
+      descriptionEn:
+        'Hydraulic/pneumatic components, hoses and fittings, plus shredding solutions for production, recycling, and maintenance.',
+      descriptionVi:
+        'Linh kiện thủy lực/khí nén, ống và phụ kiện, kèm giải pháp nghiền cho sản xuất, tái chế và bảo trì.',
+      imageUrl: img.group['fluid-transmission'],
+      order: 11,
+    },
+    {
+      slug: 'heat-conducting',
+      nameEn: 'Heat-Conducting Material',
+      nameVi: 'Vật Liệu Dẫn Nhiệt',
+      descriptionEn:
+        'Thermal interface materials (pads, pastes, gap fillers) for effective heat dissipation in electronics and power systems.',
+      descriptionVi:
+        'Vật liệu giao diện nhiệt (pad, keo, gap filler) giúp tản nhiệt hiệu quả cho điện tử và hệ thống nguồn.',
+      imageUrl: img.group['heat-conducting'],
+      order: 12,
     },
   ];
 
@@ -473,6 +554,11 @@ async function main() {
       create: industry,
     });
   }
+  // Deactivate non-canonical industry categories (safe cleanup)
+  await prisma.industryCategory.updateMany({
+    where: { slug: { notIn: industries.map((i) => i.slug) } },
+    data: { isActive: false },
+  });
   console.log('✅ Industry categories created');
 
   // Create product groups

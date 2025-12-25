@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Prisma } from '@prisma/client';
+import { Prisma, StockDocumentStatus, StockDocumentType } from '@prisma/client';
 import { z } from 'zod';
 
 import { auth } from '@/lib/auth';
@@ -36,12 +36,12 @@ export async function GET(req: NextRequest) {
   const skip = (page - 1) * take;
 
   const where: Prisma.StockDocumentWhereInput = {};
-  if (type) where.type = type as Prisma.StockDocumentType;
-  if (status) where.status = status as Prisma.StockDocumentStatus;
+  if (type) where.type = type as StockDocumentType;
+  if (status) where.status = status as StockDocumentStatus;
   if (q) {
     where.OR = [
-      { code: { contains: q, mode: 'insensitive' } },
-      { note: { contains: q, mode: 'insensitive' } },
+      { code: { contains: q } },
+      { note: { contains: q } },
     ];
   }
 
