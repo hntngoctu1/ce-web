@@ -500,9 +500,68 @@ src/modules/auth/
 └── index.ts             # Module exports
 ```
 
+### ✅ Step 3: Audit Logging Integration (COMPLETED)
+
+Audit logging integrated into:
+- Order status changes (`ORDER_STATUS_CHANGED`)
+- Payment additions (`ORDER_PAYMENT_ADDED`)
+- Stock document operations (`STOCK_DOCUMENT_CREATED`, `STOCK_DOCUMENT_POSTED`, `STOCK_DOCUMENT_VOIDED`)
+
+### ✅ Step 4: Orders Module (COMPLETED)
+
+Files created:
+```
+src/modules/orders/
+├── domain/
+│   ├── types.ts         # Order, OrderItem, status types
+│   ├── state-machine.ts # Order workflow (transitions, stock actions)
+│   ├── validators.ts    # Zod schemas
+│   └── index.ts
+├── repositories/
+│   ├── order.repository.ts  # Database access layer
+│   └── index.ts
+├── services/
+│   ├── order.service.ts     # Business logic + audit
+│   └── index.ts
+└── index.ts
+```
+
+Key features:
+- `OrderRepository`: CRUD, filtering, pagination, history
+- `OrderService`: Status transitions, payments, stock operations
+- State machine: `isAllowedTransition()`, `getStockActionForTransition()`
+- Integrated audit logging for all sensitive operations
+
+### ✅ Step 5: Inventory Module (COMPLETED)
+
+Files created:
+```
+src/modules/inventory/
+├── domain/
+│   ├── types.ts         # Warehouse, Document, Movement types
+│   ├── state-machine.ts # Document workflow
+│   ├── validators.ts    # Zod schemas
+│   └── index.ts
+├── repositories/
+│   ├── inventory.repository.ts  # Database access
+│   └── index.ts
+├── services/
+│   ├── inventory.service.ts     # Business logic + audit
+│   └── index.ts
+└── index.ts
+```
+
+Key features:
+- `InventoryRepository`: Warehouses, items, documents, movements
+- `InventoryService`: Document CRUD, posting, voiding with idempotency
+- State machine: `canPostDocument()`, `canVoidDocument()`
+- Movement application with balance tracking
+- Integrated audit logging
+
 ### 🔄 Next Steps
 
-- Step 3: Enhance audit logging
-- Step 4: Create orders module
-- Step 5: Create inventory module
+- Step 6: Database improvements (indexes, constraints, soft delete)
+- Step 7: Security hardening (rate limiting, CSRF)
+- Step 8: API standardization across all routes
+- Step 9: Testing infrastructure
 
