@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/db';
 import { HeroSection } from '@/components/sections/hero-section';
 import { ContactSection } from '@/components/sections/contact-section';
-import { ServiceCarousel } from '@/components/sections/service-carousel';
+import { ServicesSection } from '@/components/sections/services-section';
 import { Target, Users, Award, Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -144,7 +144,7 @@ export default async function EnvisionPage() {
 
       {/* Services (anchor for mega-menu links) */}
       <div id="services" />
-      <ServiceCarousel services={services} className="bg-white" />
+      <ServicesSection className="bg-white" />
 
       {/* Contact Section */}
       <ContactSection />

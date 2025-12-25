@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/db';
 import { HeroSlideshow } from '@/components/sections/hero-slideshow';
-import { ServiceCarousel } from '@/components/sections/service-carousel';
+import { ServicesSection } from '@/components/sections/services-section';
 import { PartnersSection } from '@/components/sections/partners-section';
 import { ContactSection } from '@/components/sections/contact-section';
 import { CaseStudiesSection } from '@/components/sections/case-studies-section';
@@ -322,8 +322,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <ServiceCarousel services={services} />
+      {/* Services Section - Premium Industrial Design */}
+      <ServicesSection />
 
       {/* Case Studies Section */}
       <CaseStudiesSection />
