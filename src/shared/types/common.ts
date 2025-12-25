@@ -111,7 +111,7 @@ export interface UserContext {
   userId: string;
   role: 'ADMIN' | 'EDITOR' | 'CUSTOMER';
   email?: string;
-  name?: string;
+  name?: string | null;
 }
 
 /**
