@@ -1,295 +1,233 @@
-# 🗄️ Database Migration Guide
+# 🗄️ Database Guide - PostgreSQL
 
-## SQLite → PostgreSQL Migration
+> **✅ MIGRATION COMPLETE**: Schema has been updated to PostgreSQL.
 
-### Current State
-- **Database**: SQLite (development)
-- **ORM**: Prisma 6.x
-- **Models**: 39 Prisma models
-- **Schema**: `prisma/schema.prisma`
+## Quick Start
 
----
+### 1. Prerequisites
+- PostgreSQL 14+ installed (or Docker)
+- Node.js 18+
 
-## Pre-Migration Checklist
+### 2. Setup PostgreSQL
 
-### 1. Schema Improvements Needed
-
-#### Missing Indexes (Add for Performance)
-
-```prisma
-// User
-model User {
-  // Add:
-  @@index([role])
-  @@index([createdAt])
-}
-
-// Order - Already has good indexes
-model Order {
-  // Consider composite indexes for common queries:
-  @@index([orderStatus, createdAt])
-  @@index([paymentState, createdAt])
-  @@index([userId, createdAt])
-}
-
-// Product
-model Product {
-  // Add:
-  @@index([groupId])
-  @@index([industryId])
-  @@index([brandId])
-  @@index([isActive, isFeatured])
-  @@index([createdAt])
-}
-
-// BlogPost
-model BlogPost {
-  // Already has good indexes
-}
-
-// InventoryItem
-model InventoryItem {
-  // Add for low stock queries:
-  @@index([availableQty])
-}
+**Option A: Docker (Recommended)**
+```bash
+docker run --name ce-postgres \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=ce_dev \
+  -p 5432:5432 \
+  -d postgres:16-alpine
 ```
 
-#### Standardize onDelete Strategies
-
-| Relation | Current | Recommended | Reason |
-|----------|---------|-------------|--------|
-| User → Order | SetNull | SetNull ✅ | Keep order history |
-| User → BlogPost | SetNull | SetNull ✅ | Keep content |
-| Product → OrderItem | SetNull | SetNull ✅ | Keep order history |
-| Order → OrderItem | Cascade | Cascade ✅ | Delete items with order |
-| Product → InventoryItem | Cascade | Restrict ❌ | Prevent deleting product with stock |
-
-#### Add Soft Delete (Optional)
-
-For entities that should be archived rather than deleted:
-
-```prisma
-model Product {
-  // Add:
-  deletedAt DateTime?
-  deletedBy String?
-  
-  @@index([deletedAt])
-}
-
-model Order {
-  // Already has canceledAt - use for soft delete
-}
-
-model BlogPost {
-  // status = ARCHIVED serves as soft delete
-}
-```
-
-### 2. Data Type Considerations
-
-| SQLite | PostgreSQL | Notes |
-|--------|------------|-------|
-| `Float` | `Decimal(12,2)` | Money fields - better precision |
-| `String` | `Text` | Large content fields |
-| `Json` | `JsonB` | Better indexing in PG |
-| `DateTime` | `Timestamp with time zone` | Timezone aware |
-
-### 3. Constraints to Add
-
-```prisma
-model Order {
-  total Float  // Should be: total Decimal @db.Decimal(12, 2)
-  
-  // Add check constraints (PG only):
-  // @@check("total >= 0", name: "total_non_negative")
-}
-
-model InventoryItem {
-  onHandQty Decimal
-  reservedQty Decimal
-  availableQty Decimal
-  
-  // Add check constraint:
-  // @@check("reservedQty >= 0", name: "reserved_non_negative")
-  // @@check("availableQty = onHandQty - reservedQty", name: "available_calc")
-}
-```
-
----
-
-## Migration Steps
-
-### Step 1: Prepare PostgreSQL
-
+**Option B: Local PostgreSQL**
 ```bash
 # Create database
-createdb ce_production
-
-# Or with Docker:
-docker run --name ce-postgres -e POSTGRES_DB=ce_production \
-  -e POSTGRES_USER=ce_user -e POSTGRES_PASSWORD=secure_password \
-  -p 5432:5432 -d postgres:15
+createdb ce_dev
 ```
 
-### Step 2: Update Schema Provider
+### 3. Configure Environment
 
+Create/update `.env`:
+```env
+# PostgreSQL Connection
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ce_dev?schema=public"
+
+# Auth
+AUTH_SECRET="your-secret-key-min-32-characters"
+AUTH_URL="http://localhost:3000"
+NODE_ENV="development"
+```
+
+### 4. Initialize Database
+
+```bash
+# Generate Prisma client
+npx prisma generate
+
+# Run migrations
+npx prisma migrate deploy
+
+# Seed data
+npm run db:seed
+```
+
+### 5. Verify Setup
+
+```bash
+# Open Prisma Studio to view data
+npx prisma studio
+```
+
+---
+
+## Schema Overview
+
+### Database Provider
 ```prisma
-// prisma/schema.prisma
 datasource db {
-  provider = "postgresql"  // Changed from "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 ```
 
-### Step 3: Generate Migration
+### Key Features Enabled
 
-```bash
-# Backup current SQLite data first!
-cp prisma/dev.db prisma/dev.db.backup
+| Feature | Implementation |
+|---------|---------------|
+| **Decimal precision** | `@db.Decimal(15, 2)` for money |
+| **Text fields** | `@db.Text` for long content |
+| **JSON columns** | `@db.JsonB` for indexed JSON |
+| **Composite indexes** | Optimized query performance |
+| **Proper cascades** | `onDelete: Cascade/SetNull` |
 
-# Update .env
-# DATABASE_URL="postgresql://ce_user:password@localhost:5432/ce_production"
-
-# Generate migration
-npx prisma migrate dev --name init_postgres
-
-# If existing data needs migration:
-npx prisma migrate deploy
-```
-
-### Step 4: Data Migration Script
-
-```typescript
-// scripts/migrate-data.ts
-import { PrismaClient as SqliteClient } from '@prisma/client';
-import { PrismaClient as PgClient } from '@prisma/client';
-
-async function migrateData() {
-  const sqlite = new SqliteClient({
-    datasources: { db: { url: 'file:./prisma/dev.db' } }
-  });
-  const pg = new PgClient({
-    datasources: { db: { url: process.env.DATABASE_URL } }
-  });
-
-  // Migrate in order (respecting foreign keys)
-  const tables = [
-    'User',
-    'CustomerProfile',
-    'CustomerAddress',
-    'ProductGroup',
-    'IndustryCategory',
-    'Partner',
-    'Product',
-    'ProductImage',
-    'ProductSpec',
-    'Warehouse',
-    'WarehouseLocation',
-    'InventoryItem',
-    'Order',
-    'OrderItem',
-    'OrderStatusHistory',
-    'Payment',
-    // ... etc
-  ];
-
-  for (const table of tables) {
-    const data = await (sqlite as any)[table.toLowerCase()].findMany();
-    console.log(`Migrating ${data.length} ${table} records...`);
-    
-    for (const record of data) {
-      await (pg as any)[table.toLowerCase()].create({ data: record });
-    }
-  }
-
-  await sqlite.$disconnect();
-  await pg.$disconnect();
-}
-
-migrateData().catch(console.error);
-```
-
-### Step 5: Verify Migration
-
-```bash
-# Check row counts
-npx prisma studio
-
-# Run test queries
-npx tsx scripts/verify-migration.ts
-```
+### Model Count
+- **39 Prisma models**
+- **15+ enums**
+- **100+ indexes**
 
 ---
 
-## PostgreSQL-Specific Features to Enable
+## Data Types Mapping
 
-### 1. Full-Text Search
+| Field Type | PostgreSQL | Example |
+|-----------|------------|---------|
+| Money | `Decimal(15, 2)` | `price`, `total`, `amount` |
+| Quantity | `Decimal(15, 4)` | `onHandQty`, `reservedQty` |
+| Long text | `Text` | `contentEn`, `description` |
+| JSON | `JsonB` | `metadata`, `buyerSnapshot` |
+| Timestamps | `Timestamp(3)` | `createdAt`, `updatedAt` |
 
+---
+
+## Index Strategy
+
+### Primary Indexes
 ```prisma
-// Add to Product for search optimization
-model Product {
-  // PostgreSQL full-text search (add after migration)
-  searchVector Unsupported("tsvector")?
-  
-  @@index([searchVector], type: Gin)
-}
-```
-
-### 2. JSON Indexing
-
-```prisma
-// For better JSON query performance
 model Order {
-  buyerSnapshot String? // Change to Json with @db.JsonB
-  
-  @@index([buyerSnapshot(ops: JsonbPathOps)], type: Gin)
+  @@index([createdAt])
+  @@index([orderStatus])
+  @@index([paymentState])
+  @@index([customerEmail])
+  @@index([orderStatus, createdAt])  // Composite
 }
 ```
 
-### 3. Partial Indexes
+### Performance Indexes
+```prisma
+model Product {
+  @@index([isActive, isFeatured])
+  @@index([groupId])
+  @@index([industryId])
+}
 
-```sql
--- Only index active products
-CREATE INDEX idx_products_active ON products (created_at) 
-  WHERE is_active = true;
-
--- Only index unpaid orders
-CREATE INDEX idx_orders_unpaid ON orders (due_date) 
-  WHERE payment_state = 'UNPAID';
+model InventoryItem {
+  @@index([availableQty])  // Low stock queries
+}
 ```
 
 ---
 
-## Rollback Plan
+## Migration Commands
 
-### If Migration Fails:
+### Development
+```bash
+# Create new migration
+npx prisma migrate dev --name <migration_name>
 
-1. **Stop application**
-2. **Restore .env to SQLite URL**
-3. **Revert schema.prisma provider**
-4. **Regenerate Prisma client**: `npx prisma generate`
-5. **Verify SQLite backup**: `cp prisma/dev.db.backup prisma/dev.db`
-6. **Restart application**
+# Reset database (destroys data!)
+npx prisma migrate reset
+
+# View current schema
+npx prisma studio
+```
+
+### Production
+```bash
+# Apply pending migrations (safe)
+npx prisma migrate deploy
+
+# Check migration status
+npx prisma migrate status
+```
 
 ---
 
-## Performance Monitoring
+## Connection Pooling (Production)
 
-After migration, monitor:
+For serverless/edge deployments, use connection pooling:
 
-1. **Slow queries**: Enable `log_min_duration_statement` in PostgreSQL
-2. **Connection pooling**: Use PgBouncer for production
-3. **Index usage**: `pg_stat_user_indexes`
+### Option 1: Prisma Accelerate
+```env
+DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=..."
+DIRECT_URL="postgresql://user:pass@host:5432/db"
+```
 
+### Option 2: PgBouncer
+```env
+DATABASE_URL="postgresql://user:pass@pgbouncer:6432/db?pgbouncer=true"
+DIRECT_URL="postgresql://user:pass@postgres:5432/db"
+```
+
+Update schema:
+```prisma
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+```
+
+---
+
+## Backup & Restore
+
+### Backup
+```bash
+# Full backup
+pg_dump -h localhost -U postgres -d ce_dev > backup.sql
+
+# Compressed backup
+pg_dump -h localhost -U postgres -d ce_dev -Fc > backup.dump
+```
+
+### Restore
+```bash
+# From SQL
+psql -h localhost -U postgres -d ce_dev < backup.sql
+
+# From compressed
+pg_restore -h localhost -U postgres -d ce_dev backup.dump
+```
+
+---
+
+## Monitoring Queries
+
+### Connection Status
 ```sql
--- Find unused indexes
+SELECT * FROM pg_stat_activity WHERE datname = 'ce_dev';
+```
+
+### Index Usage
+```sql
 SELECT schemaname, tablename, indexname, idx_scan
 FROM pg_stat_user_indexes
-WHERE idx_scan = 0
-AND indexname NOT LIKE 'pg_%';
+ORDER BY idx_scan DESC;
+```
 
--- Find slow queries
+### Table Sizes
+```sql
+SELECT
+  tablename,
+  pg_size_pretty(pg_total_relation_size(schemaname || '.' || tablename)) as size
+FROM pg_tables
+WHERE schemaname = 'public'
+ORDER BY pg_total_relation_size(schemaname || '.' || tablename) DESC;
+```
+
+### Slow Queries (requires pg_stat_statements)
+```sql
 SELECT query, calls, total_time, mean_time
 FROM pg_stat_statements
 ORDER BY mean_time DESC
@@ -298,20 +236,68 @@ LIMIT 10;
 
 ---
 
-## Environment Configuration
+## Production Environment
 
-### Development (SQLite)
+### Recommended Settings
 ```env
-DATABASE_URL="file:./prisma/dev.db"
+# Connection with SSL
+DATABASE_URL="postgresql://user:pass@host:5432/db?schema=public&sslmode=require"
+
+# Pool size (adjust based on serverless function count)
+# In Prisma schema or connection URL:
+# connection_limit=5
 ```
 
-### Staging (PostgreSQL)
-```env
-DATABASE_URL="postgresql://user:pass@staging-db:5432/ce_staging?schema=public"
+### Hosting Providers
+| Provider | Features | Pricing |
+|----------|----------|---------|
+| **Supabase** | Free tier, auto backups | Free - $25/mo |
+| **Neon** | Serverless, branching | Free - $19/mo |
+| **Railway** | Easy deploy | $5/mo |
+| **Vercel Postgres** | Edge optimized | $20/mo |
+| **AWS RDS** | Enterprise | $15/mo+ |
+
+---
+
+## Troubleshooting
+
+### Connection Refused
+```bash
+# Check if PostgreSQL is running
+docker ps | grep postgres
+# or
+pg_isready -h localhost -p 5432
 ```
 
-### Production (PostgreSQL with SSL)
-```env
-DATABASE_URL="postgresql://user:pass@prod-db:5432/ce_production?schema=public&sslmode=require"
+### Permission Denied
+```sql
+-- Grant permissions
+GRANT ALL PRIVILEGES ON DATABASE ce_dev TO postgres;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres;
 ```
 
+### Migration Conflicts
+```bash
+# Reset migrations (development only!)
+npx prisma migrate reset
+
+# Mark migration as applied (production)
+npx prisma migrate resolve --applied <migration_name>
+```
+
+---
+
+## Previous SQLite Data Migration
+
+If migrating from SQLite:
+
+```bash
+# 1. Export SQLite data
+sqlite3 prisma/dev.db .dump > sqlite_backup.sql
+
+# 2. Start fresh with PostgreSQL
+npx prisma migrate deploy
+npm run db:seed
+```
+
+For complex data migration, use custom scripts in `/scripts/`.
