@@ -7,13 +7,16 @@ const supported = new Set<string>(locales);
 
 export default getRequestConfig(async ({ requestLocale }) => {
   const segmentLocale = await requestLocale;
-  if (segmentLocale && !supported.has(segmentLocale)) notFound();
+  
+  // Don't throw notFound for non-locale segments - they might be valid routes
+  // Only use segmentLocale if it's actually a valid locale
+  const validSegmentLocale = segmentLocale && supported.has(segmentLocale) ? segmentLocale : undefined;
 
   // Otherwise, prefer cookie, then Accept-Language, then default to vi.
   const cookieStore = await cookies();
   const headersList = await headers();
 
-  let locale = segmentLocale || cookieStore.get('NEXT_LOCALE')?.value;
+  let locale = validSegmentLocale || cookieStore.get('NEXT_LOCALE')?.value;
 
   if (locale && !supported.has(locale)) {
     locale = undefined;
