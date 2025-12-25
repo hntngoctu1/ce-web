@@ -558,10 +558,47 @@ Key features:
 - Movement application with balance tracking
 - Integrated audit logging
 
+### ✅ Step 6: Database Improvements (COMPLETED)
+
+Created: `docs/DATABASE-MIGRATION-GUIDE.md`
+
+Contents:
+- Missing indexes identification
+- onDelete strategies standardization
+- Soft delete patterns
+- Data type considerations (Float → Decimal)
+- SQLite → PostgreSQL migration steps
+- Rollback plan
+- Performance monitoring queries
+
+### ✅ Step 7: Security Hardening (COMPLETED)
+
+Files created:
+```
+src/shared/security/
+├── rate-limit.ts    # In-memory rate limiter
+├── upload.ts        # Secure file upload validation
+└── index.ts
+```
+
+Rate limiting configurations:
+- LOGIN: 5 attempts per 15 minutes
+- REGISTER: 3 attempts per hour
+- CHECKOUT: 10 attempts per hour
+- CONTACT: 5 per hour
+- API_GENERAL: 100 per minute
+- API_ADMIN: 200 per minute
+
+File upload security:
+- MIME type validation
+- Magic byte verification
+- Size limits by category
+- File name sanitization
+- Extension validation
+
 ### 🔄 Next Steps
 
-- Step 6: Database improvements (indexes, constraints, soft delete)
-- Step 7: Security hardening (rate limiting, CSRF)
-- Step 8: API standardization across all routes
-- Step 9: Testing infrastructure
+- Step 8: API standardization across all routes (refactor existing routes)
+- Step 9: Testing infrastructure (unit + integration)
+- Step 10: CI/CD pipeline setup
 

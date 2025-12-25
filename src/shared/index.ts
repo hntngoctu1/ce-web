@@ -57,3 +57,6 @@ export * from './types';
 // Utils
 export * from './utils';
 
+// Security
+export * from './security';
+
