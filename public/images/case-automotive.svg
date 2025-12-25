@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Automotive assembly line case study cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#DEE0E9"/>
+      <stop offset="0.45" stop-color="#F7F8FA"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <linearGradient id="ce" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#434A6B"/>
+      <stop offset="0.55" stop-color="#676E9F"/>
+      <stop offset="1" stop-color="#565D85"/>
+    </linearGradient>
+    <pattern id="dots" width="36" height="36" patternUnits="userSpaceOnUse">
+      <circle cx="6" cy="6" r="2" fill="#676E9F" opacity="0.12"/>
+    </pattern>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .35 0"/>
+      <feBlend in="SourceGraphic" mode="normal"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#dots)"/>
+
+  <!-- Brand ribbon -->
+  <path d="M0,620 C220,520 420,540 610,470 C820,392 980,300 1200,270 L1200,900 L0,900 Z" fill="url(#ce)" opacity="0.18"/>
+  <path d="M0,720 C240,640 450,650 640,590 C860,520 1020,440 1200,420" stroke="#676E9F" stroke-width="6" opacity="0.25" fill="none"/>
+
+  <!-- Automotive icon (stylized car + assembly line) -->
+  <g transform="translate(210 300)" filter="url(#soft)">
+    <rect x="0" y="250" width="780" height="18" rx="9" fill="#434A6B" opacity="0.18"/>
+    <g transform="translate(120 120)">
+      <path d="M60 160 L120 90 C135 70 155 60 178 60 H352 C375 60 395 70 410 90 L470 160 Z"
+            fill="url(#ce)"/>
+      <rect x="40" y="150" width="480" height="120" rx="28" fill="#676E9F"/>
+      <path d="M160 92 H360 C370 92 378 100 378 110 V150 H142 V110 C142 100 150 92 160 92 Z"
+            fill="#F7F8FA" opacity="0.9"/>
+      <circle cx="140" cy="270" r="44" fill="#292C40" opacity="0.9"/>
+      <circle cx="420" cy="270" r="44" fill="#292C40" opacity="0.9"/>
+      <circle cx="140" cy="270" r="20" fill="#DEE0E9"/>
+      <circle cx="420" cy="270" r="20" fill="#DEE0E9"/>
+      <rect x="70" y="182" width="90" height="16" rx="8" fill="#F7F8FA" opacity="0.85"/>
+      <rect x="400" y="182" width="90" height="16" rx="8" fill="#F7F8FA" opacity="0.85"/>
+    </g>
+    <!-- robotic arm hint -->
+    <g transform="translate(520 40)" opacity="0.85">
+      <path d="M40 60 C60 40 90 40 110 60 L180 130" stroke="#565D85" stroke-width="16" stroke-linecap="round" fill="none"/>
+      <path d="M180 130 L230 180" stroke="#434A6B" stroke-width="18" stroke-linecap="round" fill="none"/>
+      <circle cx="40" cy="60" r="18" fill="#676E9F"/>
+      <circle cx="180" cy="130" r="16" fill="#676E9F"/>
+      <circle cx="230" cy="180" r="14" fill="#434A6B"/>
+    </g>
+  </g>
+
+  <!-- Label -->
+  <g transform="translate(80 90)">
+    <rect x="0" y="0" width="420" height="54" rx="14" fill="#676E9F" opacity="0.12"/>
+    <rect x="18" y="18" width="18" height="18" rx="4" fill="#676E9F"/>
+    <text x="50" y="36" font-family="Lato, Arial, sans-serif" font-size="18" font-weight="700" fill="#292C40" letter-spacing="1">
+      AUTOMOTIVE • DISPENSING OPTIMIZATION
+    </text>
+  </g>
+</svg>
+
+

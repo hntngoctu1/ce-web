@@ -1,0 +1,13 @@
+<svg width="96" height="96" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- CE mark (transparent background) -->
+  <circle cx="24" cy="24" r="20" stroke="#676E9F" stroke-width="3"/>
+  <!-- C -->
+  <path d="M28.5 16.5c-6.2 0-11.2 5-11.2 11.2S22.3 39 28.5 39" stroke="#676E9F" stroke-width="3" stroke-linecap="round"/>
+  <!-- E -->
+  <path d="M26 19.5h11" stroke="#676E9F" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 24h13" stroke="#676E9F" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 28.5h11" stroke="#676E9F" stroke-width="3" stroke-linecap="round"/>
+</svg>
+
+
+

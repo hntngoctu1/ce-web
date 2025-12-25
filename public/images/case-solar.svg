@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Solar panel production case study cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.55" stop-color="#F7F8FA"/>
+      <stop offset="1" stop-color="#DEE0E9"/>
+    </linearGradient>
+    <linearGradient id="ce" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#434A6B"/>
+      <stop offset="0.6" stop-color="#676E9F"/>
+      <stop offset="1" stop-color="#565D85"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="30%" cy="25%" r="60%">
+      <stop offset="0" stop-color="#DEE0E9" stop-opacity="1"/>
+      <stop offset="0.35" stop-color="#676E9F" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#676E9F" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#sun)"/>
+
+  <path d="M0,710 C260,620 470,620 700,540 C920,465 1060,380 1200,360 L1200,900 L0,900 Z" fill="url(#ce)" opacity="0.16"/>
+
+  <!-- Solar panel -->
+  <g transform="translate(170 240)">
+    <g transform="translate(0 0)">
+      <rect x="0" y="0" width="860" height="460" rx="26" fill="#292C40" opacity="0.10"/>
+      <rect x="22" y="22" width="816" height="416" rx="22" fill="url(#ce)" opacity="0.95"/>
+      <g stroke="#F7F8FA" stroke-width="3" opacity="0.35">
+        <!-- grid lines -->
+        <path d="M22 92 H838"/>
+        <path d="M22 162 H838"/>
+        <path d="M22 232 H838"/>
+        <path d="M22 302 H838"/>
+        <path d="M22 372 H838"/>
+        <path d="M122 22 V438"/>
+        <path d="M222 22 V438"/>
+        <path d="M322 22 V438"/>
+        <path d="M422 22 V438"/>
+        <path d="M522 22 V438"/>
+        <path d="M622 22 V438"/>
+        <path d="M722 22 V438"/>
+      </g>
+    </g>
+
+    <!-- Bonding bead hint -->
+    <path d="M120 420 C200 380 280 380 360 420 C440 460 520 460 600 420 C680 380 760 380 820 420"
+          stroke="#DEE0E9" stroke-width="10" opacity="0.35" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Label -->
+  <g transform="translate(80 90)">
+    <rect x="0" y="0" width="410" height="54" rx="14" fill="#676E9F" opacity="0.12"/>
+    <rect x="18" y="18" width="18" height="18" rx="4" fill="#676E9F"/>
+    <text x="50" y="36" font-family="Lato, Arial, sans-serif" font-size="18" font-weight="700" fill="#292C40" letter-spacing="1">
+      SOLAR • HIGH-PERFORMANCE BONDING
+    </text>
+  </g>
+</svg>
+
+

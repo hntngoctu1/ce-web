@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Appliance manufacturing case study cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.55" stop-color="#F7F8FA"/>
+      <stop offset="1" stop-color="#DEE0E9"/>
+    </linearGradient>
+    <linearGradient id="ce" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#434A6B"/>
+      <stop offset="0.55" stop-color="#676E9F"/>
+      <stop offset="1" stop-color="#565D85"/>
+    </linearGradient>
+    <pattern id="diag" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M-10 10 L10 -10 M0 40 L40 0 M30 50 L50 30" stroke="#676E9F" stroke-width="4" opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#diag)"/>
+
+  <path d="M0,700 C250,620 460,620 680,545 C900,470 1060,390 1200,365 L1200,900 L0,900 Z" fill="url(#ce)" opacity="0.16"/>
+
+  <!-- Appliance + labeling -->
+  <g transform="translate(210 210)">
+    <rect x="0" y="0" width="780" height="540" rx="28" fill="#FFFFFF" opacity="0.92" stroke="#BCC1D3" stroke-width="2"/>
+    <rect x="70" y="60" width="640" height="420" rx="26" fill="#F7F8FA"/>
+
+    <!-- panel -->
+    <rect x="130" y="120" width="520" height="230" rx="22" fill="url(#ce)" opacity="0.95"/>
+    <rect x="162" y="150" width="210" height="24" rx="12" fill="#DEE0E9"/>
+    <rect x="162" y="190" width="320" height="18" rx="9" fill="#DEE0E9" opacity="0.9"/>
+    <rect x="162" y="220" width="280" height="18" rx="9" fill="#DEE0E9" opacity="0.9"/>
+    <rect x="162" y="250" width="240" height="18" rx="9" fill="#DEE0E9" opacity="0.9"/>
+
+    <!-- label sticker -->
+    <g transform="translate(470 165)">
+      <rect x="0" y="0" width="150" height="170" rx="18" fill="#FFFFFF" opacity="0.92" stroke="#DEE0E9" stroke-width="2"/>
+      <rect x="18" y="24" width="114" height="22" rx="11" fill="#676E9F" opacity="0.85"/>
+      <rect x="18" y="62" width="90" height="14" rx="7" fill="#BCC1D3"/>
+      <rect x="18" y="88" width="100" height="14" rx="7" fill="#BCC1D3"/>
+      <rect x="18" y="114" width="70" height="14" rx="7" fill="#BCC1D3"/>
+      <rect x="18" y="140" width="54" height="14" rx="7" fill="#BCC1D3"/>
+    </g>
+
+    <!-- base -->
+    <rect x="110" y="380" width="560" height="36" rx="18" fill="#DEE0E9"/>
+    <circle cx="210" cy="398" r="10" fill="#676E9F" opacity="0.5"/>
+    <circle cx="260" cy="398" r="10" fill="#676E9F" opacity="0.35"/>
+  </g>
+
+  <!-- Label -->
+  <g transform="translate(80 90)">
+    <rect x="0" y="0" width="420" height="54" rx="14" fill="#676E9F" opacity="0.12"/>
+    <rect x="18" y="18" width="18" height="18" rx="4" fill="#676E9F"/>
+    <text x="50" y="36" font-family="Lato, Arial, sans-serif" font-size="18" font-weight="700" fill="#292C40" letter-spacing="1">
+      APPLIANCES • LABELING INTEGRATION
+    </text>
+  </g>
+</svg>
+
+

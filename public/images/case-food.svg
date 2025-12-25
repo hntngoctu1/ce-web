@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Food processing case study cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F7F8FA"/>
+      <stop offset="0.5" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DEE0E9"/>
+    </linearGradient>
+    <linearGradient id="ce" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#434A6B"/>
+      <stop offset="0.55" stop-color="#676E9F"/>
+      <stop offset="1" stop-color="#565D85"/>
+    </linearGradient>
+    <pattern id="rings" width="80" height="80" patternUnits="userSpaceOnUse">
+      <circle cx="40" cy="40" r="22" fill="none" stroke="#676E9F" stroke-width="3" opacity="0.10"/>
+      <circle cx="40" cy="40" r="6" fill="#676E9F" opacity="0.10"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#rings)"/>
+
+  <path d="M0,690 C260,600 460,610 680,530 C900,450 1040,360 1200,330 L1200,900 L0,900 Z" fill="url(#ce)" opacity="0.16"/>
+
+  <!-- Conveyor + package -->
+  <g transform="translate(160 250)">
+    <rect x="0" y="420" width="880" height="34" rx="17" fill="#434A6B" opacity="0.18"/>
+    <g fill="#676E9F" opacity="0.25">
+      <circle cx="90" cy="437" r="10"/>
+      <circle cx="170" cy="437" r="10"/>
+      <circle cx="250" cy="437" r="10"/>
+      <circle cx="330" cy="437" r="10"/>
+      <circle cx="410" cy="437" r="10"/>
+      <circle cx="490" cy="437" r="10"/>
+      <circle cx="570" cy="437" r="10"/>
+      <circle cx="650" cy="437" r="10"/>
+      <circle cx="730" cy="437" r="10"/>
+      <circle cx="810" cy="437" r="10"/>
+    </g>
+
+    <g transform="translate(240 110)">
+      <rect x="0" y="60" width="420" height="300" rx="26" fill="#FFFFFF" opacity="0.9" stroke="#BCC1D3" stroke-width="2"/>
+      <rect x="34" y="94" width="352" height="120" rx="18" fill="url(#ce)" opacity="0.9"/>
+      <rect x="34" y="236" width="250" height="20" rx="10" fill="#DEE0E9"/>
+      <rect x="34" y="270" width="310" height="20" rx="10" fill="#DEE0E9"/>
+      <rect x="34" y="304" width="210" height="20" rx="10" fill="#DEE0E9"/>
+
+      <!-- Shield (food-safe) -->
+      <g transform="translate(300 242)">
+        <path d="M50 0 L92 16 V56 C92 92 72 118 50 130 C28 118 8 92 8 56 V16 Z" fill="#676E9F" opacity="0.9"/>
+        <path d="M32 58 L44 70 L70 44" stroke="#F7F8FA" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Label -->
+  <g transform="translate(80 90)">
+    <rect x="0" y="0" width="420" height="54" rx="14" fill="#676E9F" opacity="0.12"/>
+    <rect x="18" y="18" width="18" height="18" rx="4" fill="#676E9F"/>
+    <text x="50" y="36" font-family="Lato, Arial, sans-serif" font-size="18" font-weight="700" fill="#292C40" letter-spacing="1">
+      FOOD • SAFE COATINGS &amp; PACKAGING
+    </text>
+  </g>
+</svg>
+
+

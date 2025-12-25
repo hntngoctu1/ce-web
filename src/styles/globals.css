@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 234 24% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 234 24% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 234 24% 11%;
+    --primary: 234 24% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 234 15% 93%;
+    --secondary-foreground: 234 24% 30%;
+    --muted: 234 15% 95%;
+    --muted-foreground: 234 10% 45%;
+    --accent: 234 15% 93%;
+    --accent-foreground: 234 24% 30%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 234 15% 88%;
+    --input: 234 15% 88%;
+    --ring: 234 24% 51%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 234 24% 8%;
+    --foreground: 0 0% 98%;
+    --card: 234 24% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 234 24% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 234 24% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 234 15% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 234 15% 18%;
+    --muted-foreground: 234 10% 65%;
+    --accent: 234 15% 18%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 234 15% 20%;
+    --input: 234 15% 20%;
+    --ring: 234 24% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background font-lato text-foreground antialiased;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+}
+
+@layer components {
+  .ce-container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .ce-section {
+    @apply py-16 md:py-24;
+  }
+
+  /* Brand-forward, reusable typography blocks */
+  .ce-kicker {
+    @apply text-xs font-bold uppercase tracking-wider text-ce-primary;
+  }
+
+  .ce-section-title {
+    @apply relative inline-block text-ce-primary-900;
+  }
+
+  /* Underline bar using CE brand color */
+  .ce-section-title::after {
+    content: '';
+    @apply mt-3 block h-1 w-14 rounded-full bg-ce-primary;
+  }
+
+  .ce-heading {
+    @apply font-heavy uppercase tracking-wider text-ce-primary;
+  }
+
+  .ce-gradient-text {
+    @apply bg-gradient-to-r from-ce-primary-600 to-ce-primary-400 bg-clip-text text-transparent;
+  }
+
+  .ce-card {
+    @apply rounded-lg border border-border bg-card p-6 shadow-sm transition-all focus-within:ring-2 focus-within:ring-ce-primary/20 focus-within:ring-offset-2 hover:border-ce-primary/30 hover:shadow-md;
+  }
+
+  /* A subtle brand-tinted surface that increases CE presence without heavy fills */
+  .ce-surface {
+    @apply bg-white;
+    background-image: linear-gradient(
+      135deg,
+      rgba(103, 110, 159, 0.06) 0%,
+      rgba(103, 110, 159, 0.02) 40%,
+      rgba(255, 255, 255, 1) 100%
+    );
+  }
+
+  .ce-btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-ce-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-ce-primary-600 focus:outline-none focus:ring-2 focus:ring-ce-primary focus:ring-offset-2;
+  }
+
+  .ce-btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-ce-primary bg-transparent px-6 py-3 text-sm font-medium text-ce-primary transition-colors hover:bg-ce-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-ce-primary focus:ring-offset-2;
+  }
+
+  /* CE Pattern Background */
+  .ce-pattern-bg {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23676E9F' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3Cpath d='M30 0v60M0 30h60' stroke-width='0.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Circle and Line Pattern */
+  .ce-circle-pattern {
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(103, 110, 159, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(103, 110, 159, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 40% 80%, rgba(103, 110, 159, 0.04) 0%, transparent 30%);
+  }
+
+  /* Hero Section Pattern */
+  .ce-hero-pattern {
+    background-image:
+      linear-gradient(135deg, rgba(103, 110, 159, 0.02) 25%, transparent 25%),
+      linear-gradient(225deg, rgba(103, 110, 159, 0.02) 25%, transparent 25%),
+      linear-gradient(45deg, rgba(103, 110, 159, 0.02) 25%, transparent 25%),
+      linear-gradient(315deg, rgba(103, 110, 159, 0.02) 25%, transparent 25%);
+    background-size: 40px 40px;
+  }
+
+  /* Gradient Backgrounds */
+  .bg-ce-gradient {
+    background: linear-gradient(135deg, #676e9f 0%, #565d85 100%);
+  }
+
+  .bg-ce-gradient-light {
+    background: linear-gradient(135deg, #ffffff 0%, #dee0e9 100%);
+  }
+
+  .bg-ce-gradient-radial {
+    background: radial-gradient(circle at top right, #676e9f 0%, #434a6b 100%);
+  }
+}
+
+@layer utilities {
+  /* Fade-up animation */
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+}

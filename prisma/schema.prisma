@@ -1,0 +1,1045 @@
+// CE Website Database Schema
+// SQLite for development, PostgreSQL for production
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== AUTH & USERS ====================
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  CUSTOMER
+}
+
+enum CustomerType {
+  PERSONAL
+  BUSINESS
+}
+
+enum AddressKind {
+  SHIPPING
+  BILLING
+}
+
+enum OrderStatus {
+  DRAFT
+  PENDING_CONFIRMATION
+  CONFIRMED
+  PACKING
+  SHIPPED
+  DELIVERED
+  CANCELED
+  RETURN_REQUESTED
+  RETURNED
+  FAILED
+}
+
+enum PaymentState {
+  UNPAID
+  PAID
+  REFUNDED
+  PARTIAL
+}
+
+enum FulfillmentStatus {
+  UNFULFILLED
+  PACKING
+  SHIPPED
+  DELIVERED
+  RETURNED
+}
+
+// Accounting-focused status (separate from operational OrderStatus workflow)
+enum AccountingOrderStatus {
+  DRAFT
+  PENDING_PAYMENT
+  PAID
+  PARTIALLY_PAID
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum CustomerKind {
+  INDIVIDUAL
+  BUSINESS
+}
+
+enum PaymentMethod {
+  COD
+  BANK_TRANSFER
+  CASH
+  CARD
+  MANUAL_ADJUSTMENT
+  OTHER
+}
+
+enum NotificationType {
+  ORDER_STATUS_EMAIL
+}
+
+enum NotificationStatus {
+  SENT
+  FAILED
+  SKIPPED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  phone         String?
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          UserRole  @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  accounts        Account[]
+  sessions        Session[]
+  customerProfile CustomerProfile?
+  addresses       CustomerAddress[]
+  orders          Order[]
+  orderStatusHistory OrderStatusHistory[] @relation("OrderStatusHistoryActor")
+  paymentsRecorded Payment[] @relation("PaymentActor")
+  blogPosts       BlogPost[]       @relation("PostAuthor")
+
+  @@map("users")
+}
+
+model OrderCounter {
+  id         String   @id @default(cuid())
+  year       Int      @unique
+  lastNumber Int      @default(0)
+  updatedAt  DateTime @updatedAt
+
+  @@map("order_counters")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model CustomerProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+
+  // B2B/B2C segmentation
+  customerType  CustomerType @default(PERSONAL)
+
+  // Legacy single-address fields (kept for backward compatibility)
+  address       String?
+  city          String?
+  province      String?
+  postalCode    String?
+  country       String?  @default("Vietnam")
+
+  // Business fields (for B2B)
+  companyName   String?
+  taxId         String?
+
+  // Optional invoice contact (can be used later in API/UI)
+  companyEmail  String?
+
+  loyaltyPoints Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("customer_profiles")
+}
+
+model CustomerAddress {
+  id             String      @id @default(cuid())
+  userId         String
+  kind           AddressKind @default(SHIPPING)
+
+  // Display name for address book entries (e.g. "Warehouse", "Office HQ")
+  label          String?
+
+  // Recipient / buyer contact (can support both PERSONAL and BUSINESS)
+  recipientName  String
+  recipientEmail String?
+  recipientPhone String
+
+  // Company / tax info (for BUSINESS or invoice addresses)
+  companyName    String?
+  taxId          String?
+
+  // Address fields (Vietnam-oriented but generic enough)
+  addressLine1   String
+  addressLine2   String?
+  ward           String?
+  district       String?
+  city           String?
+  province       String?
+  postalCode     String?
+  country        String @default("Vietnam")
+
+  // Defaults (enforced later in API)
+  isDefault      Boolean @default(false)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("customer_addresses")
+}
+
+// ==================== COMPANY INFO & PAGES ====================
+
+model PageSection {
+  id          String   @id @default(cuid())
+  page        String
+  sectionType String
+  titleEn     String?
+  titleVi     String?
+  subtitleEn  String?
+  subtitleVi  String?
+  contentEn   String?
+  contentVi   String?
+  imageUrl    String?
+  videoUrl    String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  metadata    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([page, sectionType, order])
+  @@map("page_sections")
+}
+
+// ==================== SERVICES ====================
+
+model ServiceCategory {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  nameEn        String
+  nameVi        String
+  descriptionEn String?
+  descriptionVi String?
+  iconName      String?
+  imageUrl      String?
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("service_categories")
+}
+
+// ==================== INDUSTRY CATEGORIES ====================
+
+model IndustryCategory {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  nameEn        String
+  nameVi        String
+  descriptionEn String?
+  descriptionVi String?
+  imageUrl      String?
+  order         Int       @default(0)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  products Product[]
+
+  @@map("industry_categories")
+}
+
+// ==================== PRODUCTS ====================
+
+model ProductGroup {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  nameEn        String
+  nameVi        String
+  descriptionEn String?
+  descriptionVi String?
+  imageUrl      String?
+  order         Int       @default(0)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  products Product[]
+
+  @@map("product_groups")
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  sku           String?  @unique
+  nameEn        String
+  nameVi        String
+  shortDescEn   String?
+  shortDescVi   String?
+  descriptionEn String?
+  descriptionVi String?
+  price         Float    @default(0)
+  salePrice     Float?
+  currency      String   @default("VND")
+  isOnSale      Boolean  @default(false)
+  isFeatured    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  stockQuantity Int      @default(0)
+  order         Int      @default(0)
+  
+  // Relations
+  groupId    String?
+  group      ProductGroup?     @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  
+  industryId String?
+  industry   IndustryCategory? @relation(fields: [industryId], references: [id], onDelete: SetNull)
+  
+  brandId    String?
+  brand      Partner?          @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  
+  images     ProductImage[]
+  specs      ProductSpec[]
+  orderItems OrderItem[]
+  inventoryItems InventoryItem[]
+  stockDocumentLines StockDocumentLine[]
+  stockMovements StockMovement[]
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  url       String
+  alt       String?
+  order     Int      @default(0)
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model ProductSpec {
+  id        String   @id @default(cuid())
+  productId String
+  keyEn     String
+  keyVi     String
+  valueEn   String
+  valueVi   String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_specs")
+}
+
+// ==================== PARTNERS/BRANDS ====================
+
+model Partner {
+  id         String    @id @default(cuid())
+  name       String
+  logoUrl    String?
+  websiteUrl String?
+  order      Int       @default(0)
+  isActive   Boolean   @default(true)
+  isBrand    Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  // Relations
+  products Product[]
+
+  @@map("partners")
+}
+
+// ==================== BLOG / CMS ====================
+
+enum BlogPostStatus {
+  DRAFT
+  REVIEW
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum BlogPostVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum MediaProvider {
+  LOCAL
+  S3
+  CLOUDINARY
+}
+
+enum AiJobType {
+  GENERATE_DRAFT
+  TRANSLATE
+  SUMMARIZE
+  SEO_OPTIMIZE
+  REWRITE
+}
+
+enum AiJobStatus {
+  QUEUED
+  RUNNING
+  DONE
+  FAILED
+}
+
+model BlogCategory {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  nameEn      String
+  nameVi      String
+  description String?
+  order       Int        @default(0)
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  posts BlogPost[]
+
+  @@map("blog_categories")
+}
+
+model BlogTag {
+  id        String        @id @default(cuid())
+  slug      String        @unique
+  nameEn    String
+  nameVi    String
+  createdAt DateTime      @default(now())
+
+  // Relations
+  posts BlogPostTag[]
+
+  @@map("blog_tags")
+}
+
+model BlogPost {
+  id           String             @id @default(cuid())
+  // Legacy fields (kept for backward compatibility)
+  slug         String             @unique
+  titleEn      String
+  titleVi      String
+  excerptEn    String?
+  excerptVi    String?
+  contentEn    String?
+  contentVi    String?
+  coverImage   String?
+  isPublished  Boolean            @default(false)
+  isFeatured   Boolean            @default(false)
+  publishedAt  DateTime?
+  viewCount    Int                @default(0)
+  
+  // New CMS fields
+  status       BlogPostStatus     @default(DRAFT)
+  visibility   BlogPostVisibility @default(PUBLIC)
+  scheduledAt  DateTime?
+  readTimeMin  Int?
+  wordCount    Int?
+  
+  // Relations
+  categoryId   String?
+  category     BlogCategory?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  
+  authorId     String?
+  author       User?              @relation("PostAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  
+  coverImageId String?
+  coverMedia   MediaAsset?        @relation("PostCoverImage", fields: [coverImageId], references: [id], onDelete: SetNull)
+  
+  tags         BlogPostTag[]
+  translations BlogPostTranslation[]
+  revisions    BlogPostRevision[]
+  aiJobs       AiContentJob[]
+  
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([status])
+  @@index([publishedAt])
+  @@index([authorId])
+  @@index([categoryId])
+  @@map("blog_posts")
+}
+
+model BlogPostTranslation {
+  id             String      @id @default(cuid())
+  postId         String
+  locale         String      // 'en' | 'vi'
+  title          String
+  slug           String
+  excerpt        String?
+  contentJson    String?     // Editor native JSON format (canonical)
+  contentHtml    String?     // Rendered HTML for preview/public
+  
+  // SEO fields
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String?
+  ogImageId      String?
+  ogImage        MediaAsset? @relation("TranslationOgImage", fields: [ogImageId], references: [id], onDelete: SetNull)
+  
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, locale])
+  @@unique([slug, locale])
+  @@index([locale])
+  @@map("blog_post_translations")
+}
+
+model BlogPostRevision {
+  id           String   @id @default(cuid())
+  postId       String
+  locale       String
+  snapshotJson String?  // Full editor JSON at this point
+  snapshotHtml String?  // Rendered HTML
+  title        String?
+  excerpt      String?
+  message      String?  // "Autosave", "Manual save", "Published"
+  createdBy    String?
+  createdAt    DateTime @default(now())
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, locale])
+  @@index([createdAt])
+  @@map("blog_post_revisions")
+}
+
+model BlogPostTag {
+  postId String
+  tagId  String
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  BlogTag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@map("blog_post_tags")
+}
+
+// ==================== MEDIA LIBRARY ====================
+
+model MediaAsset {
+  id         String        @id @default(cuid())
+  url        String
+  provider   MediaProvider @default(LOCAL)
+  fileName   String
+  mimeType   String
+  size       Int           // bytes
+  width      Int?
+  height     Int?
+  altText    String?
+  caption    String?
+  folder     String?       @default("general")
+  createdBy  String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  // Relations
+  postsCover       BlogPost[]             @relation("PostCoverImage")
+  translationsOg   BlogPostTranslation[]  @relation("TranslationOgImage")
+
+  @@index([folder])
+  @@index([mimeType])
+  @@index([createdAt])
+  @@map("media_assets")
+}
+
+// ==================== AI CONTENT PIPELINE (Future-proof) ====================
+
+model AiContentJob {
+  id        String       @id @default(cuid())
+  type      AiJobType
+  status    AiJobStatus  @default(QUEUED)
+  input     String?      // JSON
+  output    String?      // JSON
+  error     String?
+  postId    String?
+  locale    String?
+  createdBy String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  post BlogPost? @relation(fields: [postId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([type])
+  @@index([postId])
+  @@map("ai_content_jobs")
+}
+
+// ==================== ORDERS ====================
+
+model Order {
+  id              String   @id @default(cuid())
+  orderNumber     String   @unique
+  // Human-friendly incremental code (e.g. CE-2025-000123). For new orders we set both orderNumber and orderCode to this value.
+  orderCode       String?  @unique
+  userId          String?
+  
+  // Customer info
+  customerName    String
+  customerEmail   String
+  customerPhone   String?
+  shippingAddress String?
+  billingAddress  String?
+
+  // Snapshot for B2B/B2C at the time of checkout (backward compatible)
+  buyerType       CustomerType @default(PERSONAL)
+  buyerCompanyName String?
+  buyerTaxId      String?
+  buyerCompanyEmail String?
+  buyerSnapshot   String? // JSON string
+  shippingSnapshot String? // JSON string
+  billingSnapshot  String? // JSON string
+  
+  // Order details
+  subtotal        Float
+  discount        Float    @default(0)
+  tax             Float    @default(0)
+  shippingCost    Float    @default(0)
+  total           Float
+  currency        String   @default("VND")
+
+  // Finance v1 (Revenue/Debt module) - backward compatible, derived from existing totals
+  totalAmount       Float   @default(0)
+  paidAmount        Float   @default(0)
+  outstandingAmount Float   @default(0)
+  invoiceNo         String? @unique
+  orderDate         DateTime @default(now())
+  dueDate           DateTime?
+  accountingStatus  AccountingOrderStatus @default(PENDING_PAYMENT)
+
+  // Customer segmentation for accounting
+  customerKind      CustomerKind @default(INDIVIDUAL)
+  companyId         String?
+  
+  // Legacy status fields (kept to avoid breaking existing UI)
+  status          String   @default("PENDING")
+  paymentStatus   String   @default("PENDING")
+  paymentMethod   String?
+
+  // Order management v2 (admin workflow)
+  orderStatus     OrderStatus        @default(PENDING_CONFIRMATION)
+  paymentState    PaymentState       @default(UNPAID)
+  fulfillmentStatus FulfillmentStatus @default(UNFULFILLED)
+  transactionRef  String?
+
+  // Shipment info (optional)
+  carrier         String?
+  trackingCode    String?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+
+  // Cancellation/returns
+  canceledAt      DateTime?
+  cancelReason    String?
+  
+  notes           String?
+  
+  // Relations
+  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  company   Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  items     OrderItem[]
+  statusHistory OrderStatusHistory[]
+  notificationLogs NotificationLog[]
+  payments  Payment[]
+  
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@index([userId])
+  @@index([customerEmail])
+  @@index([customerPhone])
+  @@index([buyerCompanyName])
+  @@index([orderStatus])
+  @@index([paymentState])
+  @@index([fulfillmentStatus])
+  @@index([accountingStatus])
+  @@index([dueDate])
+  @@index([companyId])
+  @@map("orders")
+}
+
+model Company {
+  id        String   @id @default(cuid())
+  name      String
+  taxId     String?  @unique
+  email     String?
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+
+  @@index([name])
+  @@map("companies")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String
+  amount        Float
+  paymentDate   DateTime      @default(now())
+  paymentMethod PaymentMethod @default(OTHER)
+  note          String?
+  actorAdminId  String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  actor User? @relation("PaymentActor", fields: [actorAdminId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([paymentDate])
+  @@index([paymentMethod])
+  @@map("payments")
+}
+model OrderItem {
+  id          String  @id @default(cuid())
+  orderId     String
+  productId   String?
+  productName String
+  productSku  String?
+  quantity    Int
+  unitPrice   Float
+  totalPrice  Float
+  
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id            String      @id @default(cuid())
+  orderId       String
+  fromStatus    OrderStatus?
+  toStatus      OrderStatus
+  actorAdminId  String?     // User.id of admin/editor who changed the status (null for system)
+  noteInternal  String?
+  noteCustomer  String?
+  createdAt     DateTime    @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  actor User? @relation("OrderStatusHistoryActor", fields: [actorAdminId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([toStatus])
+  @@index([createdAt])
+  @@map("order_status_history")
+}
+
+model NotificationLog {
+  id                String             @id @default(cuid())
+  orderId            String
+  type              NotificationType
+  recipient         String
+  status            NotificationStatus @default(SENT)
+  providerMessageId String?
+  error             String?
+  // Prevent duplicate sends for the same order + status event
+  dedupeKey         String?            @unique
+  createdAt         DateTime           @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([recipient])
+  @@index([createdAt])
+  @@map("notification_logs")
+}
+
+// ==================== CONTACT MESSAGES ====================
+
+model ContactMessage {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  company   String?
+  subject   String?
+  message   String
+  isRead    Boolean   @default(false)
+  isReplied Boolean   @default(false)
+  repliedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("contact_messages")
+}
+
+// ==================== MEDIA/UPLOADS ====================
+
+model MediaFile {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  url          String
+  folder       String?  @default("general")
+  alt          String?
+  createdAt    DateTime @default(now())
+
+  @@map("media_files")
+}
+
+// ==================== SETTINGS ====================
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  type      String   @default("string")
+  group     String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// ==================== WAREHOUSE / INVENTORY (Phase 1) ====================
+
+enum StockDocumentType {
+  GRN
+  ISSUE
+  ADJUSTMENT
+  TRANSFER
+  RESERVE
+  RELEASE
+  DEDUCT
+  RESTOCK
+}
+
+enum StockDocumentStatus {
+  DRAFT
+  POSTED
+  VOID
+}
+
+enum StockReferenceType {
+  ORDER
+  PO
+  MANUAL
+}
+
+model Warehouse {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  address   String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  locations      WarehouseLocation[]
+  inventoryItems InventoryItem[]
+  stockDocuments StockDocument[]       @relation("WarehouseSource")
+  transferTargets StockDocument[]      @relation("WarehouseTarget")
+  stockMovements StockMovement[]
+
+  @@map("warehouses")
+}
+
+model WarehouseLocation {
+  id          String   @id @default(cuid())
+  warehouseId String
+  code        String
+  name        String
+  isDefault   Boolean  @default(false)
+
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  inventoryItems InventoryItem[]
+  sourceLines StockDocumentLine[] @relation("LineSourceLocation")
+  targetLines StockDocumentLine[] @relation("LineTargetLocation")
+  stockMovements StockMovement[]
+
+  @@unique([warehouseId, code])
+  @@map("warehouse_locations")
+}
+
+model InventoryItem {
+  id            String   @id @default(cuid())
+  productId     String
+  warehouseId   String
+  locationId    String?
+  onHandQty     Decimal  @default(0)
+  reservedQty   Decimal  @default(0)
+  availableQty  Decimal  @default(0)
+  reorderPointQty Decimal @default(0)
+  reorderQty    Decimal  @default(0)
+  updatedAt     DateTime @updatedAt
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  location  WarehouseLocation? @relation(fields: [locationId], references: [id], onDelete: SetNull)
+
+  @@unique([productId, warehouseId, locationId])
+  @@index([warehouseId])
+  @@index([productId])
+  @@map("inventory_items")
+}
+
+model StockDocument {
+  id                String             @id @default(cuid())
+  code              String             @unique
+  type              StockDocumentType
+  status            StockDocumentStatus @default(DRAFT)
+  warehouseId       String
+  targetWarehouseId String?
+  referenceType     StockReferenceType?
+  referenceId       String?
+  note              String?
+  createdBy         String?
+  postedBy          String?
+  postedAt          DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  warehouse       Warehouse        @relation("WarehouseSource", fields: [warehouseId], references: [id], onDelete: Cascade)
+  targetWarehouse Warehouse?       @relation("WarehouseTarget", fields: [targetWarehouseId], references: [id], onDelete: SetNull)
+  lines           StockDocumentLine[]
+  movements       StockMovement[]
+
+  @@index([type])
+  @@index([status])
+  @@index([warehouseId])
+  @@index([targetWarehouseId])
+  @@map("stock_documents")
+}
+
+model StockDocumentLine {
+  id             String   @id @default(cuid())
+  documentId     String
+  productId      String
+  skuSnapshot    String?
+  nameSnapshot   String?
+  qty            Decimal
+  unitCost       Decimal?
+  sourceLocationId String?
+  targetLocationId String?
+  metadata       Json?
+
+  document StockDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  product  Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sourceLocation WarehouseLocation? @relation("LineSourceLocation", fields: [sourceLocationId], references: [id], onDelete: SetNull)
+  targetLocation WarehouseLocation? @relation("LineTargetLocation", fields: [targetLocationId], references: [id], onDelete: SetNull)
+  movements StockMovement[]
+
+  @@index([documentId])
+  @@index([productId])
+  @@map("stock_document_lines")
+}
+
+model StockMovement {
+  id                 String   @id @default(cuid())
+  documentId         String
+  lineId             String?
+  productId          String
+  warehouseId        String
+  locationId         String?
+  movementType       StockDocumentType
+  qtyChangeOnHand    Decimal  @default(0)
+  qtyChangeReserved  Decimal  @default(0)
+  balanceOnHandAfter Decimal
+  balanceReservedAfter Decimal
+  idempotencyKey     String   @unique
+  createdAt          DateTime @default(now())
+  createdBy          String?
+
+  document StockDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  line     StockDocumentLine? @relation(fields: [lineId], references: [id], onDelete: SetNull)
+  product  Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouse Warehouse    @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  location  WarehouseLocation? @relation(fields: [locationId], references: [id], onDelete: SetNull)
+
+  @@index([productId])
+  @@index([warehouseId])
+  @@index([movementType])
+  @@index([createdAt])
+  @@map("stock_movements")
+}
+
+model InventoryAuditLog {
+  id        String   @id @default(cuid())
+  entityType String
+  entityId  String
+  action    String
+  before    Json?
+  after     Json?
+  createdBy String?
+  createdAt DateTime @default(now())
+  ip        String?
+  userAgent String?
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("inventory_audit_logs")
+}

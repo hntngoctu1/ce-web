@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" fill="none" role="img" aria-label="Mirka Abranet">
+  <defs>
+    <linearGradient id="g1034" x1="0" y1="0" x2="1200" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F6F7FB"/>
+      <stop offset="1" stop-color="#EEF0FA"/>
+    </linearGradient>
+    <linearGradient id="g1034-accent" x1="0" y1="1200" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#676E9F" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#2E3354" stop-opacity="0.10"/>
+    </linearGradient>
+    <pattern id="g1034-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="rgba(103,110,159,0.20)" stroke-width="1"/>
+    </pattern>
+    <filter id="g1034-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="rgba(16,22,47,0.12)"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="1200" fill="url(#g1034)"/>
+  <rect x="0" y="0" width="1200" height="1200" fill="url(#g1034-grid)" opacity="0.35"/>
+
+  <!-- Accent shapes -->
+  <path d="M 744 60 C 1056 216, 1176 504, 1080 840 C 960 1176, 624 1176, 480 983.9999999999999 C 300 744, 480 264, 744 60 Z"
+        fill="url(#g1034-accent)"/>
+
+  <g filter="url(#g1034-shadow)">
+    <rect x="84" y="120" width="1032" height="960" rx="28" fill="#FFFFFF"/>
+    <rect x="84" y="120" width="1032" height="960" rx="28" stroke="rgba(103,110,159,0.22)"/>
+  </g>
+
+  <!-- Icon -->
+  <g transform="translate(168, 264)">
+    
+  <svg width="220" height="220" viewBox="0 0 100 100" fill="none">
+    <g stroke="#676E9F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+      
+    <path d="M30 28h40v44H30z"/>
+    <path d="M34 36h0.1M42 36h0.1M50 36h0.1M58 36h0.1"/>
+    <path d="M34 46h0.1M42 46h0.1M50 46h0.1M58 46h0.1"/>
+    <path d="M34 56h0.1M42 56h0.1M50 56h0.1M58 56h0.1"/>
+    <path d="M34 66h0.1M42 66h0.1M50 66h0.1M58 66h0.1"/>
+  
+    </g>
+  </svg>
+  </g>
+
+  <!-- Text -->
+  <g transform="translate(168, 744)">
+    <text x="0" y="0" font-family="system-ui, -apple-system, Segoe UI, Arial" font-size="78" font-weight="800" fill="#10162F" letter-spacing="-0.5">Mirka Abranet</text>
+    <text x="0" y="90" font-family="system-ui, -apple-system, Segoe UI, Arial" font-size="46" font-weight="600" fill="#4B5563">Mesh Sandpaper</text>
+  </g>
+</svg>

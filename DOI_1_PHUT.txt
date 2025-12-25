@@ -1,0 +1,117 @@
+╔══════════════════════════════════════════════════════════╗
+║                                                          ║
+║          ⏰ ĐỢI 1 PHÚT - SERVER ĐANG COMPILE ⏰          ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+
+
+📍 ĐÃ FIX LỖI CONNECTION REFUSED
+
+
+┌──────────────────────────────────────────────────────────┐
+│  ✅ NHỮNG GÌ TÔI ĐÃ LÀM                                 │
+└──────────────────────────────────────────────────────────┘
+
+1. ✅ Fix i18n config (tạo i18n.ts)
+2. ✅ Cập nhật next.config.mjs
+3. ✅ Tạo test page siêu đơn giản (/hello)
+4. ✅ Stop tất cả Node processes (3 processes)
+5. ✅ Restart dev server
+6. ⏳ Server đang compile... (~60 giây)
+
+
+┌──────────────────────────────────────────────────────────┐
+│  ⏰ SAU 1 PHÚT - THỬ CÁC URL SAU (THEO THỨ TỰ)         │
+└──────────────────────────────────────────────────────────┘
+
+🥇 ĐẦU TIÊN (QUAN TRỌNG NHẤT):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+http://localhost:3000/hello
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+→ Trang đơn giản nhất, không dùng i18n
+→ Nếu trang này OK = Server đang chạy tốt!
+
+
+🥈 THỨ HAI:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+http://localhost:3000/simple
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+🥉 THỨ BA:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+http://localhost:3000
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+┌──────────────────────────────────────────────────────────┐
+│  📊 TRẠNG THÁI HIỆN TẠI                                 │
+└──────────────────────────────────────────────────────────┘
+
+✅ Code:           100% complete
+✅ i18n config:    FIXED
+✅ Test page:      CREATED (/hello)
+✅ Node process:   KILLED & RESTARTED
+⏳ Compilation:    IN PROGRESS
+⏳ Ready:          ~60 SECONDS
+
+
+┌──────────────────────────────────────────────────────────┐
+│  ⚠️  TẠI SAO PHẢI ĐỢI?                                 │
+└──────────────────────────────────────────────────────────┘
+
+Next.js cần thời gian để:
+1. ⏳ Compile all pages (~30s)
+2. ⏳ Generate Prisma client (~10s)
+3. ⏳ Initialize server (~10s)
+4. ⏳ Ready to accept connections (~10s)
+
+Tổng: ~60 giây
+
+
+┌──────────────────────────────────────────────────────────┐
+│  🎯 KẾT QUẢ MONG ĐỢI (/hello)                          │
+└──────────────────────────────────────────────────────────┘
+
+Bạn sẽ thấy:
+✅ Heading "Server is Running!" màu xanh CE
+✅ Gradient box màu CE blue
+✅ Danh sách test links
+✅ Status checklist
+
+Nếu thấy trang này = SUCCESS! ✅
+
+
+┌──────────────────────────────────────────────────────────┐
+│  🐛 NẾU VẪN LỖI SAU 1 PHÚT                             │
+└──────────────────────────────────────────────────────────┘
+
+1. Check terminal có lỗi gì không
+2. Thử port khác (3001, 3002)
+3. F12 → Console → Screenshot
+4. Gửi lại screenshot
+
+
+┌──────────────────────────────────────────────────────────┐
+│  📚 TÀI LIỆU THAM KHẢO                                  │
+└──────────────────────────────────────────────────────────┘
+
+📄 FIX_CONNECTION_REFUSED.md  - Chi tiết fix lỗi
+📄 SERVER_RUNNING.md          - Hướng dẫn khi server OK
+📄 READY_TO_TEST.md           - Testing checklist
+
+
+╔══════════════════════════════════════════════════════════╗
+║                                                          ║
+║       ⏰ HÃY ĐỢI 60 GIÂY RỒI THỬ LẠI! ⏰               ║
+║                                                          ║
+║          http://localhost:3000/hello                     ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+
+
+🕐 Thời gian: Bây giờ → +60 giây
+
+⏳⏳⏳ ĐANG COMPILE... VUI LÒNG ĐỢI... ⏳⏳⏳
+

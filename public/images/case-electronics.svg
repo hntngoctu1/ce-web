@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Electronics manufacturing case study cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.55" stop-color="#F7F8FA"/>
+      <stop offset="1" stop-color="#DEE0E9"/>
+    </linearGradient>
+    <linearGradient id="ce" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#565D85"/>
+      <stop offset="0.55" stop-color="#676E9F"/>
+      <stop offset="1" stop-color="#434A6B"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#676E9F" stroke-width="2" opacity="0.08"/>
+      <circle cx="24" cy="24" r="2.5" fill="#676E9F" opacity="0.14"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#grid)"/>
+
+  <path d="M0,650 C240,580 430,580 650,510 C870,440 1020,360 1200,320 L1200,900 L0,900 Z" fill="url(#ce)" opacity="0.16"/>
+
+  <!-- PCB / chip illustration -->
+  <g transform="translate(220 190)">
+    <rect x="0" y="0" width="760" height="520" rx="28" fill="#FFFFFF" opacity="0.85" stroke="#BCC1D3" stroke-width="2"/>
+    <rect x="52" y="52" width="656" height="416" rx="22" fill="#F7F8FA" stroke="#DEE0E9" stroke-width="2"/>
+
+    <rect x="250" y="160" width="260" height="200" rx="22" fill="url(#ce)" opacity="0.95"/>
+    <rect x="284" y="194" width="192" height="132" rx="16" fill="#F7F8FA" opacity="0.92"/>
+
+    <!-- Pins -->
+    <g fill="#434A6B" opacity="0.35">
+      <rect x="238" y="176" width="10" height="22" rx="4"/>
+      <rect x="238" y="214" width="10" height="22" rx="4"/>
+      <rect x="238" y="252" width="10" height="22" rx="4"/>
+      <rect x="238" y="290" width="10" height="22" rx="4"/>
+      <rect x="510" y="176" width="10" height="22" rx="4"/>
+      <rect x="510" y="214" width="10" height="22" rx="4"/>
+      <rect x="510" y="252" width="10" height="22" rx="4"/>
+      <rect x="510" y="290" width="10" height="22" rx="4"/>
+    </g>
+
+    <!-- Traces -->
+    <g stroke="#676E9F" stroke-width="6" opacity="0.28" fill="none" stroke-linecap="round">
+      <path d="M120 140 H260"/>
+      <path d="M120 220 H240"/>
+      <path d="M120 300 H240"/>
+      <path d="M500 140 H640"/>
+      <path d="M520 220 H640"/>
+      <path d="M520 300 H640"/>
+      <path d="M380 380 V448"/>
+      <path d="M260 120 V60"/>
+      <path d="M500 120 V60"/>
+    </g>
+
+    <!-- Nodes -->
+    <g fill="#676E9F" opacity="0.55">
+      <circle cx="120" cy="140" r="10"/>
+      <circle cx="120" cy="220" r="10"/>
+      <circle cx="120" cy="300" r="10"/>
+      <circle cx="640" cy="140" r="10"/>
+      <circle cx="640" cy="220" r="10"/>
+      <circle cx="640" cy="300" r="10"/>
+      <circle cx="380" cy="448" r="10"/>
+      <circle cx="260" cy="60" r="10"/>
+      <circle cx="500" cy="60" r="10"/>
+    </g>
+  </g>
+
+  <!-- Label -->
+  <g transform="translate(80 90)">
+    <rect x="0" y="0" width="390" height="54" rx="14" fill="#676E9F" opacity="0.12"/>
+    <rect x="18" y="18" width="18" height="18" rx="4" fill="#676E9F"/>
+    <text x="50" y="36" font-family="Lato, Arial, sans-serif" font-size="18" font-weight="700" fill="#292C40" letter-spacing="1">
+      ELECTRONICS • PRECISION TAPING
+    </text>
+  </g>
+</svg>
+
+
