@@ -86,8 +86,9 @@ const config: Config = {
         },
       },
       fontFamily: {
+        lato: ['Lato', 'sans-serif'],
         vietnam: ['"Be Vietnam Pro"', 'sans-serif'],
-        sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
+        sans: ['Lato', 'system-ui', 'sans-serif'],
       },
       fontWeight: {
         light: '300',

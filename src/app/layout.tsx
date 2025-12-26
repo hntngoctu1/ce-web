@@ -71,10 +71,13 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
   const messages = await getMessages();
+  
+  // Use Be Vietnam Pro for Vietnamese, Lato for English
+  const fontClass = locale === 'vi' ? 'font-vietnam' : 'font-lato';
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-vietnam antialiased">
+      <body className={`min-h-screen bg-background ${fontClass} antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <div className="flex min-h-screen flex-col">
