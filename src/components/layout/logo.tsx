@@ -15,29 +15,15 @@ export function Logo({ className, variant = 'default' }: LogoProps) {
 
   return (
     <Link href="/" className={cn('flex items-center', className)} aria-label="Creative Engineering">
-      {/* Mobile: symbol only (>= 30px) */}
-      <span className="sm:hidden">
-        <Image
-          src="/brand/ce-symbol.svg"
-          alt="Creative Engineering"
-          width={120}
-          height={64}
-          className={cn('h-[30px] w-auto', invertForWhite)}
-          priority
-        />
-      </span>
-
-      {/* Desktop: standard logo as ONE asset (>= 80px) */}
-      <span className="hidden sm:block">
-        <Image
-          src="/brand/ce-logo.svg"
-          alt="Creative Engineering"
-          width={720}
-          height={240}
-          className={cn('h-[88px] w-auto md:h-[110px]', invertForWhite)}
-          priority
-        />
-      </span>
+      {/* Always show full logo, responsive sizing */}
+      <Image
+        src="/brand/ce-logo.svg"
+        alt="Creative Engineering"
+        width={720}
+        height={240}
+        className={cn('h-[60px] w-auto sm:h-[80px] md:h-[100px]', invertForWhite)}
+        priority
+      />
     </Link>
   );
 }
