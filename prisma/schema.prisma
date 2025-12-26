@@ -1,12 +1,12 @@
 // CE Website Database Schema
-// PostgreSQL for production
+// SQLite for development, PostgreSQL for production
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -113,8 +113,6 @@ model User {
   paymentsRecorded Payment[] @relation("PaymentActor")
   blogPosts       BlogPost[]       @relation("PostAuthor")
 
-  @@index([role])
-  @@index([createdAt])
   @@map("users")
 }
 
@@ -133,12 +131,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -246,13 +244,13 @@ model PageSection {
   titleVi     String?
   subtitleEn  String?
   subtitleVi  String?
-  contentEn   String?  @db.Text
-  contentVi   String?  @db.Text
+  contentEn   String?
+  contentVi   String?
   imageUrl    String?
   videoUrl    String?
   order       Int      @default(0)
   isActive    Boolean  @default(true)
-  metadata    String?  @db.Text
+  metadata    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -267,8 +265,8 @@ model ServiceCategory {
   slug          String   @unique
   nameEn        String
   nameVi        String
-  descriptionEn String?  @db.Text
-  descriptionVi String?  @db.Text
+  descriptionEn String?
+  descriptionVi String?
   iconName      String?
   imageUrl      String?
   order         Int      @default(0)
@@ -286,8 +284,8 @@ model IndustryCategory {
   slug          String    @unique
   nameEn        String
   nameVi        String
-  descriptionEn String?   @db.Text
-  descriptionVi String?   @db.Text
+  descriptionEn String?
+  descriptionVi String?
   imageUrl      String?
   order         Int       @default(0)
   isActive      Boolean   @default(true)
@@ -307,8 +305,8 @@ model ProductGroup {
   slug          String    @unique
   nameEn        String
   nameVi        String
-  descriptionEn String?   @db.Text
-  descriptionVi String?   @db.Text
+  descriptionEn String?
+  descriptionVi String?
   imageUrl      String?
   order         Int       @default(0)
   isActive      Boolean   @default(true)
@@ -327,12 +325,12 @@ model Product {
   sku           String?  @unique
   nameEn        String
   nameVi        String
-  shortDescEn   String?  @db.Text
-  shortDescVi   String?  @db.Text
-  descriptionEn String?  @db.Text
-  descriptionVi String?  @db.Text
-  price         Decimal  @default(0) @db.Decimal(15, 2)
-  salePrice     Decimal? @db.Decimal(15, 2)
+  shortDescEn   String?
+  shortDescVi   String?
+  descriptionEn String?
+  descriptionVi String?
+  price         Float    @default(0)
+  salePrice     Float?
   currency      String   @default("VND")
   isOnSale      Boolean  @default(false)
   isFeatured    Boolean  @default(false)
@@ -360,11 +358,6 @@ model Product {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@index([groupId])
-  @@index([industryId])
-  @@index([brandId])
-  @@index([isActive, isFeatured])
-  @@index([createdAt])
   @@map("products")
 }
 
@@ -379,7 +372,6 @@ model ProductImage {
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@index([productId])
   @@map("product_images")
 }
 
@@ -395,7 +387,6 @@ model ProductSpec {
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@index([productId])
   @@map("product_specs")
 }
 
@@ -459,7 +450,7 @@ model BlogCategory {
   slug        String     @unique
   nameEn      String
   nameVi      String
-  description String?    @db.Text
+  description String?
   order       Int        @default(0)
   isActive    Boolean    @default(true)
   createdAt   DateTime   @default(now())
@@ -490,10 +481,10 @@ model BlogPost {
   slug         String             @unique
   titleEn      String
   titleVi      String
-  excerptEn    String?            @db.Text
-  excerptVi    String?            @db.Text
-  contentEn    String?            @db.Text
-  contentVi    String?            @db.Text
+  excerptEn    String?
+  excerptVi    String?
+  contentEn    String?
+  contentVi    String?
   coverImage   String?
   isPublished  Boolean            @default(false)
   isFeatured   Boolean            @default(false)
@@ -538,13 +529,13 @@ model BlogPostTranslation {
   locale         String      // 'en' | 'vi'
   title          String
   slug           String
-  excerpt        String?     @db.Text
-  contentJson    String?     @db.Text // Editor native JSON format (canonical)
-  contentHtml    String?     @db.Text // Rendered HTML for preview/public
+  excerpt        String?
+  contentJson    String?     // Editor native JSON format (canonical)
+  contentHtml    String?     // Rendered HTML for preview/public
   
   // SEO fields
   seoTitle       String?
-  seoDescription String?     @db.Text
+  seoDescription String?
   seoKeywords    String?
   ogImageId      String?
   ogImage        MediaAsset? @relation("TranslationOgImage", fields: [ogImageId], references: [id], onDelete: SetNull)
@@ -564,10 +555,10 @@ model BlogPostRevision {
   id           String   @id @default(cuid())
   postId       String
   locale       String
-  snapshotJson String?  @db.Text // Full editor JSON at this point
-  snapshotHtml String?  @db.Text // Rendered HTML
+  snapshotJson String?  // Full editor JSON at this point
+  snapshotHtml String?  // Rendered HTML
   title        String?
-  excerpt      String?  @db.Text
+  excerpt      String?
   message      String?  // "Autosave", "Manual save", "Published"
   createdBy    String?
   createdAt    DateTime @default(now())
@@ -602,7 +593,7 @@ model MediaAsset {
   width      Int?
   height     Int?
   altText    String?
-  caption    String?       @db.Text
+  caption    String?
   folder     String?       @default("general")
   createdBy  String?
   createdAt  DateTime      @default(now())
@@ -624,9 +615,9 @@ model AiContentJob {
   id        String       @id @default(cuid())
   type      AiJobType
   status    AiJobStatus  @default(QUEUED)
-  input     String?      @db.Text // JSON
-  output    String?      @db.Text // JSON
-  error     String?      @db.Text
+  input     String?      // JSON
+  output    String?      // JSON
+  error     String?
   postId    String?
   locale    String?
   createdBy String?
@@ -654,30 +645,30 @@ model Order {
   customerName    String
   customerEmail   String
   customerPhone   String?
-  shippingAddress String?  @db.Text
-  billingAddress  String?  @db.Text
+  shippingAddress String?
+  billingAddress  String?
 
   // Snapshot for B2B/B2C at the time of checkout (backward compatible)
   buyerType       CustomerType @default(PERSONAL)
   buyerCompanyName String?
   buyerTaxId      String?
   buyerCompanyEmail String?
-  buyerSnapshot   String?  @db.Text // JSON string
-  shippingSnapshot String? @db.Text // JSON string
-  billingSnapshot  String? @db.Text // JSON string
+  buyerSnapshot   String? // JSON string
+  shippingSnapshot String? // JSON string
+  billingSnapshot  String? // JSON string
   
   // Order details
-  subtotal        Decimal  @db.Decimal(15, 2)
-  discount        Decimal  @default(0) @db.Decimal(15, 2)
-  tax             Decimal  @default(0) @db.Decimal(15, 2)
-  shippingCost    Decimal  @default(0) @db.Decimal(15, 2)
-  total           Decimal  @db.Decimal(15, 2)
+  subtotal        Float
+  discount        Float    @default(0)
+  tax             Float    @default(0)
+  shippingCost    Float    @default(0)
+  total           Float
   currency        String   @default("VND")
 
   // Finance v1 (Revenue/Debt module) - backward compatible, derived from existing totals
-  totalAmount       Decimal @default(0) @db.Decimal(15, 2)
-  paidAmount        Decimal @default(0) @db.Decimal(15, 2)
-  outstandingAmount Decimal @default(0) @db.Decimal(15, 2)
+  totalAmount       Float   @default(0)
+  paidAmount        Float   @default(0)
+  outstandingAmount Float   @default(0)
   invoiceNo         String? @unique
   orderDate         DateTime @default(now())
   dueDate           DateTime?
@@ -706,9 +697,9 @@ model Order {
 
   // Cancellation/returns
   canceledAt      DateTime?
-  cancelReason    String?  @db.Text
+  cancelReason    String?
   
-  notes           String?  @db.Text
+  notes           String?
   
   // Relations
   user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
@@ -733,8 +724,6 @@ model Order {
   @@index([accountingStatus])
   @@index([dueDate])
   @@index([companyId])
-  @@index([orderStatus, createdAt])
-  @@index([paymentState, createdAt])
   @@map("orders")
 }
 
@@ -744,7 +733,7 @@ model Company {
   taxId     String?  @unique
   email     String?
   phone     String?
-  address   String?  @db.Text
+  address   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -757,10 +746,10 @@ model Company {
 model Payment {
   id            String        @id @default(cuid())
   orderId       String
-  amount        Decimal       @db.Decimal(15, 2)
+  amount        Float
   paymentDate   DateTime      @default(now())
   paymentMethod PaymentMethod @default(OTHER)
-  note          String?       @db.Text
+  note          String?
   actorAdminId  String?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -773,7 +762,6 @@ model Payment {
   @@index([paymentMethod])
   @@map("payments")
 }
-
 model OrderItem {
   id          String  @id @default(cuid())
   orderId     String
@@ -781,13 +769,12 @@ model OrderItem {
   productName String
   productSku  String?
   quantity    Int
-  unitPrice   Decimal @db.Decimal(15, 2)
-  totalPrice  Decimal @db.Decimal(15, 2)
+  unitPrice   Float
+  totalPrice  Float
   
   order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 
-  @@index([orderId])
   @@map("order_items")
 }
 
@@ -797,8 +784,8 @@ model OrderStatusHistory {
   fromStatus    OrderStatus?
   toStatus      OrderStatus
   actorAdminId  String?     // User.id of admin/editor who changed the status (null for system)
-  noteInternal  String?     @db.Text
-  noteCustomer  String?     @db.Text
+  noteInternal  String?
+  noteCustomer  String?
   createdAt     DateTime    @default(now())
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
@@ -817,7 +804,7 @@ model NotificationLog {
   recipient         String
   status            NotificationStatus @default(SENT)
   providerMessageId String?
-  error             String?            @db.Text
+  error             String?
   // Prevent duplicate sends for the same order + status event
   dedupeKey         String?            @unique
   createdAt         DateTime           @default(now())
@@ -839,14 +826,12 @@ model ContactMessage {
   phone     String?
   company   String?
   subject   String?
-  message   String    @db.Text
+  message   String
   isRead    Boolean   @default(false)
   isReplied Boolean   @default(false)
   repliedAt DateTime?
   createdAt DateTime  @default(now())
 
-  @@index([createdAt])
-  @@index([isRead])
   @@map("contact_messages")
 }
 
@@ -863,8 +848,6 @@ model MediaFile {
   alt          String?
   createdAt    DateTime @default(now())
 
-  @@index([folder])
-  @@index([createdAt])
   @@map("media_files")
 }
 
@@ -873,13 +856,12 @@ model MediaFile {
 model Setting {
   id        String   @id @default(cuid())
   key       String   @unique
-  value     String   @db.Text
+  value     String
   type      String   @default("string")
   group     String   @default("general")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([group])
   @@map("settings")
 }
 
@@ -912,7 +894,7 @@ model Warehouse {
   id        String   @id @default(cuid())
   code      String   @unique
   name      String
-  address   String?  @db.Text
+  address   String?
   isDefault Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -948,11 +930,11 @@ model InventoryItem {
   productId     String
   warehouseId   String
   locationId    String?
-  onHandQty     Decimal  @default(0) @db.Decimal(15, 4)
-  reservedQty   Decimal  @default(0) @db.Decimal(15, 4)
-  availableQty  Decimal  @default(0) @db.Decimal(15, 4)
-  reorderPointQty Decimal @default(0) @db.Decimal(15, 4)
-  reorderQty    Decimal  @default(0) @db.Decimal(15, 4)
+  onHandQty     Decimal  @default(0)
+  reservedQty   Decimal  @default(0)
+  availableQty  Decimal  @default(0)
+  reorderPointQty Decimal @default(0)
+  reorderQty    Decimal  @default(0)
   updatedAt     DateTime @updatedAt
 
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -962,7 +944,6 @@ model InventoryItem {
   @@unique([productId, warehouseId, locationId])
   @@index([warehouseId])
   @@index([productId])
-  @@index([availableQty])
   @@map("inventory_items")
 }
 
@@ -975,7 +956,7 @@ model StockDocument {
   targetWarehouseId String?
   referenceType     StockReferenceType?
   referenceId       String?
-  note              String?            @db.Text
+  note              String?
   createdBy         String?
   postedBy          String?
   postedAt          DateTime?
@@ -991,7 +972,6 @@ model StockDocument {
   @@index([status])
   @@index([warehouseId])
   @@index([targetWarehouseId])
-  @@index([createdAt])
   @@map("stock_documents")
 }
 
@@ -1001,11 +981,11 @@ model StockDocumentLine {
   productId      String
   skuSnapshot    String?
   nameSnapshot   String?
-  qty            Decimal  @db.Decimal(15, 4)
-  unitCost       Decimal? @db.Decimal(15, 2)
+  qty            Decimal
+  unitCost       Decimal?
   sourceLocationId String?
   targetLocationId String?
-  metadata       Json?    @db.JsonB
+  metadata       Json?
 
   document StockDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
   product  Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -1026,10 +1006,10 @@ model StockMovement {
   warehouseId        String
   locationId         String?
   movementType       StockDocumentType
-  qtyChangeOnHand    Decimal  @default(0) @db.Decimal(15, 4)
-  qtyChangeReserved  Decimal  @default(0) @db.Decimal(15, 4)
-  balanceOnHandAfter Decimal  @db.Decimal(15, 4)
-  balanceReservedAfter Decimal @db.Decimal(15, 4)
+  qtyChangeOnHand    Decimal  @default(0)
+  qtyChangeReserved  Decimal  @default(0)
+  balanceOnHandAfter Decimal
+  balanceReservedAfter Decimal
   idempotencyKey     String   @unique
   createdAt          DateTime @default(now())
   createdBy          String?
@@ -1052,8 +1032,8 @@ model InventoryAuditLog {
   entityType String
   entityId  String
   action    String
-  before    Json?    @db.JsonB
-  after     Json?    @db.JsonB
+  before    Json?
+  after     Json?
   createdBy String?
   createdAt DateTime @default(now())
   ip        String?

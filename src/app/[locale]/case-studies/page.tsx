@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
 import { CaseStudiesClient } from './case-studies-client';
 
 export async function generateMetadata({
@@ -18,7 +17,5 @@ export async function generateMetadata({
 }
 
 export default async function CaseStudiesPage() {
-  const t = await getTranslations('caseStudies');
   return <CaseStudiesClient />;
 }
-
