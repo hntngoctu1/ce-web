@@ -11,7 +11,7 @@ import { QuickFilters } from '@/components/product/plp/quick-filters';
 import { MobileBottomBar } from '@/components/product/plp/mobile-bottom-bar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Home, ChevronRight as ChevronRightIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, ChevronRight as ChevronRightIcon, Search } from 'lucide-react';
 import { getProductListOptionsCached } from './_data';
 
 function buildCanonicalQuery(params: any) {
@@ -423,19 +423,19 @@ export default async function ProductListPage({ searchParams }: ProductPageProps
         }}
       />
 
-      {/* Breadcrumb - minimal, right under header */}
-      <div className="sticky top-[72px] z-30 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
-        <div className="mx-auto max-w-[1600px] px-4 sm:px-6">
-          <nav className="flex items-center gap-1.5 py-2.5 text-sm">
+      {/* Breadcrumb - minimal, aligned with header */}
+      <div className="sticky top-[128px] z-30 border-b border-gray-100 bg-white/95 backdrop-blur-sm md:top-[144px]">
+        <div className="ce-container">
+          <nav className="flex items-center gap-2 py-3 text-sm">
             <Link
               href="/"
-              className="flex items-center text-gray-500 transition-colors hover:text-ce-primary"
+              className="flex items-center gap-1 text-gray-500 transition-colors hover:text-ce-primary"
             >
-              <Home className="h-3.5 w-3.5" />
+              <Home className="h-4 w-4" />
             </Link>
-            <ChevronRightIcon className="h-3.5 w-3.5 text-gray-300" />
-            <span className="font-medium text-gray-900">{tProduct('title')}</span>
-            <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+            <ChevronRightIcon className="h-4 w-4 text-gray-300" />
+            <span className="font-semibold text-gray-900">{tProduct('title')}</span>
+            <span className="ml-2 rounded-full bg-ce-primary/10 px-2.5 py-0.5 text-xs font-medium text-ce-primary">
               {totalCount}
             </span>
           </nav>
@@ -443,12 +443,12 @@ export default async function ProductListPage({ searchParams }: ProductPageProps
       </div>
 
       {/* Main Content */}
-      <section className="min-h-screen bg-gray-50/50 pb-16 pt-4">
-        <div className="mx-auto max-w-[1600px] px-4 sm:px-6">
-          <div className="flex gap-5">
-            {/* Sidebar Filter - narrower, sticky */}
-            <aside className="hidden w-60 shrink-0 lg:block xl:w-64">
-              <div className="sticky top-[120px] max-h-[calc(100vh-140px)] overflow-y-auto rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+      <section className="min-h-screen bg-gradient-to-b from-gray-50 to-white pb-20 pt-6">
+        <div className="ce-container">
+          <div className="flex gap-6 lg:gap-8">
+            {/* Sidebar Filter - modern glass design */}
+            <aside className="hidden w-64 shrink-0 lg:block">
+              <div className="sticky top-[180px] max-h-[calc(100vh-200px)] overflow-y-auto rounded-2xl border border-gray-200/80 bg-white/80 p-5 shadow-lg backdrop-blur-sm md:top-[196px]">
                 <Suspense fallback={<div className="animate-pulse">{tCommon('loading')}</div>}>
                   <FilterSidebar
                     groups={groupOptions}
@@ -471,8 +471,8 @@ export default async function ProductListPage({ searchParams }: ProductPageProps
 
             {/* Main Content */}
             <div className="min-w-0 flex-1">
-              {/* Search & Sort Bar - integrated with Quick Filters */}
-              <div className="sticky top-[120px] z-20 mb-4 space-y-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+              {/* Search & Sort Bar - modern glass design */}
+              <div className="sticky top-[180px] z-20 mb-5 space-y-4 rounded-2xl border border-gray-200/80 bg-white/90 p-5 shadow-lg backdrop-blur-sm md:top-[196px]">
                 <SearchSortBar
                   searchQuery={params.q}
                   sortBy={(params.sort as any) || 'featured'}
@@ -484,15 +484,15 @@ export default async function ProductListPage({ searchParams }: ProductPageProps
 
               {/* Active Filters */}
               {activeFilters.length > 0 && (
-                <div className="mb-4 rounded-xl border border-gray-200 bg-white p-3 shadow-sm">
+                <div className="mb-5 rounded-2xl border border-ce-primary/20 bg-ce-primary/5 p-4">
                   <ActiveFilters activeFilters={activeFilters} locale={locale} />
                 </div>
               )}
 
-              {/* Products Grid */}
+              {/* Products Grid - max 4 columns for better alignment */}
               {products.length > 0 ? (
                 viewMode === 'list' ? (
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {products.map((product: any) => (
                       <ProductListItem
                         key={product.id}
@@ -505,7 +505,7 @@ export default async function ProductListPage({ searchParams }: ProductPageProps
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {products.map((product: any) => (
                       <ProductCard
                         key={product.id}
@@ -520,74 +520,86 @@ export default async function ProductListPage({ searchParams }: ProductPageProps
                   </div>
                 )
               ) : (
-                <div className="rounded-xl border border-gray-200 bg-white p-10 text-center shadow-sm">
-                  <p className="text-muted-foreground">{tProduct('noProducts')}</p>
-                  <Button variant="ce-outline" className="mt-3" size="sm" asChild>
+                <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center shadow-lg">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                    <Search className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <p className="mb-2 text-lg font-medium text-gray-900">{tProduct('noProducts')}</p>
+                  <p className="mb-4 text-sm text-muted-foreground">Try adjusting your filters</p>
+                  <Button variant="ce" className="mt-2" asChild>
                     <Link href="/menu/product">{tProduct('viewAllProducts')}</Link>
                   </Button>
                 </div>
               )}
 
-              {/* Pagination */}
+              {/* Pagination - modern design */}
               {totalPages > 1 && (
-                <div className="mt-8 flex items-center justify-center gap-1">
+                <div className="mt-10 flex items-center justify-center gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     disabled={currentPage <= 1}
                     asChild={currentPage > 1}
+                    className="h-10 rounded-xl px-4"
                   >
                     {currentPage > 1 ? (
-                      <Link href={buildPageUrl(currentPage - 1)}>
+                      <Link href={buildPageUrl(currentPage - 1)} className="flex items-center gap-1">
                         <ChevronLeft className="h-4 w-4" />
+                        <span className="hidden sm:inline">Prev</span>
                       </Link>
                     ) : (
-                      <span>
+                      <span className="flex items-center gap-1">
                         <ChevronLeft className="h-4 w-4" />
+                        <span className="hidden sm:inline">Prev</span>
                       </span>
                     )}
                   </Button>
 
-                  {Array.from({ length: totalPages }, (_, i) => i + 1)
-                    .filter(
-                      (page) =>
-                        page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1
-                    )
-                    .map((page, index, array) => {
-                      const showEllipsis = index > 0 && page - array[index - 1] > 1;
-                      return (
-                        <span key={page} className="flex items-center gap-1">
-                          {showEllipsis && (
-                            <span className="px-1 text-sm text-muted-foreground">…</span>
-                          )}
-                          <Button
-                            variant={page === currentPage ? 'ce' : 'outline'}
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                            asChild={page !== currentPage}
-                          >
-                            {page !== currentPage ? (
-                              <Link href={buildPageUrl(page)}>{page}</Link>
-                            ) : (
-                              <span>{page}</span>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(
+                        (page) =>
+                          page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1
+                      )
+                      .map((page, index, array) => {
+                        const showEllipsis = index > 0 && page - array[index - 1] > 1;
+                        return (
+                          <span key={page} className="flex items-center gap-1">
+                            {showEllipsis && (
+                              <span className="px-2 text-sm text-muted-foreground">…</span>
                             )}
-                          </Button>
-                        </span>
-                      );
-                    })}
+                            <Button
+                              variant={page === currentPage ? 'ce' : 'ghost'}
+                              size="sm"
+                              className={`h-10 w-10 rounded-xl p-0 ${page === currentPage ? 'shadow-md' : 'hover:bg-gray-100'}`}
+                              asChild={page !== currentPage}
+                            >
+                              {page !== currentPage ? (
+                                <Link href={buildPageUrl(page)}>{page}</Link>
+                              ) : (
+                                <span>{page}</span>
+                              )}
+                            </Button>
+                          </span>
+                        );
+                      })}
+                  </div>
 
                   <Button
                     variant="outline"
                     size="sm"
                     disabled={currentPage >= totalPages}
                     asChild={currentPage < totalPages}
+                    className="h-10 rounded-xl px-4"
                   >
                     {currentPage < totalPages ? (
-                      <Link href={buildPageUrl(currentPage + 1)}>
+                      <Link href={buildPageUrl(currentPage + 1)} className="flex items-center gap-1">
+                        <span className="hidden sm:inline">Next</span>
                         <ChevronRight className="h-4 w-4" />
                       </Link>
                     ) : (
-                      <span>
+                      <span className="flex items-center gap-1">
+                        <span className="hidden sm:inline">Next</span>
                         <ChevronRight className="h-4 w-4" />
                       </span>
                     )}

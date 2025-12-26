@@ -50,8 +50,8 @@ export function ProductCard({ product, className, compact = false }: ProductCard
   return (
     <Card
       className={cn(
-        'group flex flex-col overflow-hidden border-gray-200/80 bg-white transition-all duration-200 hover:border-gray-300 hover:shadow-md',
-        compact ? 'h-full rounded-lg' : 'h-full',
+        'group flex flex-col overflow-hidden rounded-2xl border-0 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
+        compact ? 'h-full' : 'h-full',
         className
       )}
     >
@@ -59,15 +59,15 @@ export function ProductCard({ product, className, compact = false }: ProductCard
       <Link
         href={`/product/${product.slug}`}
         className={cn(
-          'relative block shrink-0 overflow-hidden bg-gray-50',
-          compact ? 'aspect-[4/3]' : 'aspect-square'
+          'relative block shrink-0 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100',
+          compact ? 'aspect-square' : 'aspect-square'
         )}
       >
         <Image
           src={imageSrc}
           alt={primaryImage?.alt || name}
           fill
-          className="object-contain p-2 transition-transform duration-200 group-hover:scale-105"
+          className="object-contain p-4 transition-all duration-300 group-hover:scale-110"
           sizes={
             compact
               ? '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw'
@@ -77,32 +77,30 @@ export function ProductCard({ product, className, compact = false }: ProductCard
         />
 
         {/* Badges */}
-        <div
-          className={cn(
-            'absolute left-1.5 top-1.5 flex flex-col gap-0.5',
-            compact && 'left-1 top-1'
-          )}
-        >
+        <div className="absolute left-3 top-3 flex flex-col gap-1.5">
           {product.isFeatured && (
-            <Badge variant="featured" className={cn(compact && 'px-1.5 py-0 text-[10px]')}>
-              {compact ? '★' : tProduct('featured')}
+            <Badge variant="featured" className="rounded-full px-2.5 py-1 text-xs font-semibold shadow-md">
+              ★ {tProduct('featured')}
             </Badge>
           )}
           {product.isOnSale && (
-            <Badge variant="sale" className={cn(compact && 'px-1.5 py-0 text-[10px]')}>
-              {compact ? 'Sale' : tProduct('onSale')}
+            <Badge variant="sale" className="rounded-full px-2.5 py-1 text-xs font-semibold shadow-md">
+              {tProduct('onSale')}
             </Badge>
           )}
         </div>
+
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-ce-primary/0 transition-all duration-300 group-hover:bg-ce-primary/5" />
       </Link>
 
       {/* Content - flex-1 to fill remaining space */}
-      <CardContent className={cn('flex flex-1 flex-col p-3', compact && 'p-2')}>
+      <CardContent className="flex flex-1 flex-col p-4">
         <Link href={`/product/${product.slug}`} className="flex-1">
           <h3
             className={cn(
               'line-clamp-2 font-semibold text-gray-900 transition-colors group-hover:text-ce-primary',
-              compact ? 'min-h-[2.5rem] text-sm leading-tight' : 'min-h-[3rem] text-base'
+              compact ? 'min-h-[2.75rem] text-sm leading-snug' : 'min-h-[3rem] text-base'
             )}
           >
             {name}
@@ -110,18 +108,18 @@ export function ProductCard({ product, className, compact = false }: ProductCard
         </Link>
 
         {/* Price - always at bottom of content */}
-        <div className={cn('mt-2 flex items-baseline gap-1.5', compact && 'flex-wrap')}>
+        <div className="mt-3 flex items-baseline gap-2">
           {product.isOnSale && salePrice ? (
             <>
-              <span className={cn('font-bold text-red-600', compact ? 'text-sm' : 'text-lg')}>
+              <span className="text-lg font-bold text-red-600">
                 {formatPrice(salePrice)}
               </span>
-              <span className={cn('text-gray-400 line-through', compact ? 'text-xs' : 'text-sm')}>
+              <span className="text-sm text-gray-400 line-through">
                 {formatPrice(price)}
               </span>
             </>
           ) : (
-            <span className={cn('font-bold text-ce-primary', compact ? 'text-sm' : 'text-lg')}>
+            <span className="text-lg font-bold text-ce-primary">
               {price > 0 ? formatPrice(price) : tCommon('contact')}
             </span>
           )}
@@ -129,7 +127,7 @@ export function ProductCard({ product, className, compact = false }: ProductCard
       </CardContent>
 
       {/* Footer - always at bottom */}
-      <CardFooter className={cn('mt-auto p-3 pt-0', compact && 'p-2 pt-0')}>
+      <CardFooter className="mt-auto p-4 pt-0">
         <AddToCartButton
           product={{
             id: product.id,
@@ -139,8 +137,8 @@ export function ProductCard({ product, className, compact = false }: ProductCard
             image: primaryImage?.url,
           }}
           variant="ce"
-          size={compact ? 'sm' : 'sm'}
-          className={cn('w-full', compact && 'h-8 text-xs')}
+          size="default"
+          className="w-full rounded-xl font-medium shadow-md transition-all hover:shadow-lg"
         >
           {tProduct('buyNow')}
         </AddToCartButton>
