@@ -87,7 +87,7 @@ const config: Config = {
       },
       fontFamily: {
         lato: ['Lato', 'sans-serif'],
-        poppins: ['Poppins', 'sans-serif'],
+        vietnam: ['"Be Vietnam Pro"', 'sans-serif'],
         sans: ['Lato', 'system-ui', 'sans-serif'],
       },
       fontWeight: {
