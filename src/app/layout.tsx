@@ -72,8 +72,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = await getLocale();
   const messages = await getMessages();
   
-  // Use Be Vietnam Pro for Vietnamese, Lato for English
-  const fontClass = locale === 'vi' ? 'font-vietnam' : 'font-lato';
+  // Use Montserrat for Vietnamese, Lato for English
+  const fontClass = locale === 'vi' ? 'font-montserrat' : 'font-lato';
 
   return (
     <html lang={locale} suppressHydrationWarning>
