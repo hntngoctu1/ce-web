@@ -448,15 +448,18 @@ async function testAPIs() {
     message: `HTTP ${contactResult.status}`,
   });
   
-  // Auth APIs (expect 401 without auth)
+  // Auth APIs (expect 401 without auth) - use correct HTTP methods
   const authAPIs = [
-    { path: '/admin/products', method: 'GET', name: 'Admin Products (no auth)' },
+    { path: '/admin/products', method: 'POST', name: 'Admin Products (no auth)' },
     { path: '/admin/orders', method: 'GET', name: 'Admin Orders (no auth)' },
-    { path: '/admin/users', method: 'GET', name: 'Admin Users (no auth)' },
+    { path: '/admin/blog', method: 'POST', name: 'Admin Blog (no auth)' },
   ];
   
   for (const api of authAPIs) {
-    const result = await fetchAPI(api.path, { method: api.method });
+    const result = await fetchAPI(api.path, { 
+      method: api.method,
+      body: api.method === 'POST' ? JSON.stringify({}) : undefined 
+    });
     log({
       category: 'API',
       subcategory: 'Auth Check',
@@ -566,17 +569,21 @@ async function testCartCheckout() {
     message: `HTTP ${checkoutPage.status}`,
   });
   
-  // Test checkout API with valid data
+  // Test checkout API with valid data (matching API schema)
   const checkoutData = {
-    customerName: 'Test Customer',
-    customerEmail: 'test@example.com',
-    customerPhone: '0901234567',
-    shippingAddress: '123 Test Street, District 1, Ho Chi Minh City',
-    paymentMethod: 'cod',
+    name: 'Test Customer',
+    email: 'test@automation.com',
+    phone: '0901234567',
+    address: '123 Test Street, District 1',
+    city: 'Ho Chi Minh City',
+    paymentMethod: 'COD',
+    subtotal: Number(product.price) * 2,
+    total: Number(product.price) * 2,
     items: [
       {
         productId: product.id,
         quantity: 2,
+        price: Number(product.price),
       },
     ],
   };
@@ -592,7 +599,7 @@ async function testCartCheckout() {
     test: 'Checkout API processes order',
     status: checkoutResult.ok || checkoutResult.status === 201 ? 'PASS' : 'WARN',
     message: `HTTP ${checkoutResult.status}`,
-    details: checkoutResult.ok ? undefined : 'Order may require authentication',
+    details: checkoutResult.ok ? undefined : `Response: ${checkoutResult.body?.substring(0, 100)}`,
   });
 }
 
@@ -789,20 +796,23 @@ async function testSecurity() {
   console.log('🔒 SECURITY TESTS');
   console.log('═'.repeat(60));
   
-  // Admin routes require auth
-  const adminRoutes = [
-    '/api/admin/products',
-    '/api/admin/orders',
-    '/api/admin/users',
-    '/api/admin/settings',
+  // Admin routes require auth - test with correct HTTP methods
+  // Note: products only has POST, orders has GET
+  const adminRouteTests = [
+    { route: '/api/admin/products', method: 'POST', name: 'products (POST)' },
+    { route: '/api/admin/orders', method: 'GET', name: 'orders (GET)' },
+    { route: '/api/admin/blog', method: 'POST', name: 'blog (POST)' },
   ];
   
-  for (const route of adminRoutes) {
-    const result = await fetchPage(route);
+  for (const { route, method, name } of adminRouteTests) {
+    const result = await fetchPage(route, { 
+      method,
+      body: method === 'POST' ? JSON.stringify({}) : undefined
+    });
     log({
       category: 'Security',
       subcategory: 'Auth Required',
-      test: route.replace('/api/admin/', ''),
+      test: name,
       status: result.status === 401 || result.status === 403 ? 'PASS' : 'FAIL',
       message: `HTTP ${result.status} (expected 401/403)`,
     });

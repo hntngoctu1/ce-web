@@ -5,7 +5,7 @@
  * Supports both guest and authenticated checkout.
  */
 
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '@/lib/auth';
 import {
@@ -90,7 +90,16 @@ export async function POST(request: NextRequest) {
     const session = await auth();
 
     // Parse and validate request body
-    const rawBody = await request.json();
+    let rawBody;
+    try {
+      rawBody = await request.json();
+    } catch {
+      return NextResponse.json(
+        { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid JSON body' } },
+        { status: 400 }
+      );
+    }
+    
     const sanitizedBody = stripEmptyStrings(rawBody);
     const data = checkoutSchema.parse(sanitizedBody);
 

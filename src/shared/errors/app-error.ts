@@ -148,6 +148,16 @@ export function wrapError(error: unknown): AppError {
   }
 
   if (error instanceof Error) {
+    // Handle Zod validation errors
+    if (error.name === 'ZodError') {
+      const zodError = error as Error & { errors?: Array<{ path: (string | number)[]; message: string }> };
+      const fields = (zodError.errors ?? []).map((e) => ({
+        field: e.path.join('.'),
+        constraint: e.message,
+      }));
+      return AppError.validation('Validation failed', fields.map(f => ({ field: f.field, message: f.constraint })));
+    }
+
     // Handle Prisma errors
     if (error.name === 'PrismaClientKnownRequestError') {
       const prismaError = error as Error & { code?: string; meta?: { target?: string[] } };
