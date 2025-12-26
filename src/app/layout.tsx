@@ -74,7 +74,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-lato antialiased">
+      <body className="min-h-screen bg-background font-vietnam antialiased">
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <div className="flex min-h-screen flex-col">
