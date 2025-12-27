@@ -684,7 +684,13 @@
       "mediaLibrary": "媒体库",
       "users": "用户",
       "contacts": "联系消息",
-      "settings": "设置"
+      "settings": "设置",
+      "sectionAnalytics": "分析与营销",
+      "analyticsDashboard": "仪表板",
+      "analyticsCustomers": "客户",
+      "analyticsInventory": "库存",
+      "analyticsMarketing": "营销",
+      "coupons": "优惠券"
     },
     "analytics": {
       "filtersTitle": "筛选",

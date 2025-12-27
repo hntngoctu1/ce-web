@@ -684,7 +684,13 @@
       "mediaLibrary": "미디어 라이브러리",
       "users": "사용자",
       "contacts": "문의 메시지",
-      "settings": "설정"
+      "settings": "설정",
+      "sectionAnalytics": "분석 & 마케팅",
+      "analyticsDashboard": "대시보드",
+      "analyticsCustomers": "고객",
+      "analyticsInventory": "재고",
+      "analyticsMarketing": "마케팅",
+      "coupons": "쿠폰"
     },
     "analytics": {
       "filtersTitle": "필터",

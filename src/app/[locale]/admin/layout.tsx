@@ -145,33 +145,33 @@ export default async function AdminLayout({
             {/* Analytics & Marketing */}
             <div className="mt-5">
               <p className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-                Analytics & Marketing
+                {t('sidebar.sectionAnalytics')}
               </p>
               <div className="space-y-0.5">
                 {[
                   {
                     href: '/admin/analytics',
-                    label: 'Dashboard',
+                    label: t('sidebar.analyticsDashboard'),
                     icon: PieChart,
                   },
                   {
                     href: '/admin/analytics/customers',
-                    label: 'Khách hàng',
+                    label: t('sidebar.analyticsCustomers'),
                     icon: Users,
                   },
                   {
                     href: '/admin/analytics/inventory',
-                    label: 'Tồn kho',
+                    label: t('sidebar.analyticsInventory'),
                     icon: Boxes,
                   },
                   {
                     href: '/admin/analytics/marketing',
-                    label: 'Marketing',
+                    label: t('sidebar.analyticsMarketing'),
                     icon: TrendingUp,
                   },
                   {
                     href: '/admin/coupons',
-                    label: 'Mã giảm giá',
+                    label: t('sidebar.coupons'),
                     icon: Ticket,
                   },
                 ].map((link) => (

@@ -730,7 +730,13 @@
       "mediaLibrary": "Thư viện Media",
       "users": "Người dùng",
       "contacts": "Tin nhắn liên hệ",
-      "settings": "Cài đặt"
+      "settings": "Cài đặt",
+      "sectionAnalytics": "Phân tích & Marketing",
+      "analyticsDashboard": "Dashboard",
+      "analyticsCustomers": "Khách hàng",
+      "analyticsInventory": "Tồn kho",
+      "analyticsMarketing": "Marketing",
+      "coupons": "Mã giảm giá"
     },
     "analytics": {
       "filtersTitle": "Bộ lọc",

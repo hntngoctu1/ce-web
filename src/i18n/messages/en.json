@@ -730,7 +730,13 @@
       "mediaLibrary": "Media Library",
       "users": "Users",
       "contacts": "Contact Messages",
-      "settings": "Settings"
+      "settings": "Settings",
+      "sectionAnalytics": "Analytics & Marketing",
+      "analyticsDashboard": "Dashboard",
+      "analyticsCustomers": "Customers",
+      "analyticsInventory": "Inventory",
+      "analyticsMarketing": "Marketing",
+      "coupons": "Coupons"
     },
     "analytics": {
       "filtersTitle": "Filters",
