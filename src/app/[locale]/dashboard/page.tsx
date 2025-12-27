@@ -47,24 +47,26 @@ export default async function DashboardPage() {
   const loyaltyPoints = profile?.loyaltyPoints || 0;
   const pointsToNext = Math.max(1000 - loyaltyPoints, 0);
 
+  // Count orders by orderStatus (the correct field)
+  const pendingStatuses = ['PENDING_CONFIRMATION', 'CONFIRMED', 'PACKING'];
   const orderSteps = [
     {
       key: 'awaiting',
       icon: Clock,
       label: t('orderStatus.steps.awaiting'),
-      count: orders.filter((o) => o.status === 'PENDING').length,
+      count: orders.filter((o) => pendingStatuses.includes(o.orderStatus)).length,
     },
     {
       key: 'shipped',
       icon: Package,
       label: t('orderStatus.steps.shipped'),
-      count: orders.filter((o) => o.status === 'SHIPPED').length,
+      count: orders.filter((o) => o.orderStatus === 'SHIPPED').length,
     },
     {
       key: 'received',
       icon: CheckCircle,
       label: t('orderStatus.steps.received'),
-      count: orders.filter((o) => o.status === 'DELIVERED').length,
+      count: orders.filter((o) => o.orderStatus === 'DELIVERED').length,
     },
     { key: 'evaluate', icon: Star, label: t('orderStatus.steps.evaluate'), count: 0 },
   ];
@@ -139,14 +141,16 @@ export default async function DashboardPage() {
                           <p className="font-medium">{Number(order.total).toLocaleString()} VND</p>
                           <Badge
                             variant={
-                              order.status === 'DELIVERED'
+                              order.orderStatus === 'DELIVERED'
                                 ? 'ce'
-                                : order.status === 'SHIPPED'
+                                : order.orderStatus === 'SHIPPED'
                                   ? 'featured'
-                                  : 'secondary'
+                                  : order.orderStatus === 'CANCELED'
+                                    ? 'destructive'
+                                    : 'secondary'
                             }
                           >
-                            {order.status}
+                            {order.orderStatus.replace('_', ' ')}
                           </Badge>
                         </div>
                       </div>
