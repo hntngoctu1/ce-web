@@ -23,6 +23,9 @@ import {
   Crown,
   Gem,
   Star,
+  Heart,
+  FileText,
+  HelpCircle,
 } from 'lucide-react';
 
 import { auth } from '@/lib/auth';
@@ -125,17 +128,17 @@ export default async function DashboardPage() {
   const maxAmount = Math.max(...data.monthlySpending.map(d => d.amount), 1);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA]">
-      {/* Elegant Header */}
-      <div className="border-b border-neutral-100 bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-ce-primary-50 via-white to-ce-neutral-20/30">
+      {/* Header with CE Brand Colors */}
+      <div className="border-b border-ce-neutral-20 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-sm font-medium uppercase tracking-widest text-neutral-400">Welcome back</p>
-              <h1 className="mt-1 text-3xl font-light tracking-tight text-neutral-900">
+              <p className="text-sm font-medium uppercase tracking-widest text-ce-primary">Welcome back</p>
+              <h1 className="mt-1 text-3xl font-bold tracking-tight text-ce-primary-800">
                 {data.user?.name || session.user.name}
               </h1>
-              <p className="mt-2 text-sm text-neutral-500">
+              <p className="mt-2 text-sm text-ce-primary-400">
                 Member since {new Date(data.user?.createdAt || Date.now()).toLocaleDateString(fmtLocale, { month: 'long', year: 'numeric' })}
               </p>
             </div>
@@ -143,7 +146,7 @@ export default async function DashboardPage() {
               <Button 
                 variant="outline" 
                 size="sm"
-                className="border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
+                className="border-ce-primary-200 text-ce-primary-600 hover:bg-ce-primary-50 hover:text-ce-primary-700 hover:border-ce-primary-300"
                 asChild
               >
                 <Link href="/dashboard/profile">
@@ -153,7 +156,7 @@ export default async function DashboardPage() {
               </Button>
               <Button 
                 size="sm"
-                className="bg-neutral-900 text-white hover:bg-neutral-800"
+                className="bg-ce-primary text-white hover:bg-ce-primary-600"
                 asChild
               >
                 <Link href="/products">
@@ -167,20 +170,20 @@ export default async function DashboardPage() {
       </div>
 
       <div className="mx-auto max-w-7xl px-6 py-10">
-        {/* Membership Card - Premium Design */}
-        <div className="mb-10 overflow-hidden rounded-2xl bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 p-8 text-white shadow-2xl">
+        {/* Membership Card with CE Brand Gradient */}
+        <div className="mb-10 overflow-hidden rounded-2xl bg-ce-gradient p-8 text-white shadow-xl shadow-ce-primary/20">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-6">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-200 to-amber-400 shadow-lg">
-                {memberLevel === 'Platinum' ? <Gem className="h-10 w-10 text-neutral-800" /> :
-                 memberLevel === 'Gold' ? <Crown className="h-10 w-10 text-neutral-800" /> :
-                 memberLevel === 'Silver' ? <Award className="h-10 w-10 text-neutral-800" /> :
-                 <Star className="h-10 w-10 text-neutral-800" />}
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-ce-accent-gold shadow-lg shadow-ce-accent-gold/30">
+                {memberLevel === 'Platinum' ? <Gem className="h-10 w-10 text-ce-primary-800" /> :
+                 memberLevel === 'Gold' ? <Crown className="h-10 w-10 text-ce-primary-800" /> :
+                 memberLevel === 'Silver' ? <Award className="h-10 w-10 text-ce-primary-800" /> :
+                 <Star className="h-10 w-10 text-ce-primary-800" />}
               </div>
               <div>
-                <p className="text-sm font-medium uppercase tracking-widest text-neutral-400">Membership</p>
-                <h2 className="mt-1 text-2xl font-semibold tracking-wide">{memberLevel} Member</h2>
-                <p className="mt-1 text-sm text-neutral-400">
+                <p className="text-sm font-medium uppercase tracking-widest text-ce-neutral-40">Membership</p>
+                <h2 className="mt-1 text-2xl font-bold tracking-wide">{memberLevel} Member</h2>
+                <p className="mt-1 text-sm text-ce-neutral-40">
                   {points.toLocaleString()} loyalty points earned
                 </p>
               </div>
@@ -188,18 +191,18 @@ export default async function DashboardPage() {
             
             <div className="flex items-center gap-8">
               <div className="text-center">
-                <p className="text-3xl font-light">{data.stats.totalOrders}</p>
-                <p className="mt-1 text-xs uppercase tracking-widest text-neutral-400">Orders</p>
+                <p className="text-3xl font-bold">{data.stats.totalOrders}</p>
+                <p className="mt-1 text-xs uppercase tracking-widest text-ce-neutral-40">Orders</p>
               </div>
-              <div className="h-12 w-px bg-neutral-700" />
+              <div className="h-12 w-px bg-ce-primary-400/50" />
               <div className="text-center">
-                <p className="text-3xl font-light">{(data.stats.totalSpent / 1000000).toFixed(1)}M</p>
-                <p className="mt-1 text-xs uppercase tracking-widest text-neutral-400">Total Spent</p>
+                <p className="text-3xl font-bold">{(data.stats.totalSpent / 1000000).toFixed(1)}M</p>
+                <p className="mt-1 text-xs uppercase tracking-widest text-ce-neutral-40">Total Spent</p>
               </div>
-              <div className="h-12 w-px bg-neutral-700" />
+              <div className="h-12 w-px bg-ce-primary-400/50" />
               <div className="text-center">
-                <p className="text-3xl font-light">{data.stats.deliveredOrders}</p>
-                <p className="mt-1 text-xs uppercase tracking-widest text-neutral-400">Completed</p>
+                <p className="text-3xl font-bold">{data.stats.deliveredOrders}</p>
+                <p className="mt-1 text-xs uppercase tracking-widest text-ce-neutral-40">Completed</p>
               </div>
             </div>
           </div>
@@ -207,12 +210,12 @@ export default async function DashboardPage() {
           {/* Progress to next level */}
           <div className="mt-8">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-neutral-400">Progress to {memberLevel === 'Bronze' ? 'Silver' : memberLevel === 'Silver' ? 'Gold' : 'Platinum'}</span>
+              <span className="text-ce-neutral-40">Progress to {memberLevel === 'Bronze' ? 'Silver' : memberLevel === 'Silver' ? 'Gold' : 'Platinum'}</span>
               <span className="font-medium">{points.toLocaleString()} / {memberLevel === 'Bronze' ? '1,000' : memberLevel === 'Silver' ? '5,000' : '10,000'}</span>
             </div>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-700">
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-ce-primary-400/30">
               <div 
-                className="h-full rounded-full bg-gradient-to-r from-amber-300 to-amber-500 transition-all duration-1000"
+                className="h-full rounded-full bg-ce-accent-gold transition-all duration-1000"
                 style={{ 
                   width: `${Math.min(
                     (points / (memberLevel === 'Bronze' ? 1000 : memberLevel === 'Silver' ? 5000 : 10000)) * 100,
@@ -224,64 +227,98 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Stats Grid - Minimalist */}
+        {/* Stats Grid with CE Colors */}
         <div className="mb-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { 
               label: 'Pending Orders', 
               value: data.stats.pendingOrders, 
               icon: Clock,
-              sublabel: 'Awaiting action'
+              sublabel: 'Awaiting action',
+              color: 'text-ce-accent-coral',
+              bgColor: 'bg-ce-accent-coral/10',
             },
             { 
               label: 'In Transit', 
               value: data.ordersByStatus.shipped, 
               icon: Truck,
-              sublabel: 'On the way'
+              sublabel: 'On the way',
+              color: 'text-ce-accent-teal',
+              bgColor: 'bg-ce-accent-teal/10',
             },
             { 
               label: 'Delivered', 
               value: data.stats.deliveredOrders, 
               icon: CheckCircle,
-              sublabel: 'Successfully completed'
+              sublabel: 'Successfully completed',
+              color: 'text-ce-accent-sage',
+              bgColor: 'bg-ce-accent-sage/10',
             },
             { 
               label: 'Average Order', 
               value: `${(data.stats.avgOrderValue / 1000).toFixed(0)}K₫`, 
               icon: BarChart3,
-              sublabel: 'Per transaction'
+              sublabel: 'Per transaction',
+              color: 'text-ce-primary',
+              bgColor: 'bg-ce-primary/10',
             },
           ].map((stat) => (
             <div 
               key={stat.label}
-              className="group rounded-xl border border-neutral-100 bg-white p-6 transition-all duration-300 hover:border-neutral-200 hover:shadow-lg"
+              className="group rounded-xl border border-ce-neutral-20 bg-white p-6 transition-all duration-300 hover:border-ce-primary-200 hover:shadow-lg hover:shadow-ce-primary/10"
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-neutral-500">{stat.label}</p>
-                  <p className="mt-2 text-3xl font-light tracking-tight text-neutral-900">{stat.value}</p>
-                  <p className="mt-1 text-xs text-neutral-400">{stat.sublabel}</p>
+                  <p className="text-sm font-medium text-ce-primary-400">{stat.label}</p>
+                  <p className={cn('mt-2 text-3xl font-bold tracking-tight', stat.color)}>{stat.value}</p>
+                  <p className="mt-1 text-xs text-ce-primary-300">{stat.sublabel}</p>
                 </div>
-                <div className="rounded-lg bg-neutral-50 p-3 transition-colors group-hover:bg-neutral-100">
-                  <stat.icon className="h-5 w-5 text-neutral-400" />
+                <div className={cn('rounded-lg p-3 transition-colors', stat.bgColor)}>
+                  <stat.icon className={cn('h-5 w-5', stat.color)} />
                 </div>
               </div>
             </div>
           ))}
         </div>
 
+        {/* Quick Actions with Working Links */}
+        <div className="mb-10">
+          <h2 className="mb-4 text-lg font-semibold text-ce-primary-800">Quick Actions</h2>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+            {[
+              { icon: ShoppingBag, label: 'Products', href: '/products', color: 'bg-ce-primary' },
+              { icon: Package, label: 'My Orders', href: '/dashboard/orders', color: 'bg-ce-accent-teal' },
+              { icon: User, label: 'Profile', href: '/dashboard/profile', color: 'bg-ce-accent-sage' },
+              { icon: Heart, label: 'Wishlist', href: '/wishlist', color: 'bg-ce-accent-coral' },
+              { icon: FileText, label: 'Invoices', href: '/dashboard/orders', color: 'bg-ce-accent-gold' },
+              { icon: HelpCircle, label: 'Support', href: '/contact', color: 'bg-ce-accent-slate' },
+            ].map((action) => (
+              <Link
+                key={action.href + action.label}
+                href={action.href}
+                className="group flex flex-col items-center gap-3 rounded-xl border border-ce-neutral-20 bg-white p-5 transition-all hover:border-ce-primary-200 hover:shadow-lg hover:shadow-ce-primary/10"
+              >
+                <div className={cn('rounded-xl p-3 text-white transition-transform group-hover:scale-110', action.color)}>
+                  <action.icon className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-medium text-ce-primary-700">{action.label}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Main Content */}
           <div className="space-y-8 lg:col-span-2">
-            {/* Recent Orders - Clean Design */}
-            <Card className="overflow-hidden border-neutral-100 shadow-sm">
-              <CardHeader className="border-b border-neutral-50 bg-white px-6 py-5">
+            {/* Recent Orders */}
+            <Card className="overflow-hidden border-ce-neutral-20 shadow-sm">
+              <CardHeader className="border-b border-ce-neutral-20/50 bg-white px-6 py-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-medium text-neutral-900">{t('recentOrders.title')}</CardTitle>
-                    <p className="mt-1 text-sm text-neutral-500">{t('recentOrders.subtitle')}</p>
+                    <CardTitle className="text-lg font-semibold text-ce-primary-800">{t('recentOrders.title')}</CardTitle>
+                    <p className="mt-1 text-sm text-ce-primary-400">{t('recentOrders.subtitle')}</p>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-neutral-500 hover:text-neutral-900" asChild>
+                  <Button variant="ghost" size="sm" className="text-ce-primary hover:text-ce-primary-600 hover:bg-ce-primary-50" asChild>
                     <Link href="/dashboard/orders">
                       {t('recentOrders.viewAll')}
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -291,19 +328,19 @@ export default async function DashboardPage() {
               </CardHeader>
               <CardContent className="p-0">
                 {data.recentOrders.length > 0 ? (
-                  <div className="divide-y divide-neutral-50">
+                  <div className="divide-y divide-ce-neutral-20/50">
                     {data.recentOrders.map((order) => (
                       <Link
                         key={order.id}
                         href={`/dashboard/orders/${order.id}`}
-                        className="group flex items-center gap-5 px-6 py-5 transition-colors hover:bg-neutral-50"
+                        className="group flex items-center gap-5 px-6 py-5 transition-colors hover:bg-ce-primary-50/50"
                       >
                         <div className={cn(
                           'flex h-12 w-12 items-center justify-center rounded-full',
-                          order.status === 'DELIVERED' ? 'bg-emerald-50 text-emerald-600' :
-                          order.status === 'SHIPPED' ? 'bg-blue-50 text-blue-600' :
-                          order.status === 'CONFIRMED' || order.status === 'PACKING' ? 'bg-violet-50 text-violet-600' :
-                          'bg-amber-50 text-amber-600'
+                          order.status === 'DELIVERED' ? 'bg-ce-accent-sage/20 text-ce-accent-sage' :
+                          order.status === 'SHIPPED' ? 'bg-ce-accent-teal/20 text-ce-accent-teal' :
+                          order.status === 'CONFIRMED' || order.status === 'PACKING' ? 'bg-ce-primary/20 text-ce-primary' :
+                          'bg-ce-accent-coral/20 text-ce-accent-coral'
                         )}>
                           {order.status === 'DELIVERED' ? <CheckCircle className="h-5 w-5" /> :
                            order.status === 'SHIPPED' ? <Truck className="h-5 w-5" /> :
@@ -312,21 +349,21 @@ export default async function DashboardPage() {
                         
                         <div className="flex-1">
                           <div className="flex items-center gap-3">
-                            <span className="font-medium text-neutral-900">{order.orderNumber}</span>
+                            <span className="font-semibold text-ce-primary-800">{order.orderNumber}</span>
                             <Badge 
                               variant="secondary" 
                               className={cn(
                                 'text-xs font-normal',
-                                order.status === 'DELIVERED' ? 'bg-emerald-50 text-emerald-700' :
-                                order.status === 'SHIPPED' ? 'bg-blue-50 text-blue-700' :
-                                order.status === 'CONFIRMED' || order.status === 'PACKING' ? 'bg-violet-50 text-violet-700' :
-                                'bg-amber-50 text-amber-700'
+                                order.status === 'DELIVERED' ? 'bg-ce-accent-sage/20 text-ce-accent-sage' :
+                                order.status === 'SHIPPED' ? 'bg-ce-accent-teal/20 text-ce-accent-teal' :
+                                order.status === 'CONFIRMED' || order.status === 'PACKING' ? 'bg-ce-primary/20 text-ce-primary' :
+                                'bg-ce-accent-coral/20 text-ce-accent-coral'
                               )}
                             >
                               {order.status.replace('_', ' ')}
                             </Badge>
                           </div>
-                          <div className="mt-1 flex items-center gap-4 text-sm text-neutral-400">
+                          <div className="mt-1 flex items-center gap-4 text-sm text-ce-primary-400">
                             <span className="flex items-center gap-1.5">
                               <Calendar className="h-3.5 w-3.5" />
                               {new Date(order.createdAt).toLocaleDateString(fmtLocale)}
@@ -336,22 +373,22 @@ export default async function DashboardPage() {
                         </div>
                         
                         <div className="text-right">
-                          <p className="text-lg font-medium text-neutral-900">
+                          <p className="text-lg font-semibold text-ce-primary-800">
                             {order.total.toLocaleString('vi-VN')}₫
                           </p>
-                          <ChevronRight className="ml-auto mt-1 h-4 w-4 text-neutral-300 transition-transform group-hover:translate-x-1 group-hover:text-neutral-500" />
+                          <ChevronRight className="ml-auto mt-1 h-4 w-4 text-ce-primary-300 transition-transform group-hover:translate-x-1 group-hover:text-ce-primary" />
                         </div>
                       </Link>
                     ))}
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <div className="rounded-full bg-neutral-100 p-4">
-                      <Package className="h-8 w-8 text-neutral-400" />
+                    <div className="rounded-full bg-ce-primary-50 p-4">
+                      <Package className="h-8 w-8 text-ce-primary" />
                     </div>
-                    <h3 className="mt-4 text-lg font-medium text-neutral-900">{t('emptyOrders.title')}</h3>
-                    <p className="mt-2 text-sm text-neutral-500">Start shopping to see your orders here</p>
-                    <Button className="mt-6 bg-neutral-900 hover:bg-neutral-800" asChild>
+                    <h3 className="mt-4 text-lg font-semibold text-ce-primary-800">{t('emptyOrders.title')}</h3>
+                    <p className="mt-2 text-sm text-ce-primary-400">Start shopping to see your orders here</p>
+                    <Button className="mt-6 bg-ce-primary hover:bg-ce-primary-600" asChild>
                       <Link href="/products">{t('emptyOrders.cta')}</Link>
                     </Button>
                   </div>
@@ -359,15 +396,15 @@ export default async function DashboardPage() {
               </CardContent>
             </Card>
 
-            {/* Spending Chart - Elegant */}
-            <Card className="overflow-hidden border-neutral-100 shadow-sm">
-              <CardHeader className="border-b border-neutral-50 bg-white px-6 py-5">
+            {/* Spending Chart */}
+            <Card className="overflow-hidden border-ce-neutral-20 shadow-sm">
+              <CardHeader className="border-b border-ce-neutral-20/50 bg-white px-6 py-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-medium text-neutral-900">Spending Overview</CardTitle>
-                    <p className="mt-1 text-sm text-neutral-500">Your purchase history over the last 6 months</p>
+                    <CardTitle className="text-lg font-semibold text-ce-primary-800">Spending Overview</CardTitle>
+                    <p className="mt-1 text-sm text-ce-primary-400">Your purchase history over the last 6 months</p>
                   </div>
-                  <div className="flex items-center gap-2 rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-600">
+                  <div className="flex items-center gap-2 rounded-full bg-ce-primary-50 px-3 py-1.5 text-xs font-medium text-ce-primary">
                     <TrendingUp className="h-3.5 w-3.5" />
                     6 Months
                   </div>
@@ -381,27 +418,27 @@ export default async function DashboardPage() {
                       <div key={item.month} className="flex flex-1 flex-col items-center gap-3">
                         <div className="relative w-full flex justify-center h-40">
                           <div
-                            className="w-full max-w-[40px] rounded-t-lg bg-neutral-900 transition-all duration-500 hover:bg-neutral-700"
+                            className="w-full max-w-[40px] rounded-t-lg bg-ce-primary transition-all duration-500 hover:bg-ce-primary-600"
                             style={{ 
                               height: `${height}%`,
                               minHeight: item.amount > 0 ? '4px' : '2px',
                             }}
                           />
                         </div>
-                        <span className="text-xs font-medium text-neutral-400">{item.month}</span>
+                        <span className="text-xs font-medium text-ce-primary-400">{item.month}</span>
                       </div>
                     );
                   })}
                 </div>
                 
-                <div className="mt-8 flex items-center justify-between border-t border-neutral-100 pt-6">
+                <div className="mt-8 flex items-center justify-between border-t border-ce-neutral-20 pt-6">
                   <div>
-                    <p className="text-sm text-neutral-500">Total spent this period</p>
-                    <p className="mt-1 text-2xl font-light text-neutral-900">
+                    <p className="text-sm text-ce-primary-400">Total spent this period</p>
+                    <p className="mt-1 text-2xl font-bold text-ce-primary-800">
                       {data.monthlySpending.reduce((sum, m) => sum + m.amount, 0).toLocaleString('vi-VN')}₫
                     </p>
                   </div>
-                  <Button variant="outline" size="sm" className="text-neutral-600" asChild>
+                  <Button variant="outline" size="sm" className="border-ce-primary-200 text-ce-primary hover:bg-ce-primary-50" asChild>
                     <Link href="/dashboard/orders">
                       View Details
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -415,27 +452,27 @@ export default async function DashboardPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Profile Card */}
-            <Card className="overflow-hidden border-neutral-100 shadow-sm">
-              <CardHeader className="border-b border-neutral-50 bg-white px-6 py-5">
-                <CardTitle className="flex items-center gap-2 text-lg font-medium text-neutral-900">
-                  <User className="h-5 w-5 text-neutral-400" />
+            <Card className="overflow-hidden border-ce-neutral-20 shadow-sm">
+              <CardHeader className="border-b border-ce-neutral-20/50 bg-white px-6 py-5">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-ce-primary-800">
+                  <User className="h-5 w-5 text-ce-primary" />
                   {t('personalInfo.title')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100">
-                      <Mail className="h-4 w-4 text-neutral-500" />
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-ce-primary-50">
+                      <Mail className="h-4 w-4 text-ce-primary" />
                     </div>
-                    <span className="text-sm text-neutral-600">{session.user.email}</span>
+                    <span className="text-sm text-ce-primary-600">{session.user.email}</span>
                   </div>
                   {data.profile?.address && (
                     <div className="flex items-start gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100">
-                        <MapPin className="h-4 w-4 text-neutral-500" />
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-ce-primary-50">
+                        <MapPin className="h-4 w-4 text-ce-primary" />
                       </div>
-                      <span className="text-sm text-neutral-600">
+                      <span className="text-sm text-ce-primary-600">
                         {data.profile.address}
                         {data.profile.city && `, ${data.profile.city}`}
                       </span>
@@ -443,41 +480,42 @@ export default async function DashboardPage() {
                   )}
                   {data.profile?.companyName && (
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100">
-                        <CreditCard className="h-4 w-4 text-neutral-500" />
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-ce-primary-50">
+                        <CreditCard className="h-4 w-4 text-ce-primary" />
                       </div>
-                      <span className="text-sm text-neutral-600">{data.profile.companyName}</span>
+                      <span className="text-sm text-ce-primary-600">{data.profile.companyName}</span>
                     </div>
                   )}
                 </div>
-                <Button variant="outline" size="sm" className="mt-6 w-full text-neutral-600" asChild>
+                <Button variant="outline" size="sm" className="mt-6 w-full border-ce-primary-200 text-ce-primary hover:bg-ce-primary-50" asChild>
                   <Link href="/dashboard/profile">{t('personalInfo.editProfile')}</Link>
                 </Button>
               </CardContent>
             </Card>
 
             {/* Quick Links */}
-            <Card className="overflow-hidden border-neutral-100 shadow-sm">
-              <CardHeader className="border-b border-neutral-50 bg-white px-6 py-5">
-                <CardTitle className="text-lg font-medium text-neutral-900">Quick Links</CardTitle>
+            <Card className="overflow-hidden border-ce-neutral-20 shadow-sm">
+              <CardHeader className="border-b border-ce-neutral-20/50 bg-white px-6 py-5">
+                <CardTitle className="text-lg font-semibold text-ce-primary-800">Quick Links</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="divide-y divide-neutral-50">
+                <div className="divide-y divide-ce-neutral-20/50">
                   {[
-                    { label: 'Browse Products', href: '/products', icon: ShoppingBag },
-                    { label: 'Track Orders', href: '/dashboard/orders', icon: Package },
-                    { label: 'Account Settings', href: '/dashboard/profile', icon: Settings },
+                    { label: 'Browse Products', href: '/products', icon: ShoppingBag, color: 'text-ce-primary' },
+                    { label: 'All Orders', href: '/dashboard/orders', icon: Package, color: 'text-ce-accent-teal' },
+                    { label: 'Account Settings', href: '/dashboard/profile', icon: Settings, color: 'text-ce-accent-sage' },
+                    { label: 'Contact Support', href: '/contact', icon: HelpCircle, color: 'text-ce-accent-coral' },
                   ].map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-neutral-50"
+                      className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-ce-primary-50/50"
                     >
-                      <div className="rounded-lg bg-neutral-100 p-2.5">
-                        <link.icon className="h-4 w-4 text-neutral-500" />
+                      <div className={cn('rounded-lg bg-ce-primary-50 p-2.5', link.color)}>
+                        <link.icon className="h-4 w-4" />
                       </div>
-                      <span className="flex-1 text-sm font-medium text-neutral-700">{link.label}</span>
-                      <ChevronRight className="h-4 w-4 text-neutral-300" />
+                      <span className="flex-1 text-sm font-medium text-ce-primary-700">{link.label}</span>
+                      <ChevronRight className="h-4 w-4 text-ce-primary-300" />
                     </Link>
                   ))}
                 </div>
@@ -485,25 +523,31 @@ export default async function DashboardPage() {
             </Card>
 
             {/* Order Status Summary */}
-            <Card className="overflow-hidden border-neutral-100 shadow-sm">
-              <CardHeader className="border-b border-neutral-50 bg-white px-6 py-5">
-                <CardTitle className="text-lg font-medium text-neutral-900">{t('orderStatus.title')}</CardTitle>
+            <Card className="overflow-hidden border-ce-neutral-20 shadow-sm">
+              <CardHeader className="border-b border-ce-neutral-20/50 bg-white px-6 py-5">
+                <CardTitle className="text-lg font-semibold text-ce-primary-800">{t('orderStatus.title')}</CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 <div className="space-y-4">
                   {[
-                    { label: t('orderStatus.steps.awaiting'), value: data.ordersByStatus.pending, color: 'bg-amber-500' },
-                    { label: 'Processing', value: data.ordersByStatus.confirmed, color: 'bg-violet-500' },
-                    { label: t('orderStatus.steps.shipped'), value: data.ordersByStatus.shipped, color: 'bg-blue-500' },
-                    { label: t('orderStatus.steps.received'), value: data.ordersByStatus.delivered, color: 'bg-emerald-500' },
+                    { label: t('orderStatus.steps.awaiting'), value: data.ordersByStatus.pending, color: 'bg-ce-accent-coral' },
+                    { label: 'Processing', value: data.ordersByStatus.confirmed, color: 'bg-ce-primary' },
+                    { label: t('orderStatus.steps.shipped'), value: data.ordersByStatus.shipped, color: 'bg-ce-accent-teal' },
+                    { label: t('orderStatus.steps.received'), value: data.ordersByStatus.delivered, color: 'bg-ce-accent-sage' },
                   ].map((status) => (
                     <div key={status.label} className="flex items-center gap-4">
-                      <div className={cn('h-2 w-2 rounded-full', status.color)} />
-                      <span className="flex-1 text-sm text-neutral-600">{status.label}</span>
-                      <span className="text-sm font-medium text-neutral-900">{status.value}</span>
+                      <div className={cn('h-2.5 w-2.5 rounded-full', status.color)} />
+                      <span className="flex-1 text-sm text-ce-primary-600">{status.label}</span>
+                      <span className="text-sm font-semibold text-ce-primary-800">{status.value}</span>
                     </div>
                   ))}
                 </div>
+                <Button variant="outline" size="sm" className="mt-6 w-full border-ce-primary-200 text-ce-primary hover:bg-ce-primary-50" asChild>
+                  <Link href="/dashboard/orders">
+                    View All Orders
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
           </div>
