@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CE Platform - Phase 2 Premium Features Roadmap</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #1a1a2e;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 50px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 15s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .header h1 {
+      font-size: 2.8em;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    
+    .header .subtitle {
+      font-size: 1.3em;
+      opacity: 0.95;
+      position: relative;
+    }
+    
+    .header .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 20px;
+      border-radius: 30px;
+      margin-top: 20px;
+      font-size: 0.9em;
+      position: relative;
+    }
+    
+    /* Content */
+    .content {
+      padding: 40px;
+    }
+    
+    .section {
+      margin-bottom: 50px;
+    }
+    
+    .section-title {
+      font-size: 1.6em;
+      color: #667eea;
+      border-left: 4px solid #764ba2;
+      padding-left: 15px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .section-title .emoji {
+      font-size: 1.2em;
+    }
+    
+    /* Module Cards */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+      margin: 30px 0;
+    }
+    
+    .module-card {
+      background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+      border-radius: 16px;
+      padding: 25px;
+      border: 1px solid #e8eaff;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .module-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.15);
+    }
+    
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+    
+    .module-card.reviews::before { background: linear-gradient(90deg, #f6d365, #fda085); }
+    .module-card.coupons::before { background: linear-gradient(90deg, #a8edea, #fed6e3); }
+    .module-card.analytics::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+    
+    .module-icon {
+      font-size: 2.5em;
+      margin-bottom: 15px;
+    }
+    
+    .module-title {
+      font-size: 1.3em;
+      color: #1a1a2e;
+      margin-bottom: 10px;
+    }
+    
+    .module-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #e0e0e0;
+      font-size: 0.9em;
+    }
+    
+    .module-time { color: #667eea; font-weight: 600; }
+    .module-priority { 
+      background: #667eea;
+      color: white;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.8em;
+    }
+    
+    /* Phase Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, #667eea, #764ba2);
+      border-radius: 3px;
+    }
+    
+    .phase {
+      position: relative;
+      margin-bottom: 30px;
+      padding: 20px 25px;
+      background: #f8f9ff;
+      border-radius: 12px;
+      border: 1px solid #e8eaff;
+    }
+    
+    .phase::before {
+      content: '';
+      position: absolute;
+      left: -27px;
+      top: 25px;
+      width: 15px;
+      height: 15px;
+      background: white;
+      border: 3px solid #667eea;
+      border-radius: 50%;
+    }
+    
+    .phase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .phase-title {
+      font-size: 1.2em;
+      color: #1a1a2e;
+    }
+    
+    .phase-weeks {
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.85em;
+    }
+    
+    .phase-features {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    
+    .phase-features li {
+      padding: 5px 0;
+      padding-left: 25px;
+      position: relative;
+      font-size: 0.95em;
+    }
+    
+    .phase-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #10b981;
+      font-weight: bold;
+    }
+    
+    /* Feature Highlight */
+    .feature-highlight {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      padding: 30px;
+      color: white;
+      margin: 30px 0;
+    }
+    
+    .feature-highlight h3 {
+      font-size: 1.4em;
+      margin-bottom: 20px;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    
+    .feature-item {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    
+    .feature-item .icon {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    
+    /* Comparison Table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .comparison-table th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px;
+      text-align: left;
+    }
+    
+    .comparison-table td {
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .comparison-table tr:hover {
+      background: #f8f9ff;
+    }
+    
+    .check { color: #10b981; font-size: 1.2em; }
+    .plus { color: #667eea; font-weight: bold; }
+    
+    /* Pricing */
+    .pricing-section {
+      background: #f8f9ff;
+      border-radius: 16px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+    
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .pricing-table th {
+      background: #667eea;
+      color: white;
+      padding: 15px;
+      text-align: left;
+    }
+    
+    .pricing-table td {
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .pricing-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .total-row {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-size: 1.2em;
+    }
+    
+    .total-row td {
+      padding: 20px 15px;
+      border: none;
+    }
+    
+    /* Benchmark */
+    .benchmark-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .benchmark-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #e8eaff;
+      text-align: center;
+    }
+    
+    .benchmark-logo {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    
+    .benchmark-name {
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 10px;
+    }
+    
+    .benchmark-features {
+      font-size: 0.85em;
+      color: #666;
+      text-align: left;
+    }
+    
+    /* Visual Timeline */
+    .gantt-chart {
+      margin: 30px 0;
+      overflow-x: auto;
+    }
+    
+    .gantt-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .gantt-label {
+      width: 200px;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+    
+    .gantt-bar-container {
+      flex: 1;
+      height: 30px;
+      background: #f0f0f0;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .gantt-bar {
+      height: 100%;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.8em;
+      font-weight: 600;
+    }
+    
+    .gantt-bar.reviews { 
+      background: linear-gradient(90deg, #f6d365, #fda085);
+      width: 28.5%;
+    }
+    .gantt-bar.coupons { 
+      background: linear-gradient(90deg, #a8edea, #fed6e3);
+      width: 21.5%;
+      margin-left: 28.5%;
+      color: #333;
+    }
+    .gantt-bar.analytics { 
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      width: 35.7%;
+      margin-left: 50%;
+    }
+    .gantt-bar.testing { 
+      background: linear-gradient(90deg, #10b981, #059669);
+      width: 14.3%;
+      margin-left: 85.7%;
+    }
+    
+    .gantt-weeks {
+      display: flex;
+      margin-left: 200px;
+      margin-bottom: 10px;
+    }
+    
+    .gantt-week {
+      flex: 1;
+      text-align: center;
+      font-size: 0.75em;
+      color: #666;
+    }
+    
+    /* Footer */
+    .footer {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .footer h3 {
+      margin-bottom: 15px;
+    }
+    
+    .footer p {
+      opacity: 0.8;
+      margin: 5px 0;
+    }
+    
+    /* Print */
+    @media print {
+      body { background: white; }
+      .container { box-shadow: none; }
+      .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .module-grid, .feature-grid, .benchmark-grid {
+        grid-template-columns: 1fr;
+      }
+      .phase-features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>🚀 CE Platform Phase 2</h1>
+      <div class="subtitle">Premium Features Roadmap</div>
+      <div class="badge">🎯 Mục tiêu: Chuẩn 5 sao - Vượt trội Amazon, Shopify, Alibaba</div>
+    </div>
+    
+    <!-- Content -->
+    <div class="content">
+      
+      <!-- Overview -->
+      <div class="section">
+        <h2 class="section-title"><span class="emoji">📋</span> Tổng Quan 3 Modules</h2>
+        
+        <div class="module-grid">
+          <div class="module-card reviews">
+            <div class="module-icon">⭐</div>
+            <h3 class="module-title">Reviews & Ratings</h3>
+            <p>Hệ thống đánh giá đa phương tiện với AI sentiment analysis, gamification, và engagement tools.</p>
+            <div class="module-meta">
+              <span class="module-time">3-4 tuần</span>
+              <span class="module-priority">P1 - High</span>
+            </div>
+          </div>
+          
+          <div class="module-card coupons">
+            <div class="module-icon">🎫</div>
+            <h3 class="module-title">Coupon & Discount</h3>
+            <p>Engine khuyến mãi thông minh với tiered discounts, bundles, flash sales, và AI recommendations.</p>
+            <div class="module-meta">
+              <span class="module-time">2-3 tuần</span>
+              <span class="module-priority">P2 - Medium</span>
+            </div>
+          </div>
+          
+          <div class="module-card analytics">
+            <div class="module-icon">📊</div>
+            <h3 class="module-title">Analytics Dashboard</h3>
+            <p>Real-time metrics, customer intelligence, inventory forecasting, và marketing attribution.</p>
+            <div class="module-meta">
+              <span class="module-time">4-5 tuần</span>
+              <span class="module-priority">P3 - High</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Visual Timeline -->
+      <div class="section">
+        <h2 class="section-title"><span class="emoji">📅</span> Timeline Trực Quan</h2>
+        
+        <div class="gantt-chart">
+          <div class="gantt-weeks">
+            <div class="gantt-week">W1</div>
+            <div class="gantt-week">W2</div>
+            <div class="gantt-week">W3</div>
+            <div class="gantt-week">W4</div>
+            <div class="gantt-week">W5</div>
+            <div class="gantt-week">W6</div>
+            <div class="gantt-week">W7</div>
+            <div class="gantt-week">W8</div>
+            <div class="gantt-week">W9</div>
+            <div class="gantt-week">W10</div>
+            <div class="gantt-week">W11</div>
+            <div class="gantt-week">W12</div>
+            <div class="gantt-week">W13</div>
+            <div class="gantt-week">W14</div>
+          </div>
+          
+          <div class="gantt-row">
+            <div class="gantt-label">⭐ Reviews & Ratings</div>
+            <div class="gantt-bar-container">
+              <div class="gantt-bar reviews">Week 1-4</div>
+            </div>
+          </div>
+          
+          <div class="gantt-row">
+            <div class="gantt-label">🎫 Coupon & Discount</div>
+            <div class="gantt-bar-container">
+              <div class="gantt-bar coupons">Week 5-7</div>
+            </div>
+          </div>
+          
+          <div class="gantt-row">
+            <div class="gantt-label">📊 Analytics Dashboard</div>
+            <div class="gantt-bar-container">
+              <div class="gantt-bar analytics">Week 8-12</div>
+            </div>
+          </div>
+          
+          <div class="gantt-row">
+            <div class="gantt-label">🧪 Integration & Test</div>
+            <div class="gantt-bar-container">
+              <div class="gantt-bar testing">W13-14</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Module 1: Reviews -->
+      <div class="section">
+        <h2 class="section-title"><span class="emoji">⭐</span> Module 1: Reviews & Ratings</h2>
+        
+        <div class="benchmark-grid">
+          <div class="benchmark-card">
+            <div class="benchmark-logo">🛒</div>
+            <div class="benchmark-name">Amazon</div>
+            <div class="benchmark-features">
+              • Verified Purchase<br>
+              • Helpful votes<br>
+              • Image reviews<br>
+              • 1 video/review
+            </div>
+          </div>
+          <div class="benchmark-card">
+            <div class="benchmark-logo">🏪</div>
+            <div class="benchmark-name">Alibaba</div>
+            <div class="benchmark-features">
+              • Buyer photos<br>
+              • Seller response<br>
+              • Review incentives<br>
+              • Star seller badge
+            </div>
+          </div>
+          <div class="benchmark-card">
+            <div class="benchmark-logo">🎯</div>
+            <div class="benchmark-name">CE Platform</div>
+            <div class="benchmark-features">
+              • 10 photos + 3 videos<br>
+              • AI sentiment<br>
+              • Gamification<br>
+              • <strong style="color: #667eea">Real-time alerts</strong>
+            </div>
+          </div>
+        </div>
+        
+        <div class="timeline">
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 1.1: Core Review System</h4>
+              <span class="phase-weeks">Week 1</span>
+            </div>
+            <ul class="phase-features">
+              <li>Basic review submission</li>
+              <li>Star rating component</li>
+              <li>Review list + pagination</li>
+              <li>Verified Purchase badge</li>
+              <li>Average rating calc</li>
+              <li>Multi-criteria ratings</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 1.2: Rich Media Reviews</h4>
+              <span class="phase-weeks">Week 2</span>
+            </div>
+            <ul class="phase-features">
+              <li>Drag-drop image upload</li>
+              <li>In-browser video recorder</li>
+              <li>Image gallery lightbox</li>
+              <li>Video with timestamps</li>
+              <li>AI content moderation</li>
+              <li>Auto-compression</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 1.3: Smart Analytics</h4>
+              <span class="phase-weeks">Week 3</span>
+            </div>
+            <ul class="phase-features">
+              <li>Sentiment analysis AI</li>
+              <li>Keyword extraction</li>
+              <li>Rating distribution</li>
+              <li>Trend over time</li>
+              <li>Competitor comparison</li>
+              <li>Auto-generated summary</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 1.4: Engagement</h4>
+              <span class="phase-weeks">Week 4</span>
+            </div>
+            <ul class="phase-features">
+              <li>Review reward points</li>
+              <li>Reviewer badges</li>
+              <li>Leaderboard system</li>
+              <li>Helpful voting</li>
+              <li>Seller response</li>
+              <li>Review reminders</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Module 2: Coupons -->
+      <div class="section">
+        <h2 class="section-title"><span class="emoji">🎫</span> Module 2: Coupon & Discount</h2>
+        
+        <div class="feature-highlight">
+          <h3>🔥 Advanced Discount Types</h3>
+          <div class="feature-grid">
+            <div class="feature-item">
+              <div class="icon">📈</div>
+              <div>Tiered Discounts</div>
+              <small>Mua nhiều giảm nhiều</small>
+            </div>
+            <div class="feature-item">
+              <div class="icon">🎁</div>
+              <div>Buy X Get Y</div>
+              <small>Mua 2 tặng 1</small>
+            </div>
+            <div class="feature-item">
+              <div class="icon">📦</div>
+              <div>Bundle Deals</div>
+              <small>Combo giảm giá</small>
+            </div>
+            <div class="feature-item">
+              <div class="icon">⚡</div>
+              <div>Flash Sales</div>
+              <small>Countdown timer</small>
+            </div>
+            <div class="feature-item">
+              <div class="icon">👥</div>
+              <div>Referral Program</div>
+              <small>Giới thiệu bạn bè</small>
+            </div>
+            <div class="feature-item">
+              <div class="icon">🎂</div>
+              <div>Birthday Discount</div>
+              <small>Ưu đãi sinh nhật</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="timeline">
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 2.1: Core Engine</h4>
+              <span class="phase-weeks">Week 5</span>
+            </div>
+            <ul class="phase-features">
+              <li>Coupon CRUD</li>
+              <li>Code generator</li>
+              <li>Validation engine</li>
+              <li>Apply at checkout</li>
+              <li>Usage tracking</li>
+              <li>Expiry management</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 2.2: Advanced Types</h4>
+              <span class="phase-weeks">Week 6</span>
+            </div>
+            <ul class="phase-features">
+              <li>Tiered discounts</li>
+              <li>Buy X Get Y</li>
+              <li>Bundle builder</li>
+              <li>Flash sale scheduler</li>
+              <li>Countdown component</li>
+              <li>Stacking rules</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 2.3: Smart Promos</h4>
+              <span class="phase-weeks">Week 7</span>
+            </div>
+            <ul class="phase-features">
+              <li>Cart abandonment</li>
+              <li>Price drop alerts</li>
+              <li>Referral program</li>
+              <li>Birthday/Anniversary</li>
+              <li>Win-back campaigns</li>
+              <li>AI recommendations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Module 3: Analytics -->
+      <div class="section">
+        <h2 class="section-title"><span class="emoji">📊</span> Module 3: Analytics Dashboard</h2>
+        
+        <div class="timeline">
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 3.1: Real-time Metrics</h4>
+              <span class="phase-weeks">Week 8</span>
+            </div>
+            <ul class="phase-features">
+              <li>Live visitor counter</li>
+              <li>Active carts value</li>
+              <li>Orders live feed</li>
+              <li>World map visitors</li>
+              <li>Conversion funnel</li>
+              <li>Revenue ticker</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 3.2: Sales Analytics</h4>
+              <span class="phase-weeks">Week 9</span>
+            </div>
+            <ul class="phase-features">
+              <li>Revenue trends</li>
+              <li>Order statistics</li>
+              <li>Top products</li>
+              <li>Category performance</li>
+              <li>Time analysis</li>
+              <li>Geographic sales</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 3.3: Customer Analytics</h4>
+              <span class="phase-weeks">Week 10</span>
+            </div>
+            <ul class="phase-features">
+              <li>Customer segments</li>
+              <li>Cohort analysis</li>
+              <li>RFM matrix</li>
+              <li>Lifetime value</li>
+              <li>Journey mapping</li>
+              <li>Churn prediction</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 3.4: Inventory Analytics</h4>
+              <span class="phase-weeks">Week 11</span>
+            </div>
+            <ul class="phase-features">
+              <li>Stock status</li>
+              <li>Turnover rate</li>
+              <li>Demand forecast</li>
+              <li>Reorder alerts</li>
+              <li>Warehouse utilization</li>
+              <li>Supplier performance</li>
+            </ul>
+          </div>
+          
+          <div class="phase">
+            <div class="phase-header">
+              <h4 class="phase-title">Phase 3.5: Marketing Analytics</h4>
+              <span class="phase-weeks">Week 12</span>
+            </div>
+            <ul class="phase-features">
+              <li>Traffic sources</li>
+              <li>Campaign ROI</li>
+              <li>Email performance</li>
+              <li>Coupon analytics</li>
+              <li>Attribution models</li>
+              <li>A/B test results</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Comparison -->
+      <div class="section">
+        <h2 class="section-title"><span class="emoji">🏆</span> So Sánh Với Đối Thủ</h2>
+        
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Tính năng</th>
+              <th>Amazon</th>
+              <th>Shopify</th>
+              <th>CE Platform</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Video reviews với timestamps</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td><span class="check">✅</span></td>
+            </tr>
+            <tr>
+              <td>AI sentiment analysis</td>
+              <td><span class="check">✅</span></td>
+              <td>❌</td>
+              <td><span class="check">✅</span></td>
+            </tr>
+            <tr>
+              <td>Reviewer gamification</td>
+              <td>Basic</td>
+              <td>❌</td>
+              <td><span class="plus">Advanced</span></td>
+            </tr>
+            <tr>
+              <td>Real-time review notifications</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td><span class="check">✅</span></td>
+            </tr>
+            <tr>
+              <td>Tiered & Bundle discounts</td>
+              <td><span class="check">✅</span></td>
+              <td><span class="check">✅</span></td>
+              <td><span class="check">✅</span></td>
+            </tr>
+            <tr>
+              <td>AI-powered cart recovery</td>
+              <td>Basic</td>
+              <td>App</td>
+              <td><span class="plus">Built-in</span></td>
+            </tr>
+            <tr>
+              <td>Inventory forecasting</td>
+              <td>Seller Central</td>
+              <td>App</td>
+              <td><span class="plus">Built-in AI</span></td>
+            </tr>
+            <tr>
+              <td>Real-time dashboard</td>
+              <td><span class="check">✅</span></td>
+              <td><span class="check">✅</span></td>
+              <td><span class="plus">Live Feed</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pricing -->
+      <div class="section">
+        <h2 class="section-title"><span class="emoji">💰</span> Báo Giá Phase 2</h2>
+        
+        <div class="pricing-section">
+          <table class="pricing-table">
+            <thead>
+              <tr>
+                <th>Module</th>
+                <th>Thời gian</th>
+                <th>Chi phí (VND)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>⭐ Reviews & Ratings (Full)</td>
+                <td>4 tuần</td>
+                <td>45,000,000</td>
+              </tr>
+              <tr>
+                <td>🎫 Coupon & Discount (Full)</td>
+                <td>3 tuần</td>
+                <td>35,000,000</td>
+              </tr>
+              <tr>
+                <td>📊 Analytics Dashboard (Full)</td>
+                <td>5 tuần</td>
+                <td>65,000,000</td>
+              </tr>
+              <tr>
+                <td>🔗 Integration & Testing</td>
+                <td>2 tuần</td>
+                <td>15,000,000</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="total-row">
+                <td><strong>TỔNG PHASE 2</strong></td>
+                <td><strong>14 tuần</strong></td>
+                <td><strong>160,000,000 VND</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+          
+          <h4 style="margin-top: 30px; margin-bottom: 15px; color: #667eea;">Chi tiết từng Module:</h4>
+          
+          <table class="pricing-table" style="font-size: 0.9em;">
+            <thead>
+              <tr>
+                <th>Sub-module</th>
+                <th>Chi phí</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="2" style="background: #f0f0f0; font-weight: 600;">⭐ Reviews & Ratings</td></tr>
+              <tr><td>Core Review System</td><td>10,000,000</td></tr>
+              <tr><td>Rich Media (Photo/Video)</td><td>12,000,000</td></tr>
+              <tr><td>AI Sentiment Analysis</td><td>10,000,000</td></tr>
+              <tr><td>Gamification & Badges</td><td>8,000,000</td></tr>
+              <tr><td>Seller Response System</td><td>5,000,000</td></tr>
+              
+              <tr><td colspan="2" style="background: #f0f0f0; font-weight: 600;">🎫 Coupon & Discount</td></tr>
+              <tr><td>Core Coupon Engine</td><td>10,000,000</td></tr>
+              <tr><td>Advanced Discount Types</td><td>10,000,000</td></tr>
+              <tr><td>Referral Program</td><td>8,000,000</td></tr>
+              <tr><td>Cart Abandonment Recovery</td><td>7,000,000</td></tr>
+              
+              <tr><td colspan="2" style="background: #f0f0f0; font-weight: 600;">📊 Analytics Dashboard</td></tr>
+              <tr><td>Real-time Metrics</td><td>12,000,000</td></tr>
+              <tr><td>Sales Analytics</td><td>12,000,000</td></tr>
+              <tr><td>Customer Analytics + AI</td><td>15,000,000</td></tr>
+              <tr><td>Inventory Forecasting</td><td>13,000,000</td></tr>
+              <tr><td>Marketing Attribution</td><td>13,000,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Summary -->
+      <div class="section">
+        <h2 class="section-title"><span class="emoji">🎯</span> Tổng Kết</h2>
+        
+        <div class="feature-highlight" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+          <h3>✅ Kết quả đạt được sau Phase 2</h3>
+          <div class="feature-grid">
+            <div class="feature-item">
+              <div class="icon">⭐</div>
+              <div>Review System</div>
+              <small>Vượt Amazon về media</small>
+            </div>
+            <div class="feature-item">
+              <div class="icon">🎫</div>
+              <div>Smart Promotions</div>
+              <small>AI-powered discounts</small>
+            </div>
+            <div class="feature-item">
+              <div class="icon">📊</div>
+              <div>Real-time Analytics</div>
+              <small>Live business insights</small>
+            </div>
+          </div>
+        </div>
+        
+        <table class="comparison-table" style="margin-top: 30px;">
+          <thead>
+            <tr>
+              <th>Phase</th>
+              <th>Chi phí</th>
+              <th>Tổng cộng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Phase 1 (Đã hoàn thành)</td>
+              <td>148,000,000 VND</td>
+              <td>148,000,000 VND</td>
+            </tr>
+            <tr>
+              <td>Phase 2 (Premium Features)</td>
+              <td>160,000,000 VND</td>
+              <td>308,000,000 VND</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="2"><strong>TỔNG DỰ ÁN</strong></td>
+              <td><strong>308,000,000 VND</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <h3>📞 Liên Hệ Triển Khai Phase 2</h3>
+      <p>Email: contact@ce.com.vn</p>
+      <p>Phone: (+84) xxx-xxx-xxx</p>
+      <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.7;">
+        © 2024 Creative Engineering | Document v1.0 | 27/12/2024
+      </p>
+    </div>
+    
+  </div>
+</body>
+</html>
+
