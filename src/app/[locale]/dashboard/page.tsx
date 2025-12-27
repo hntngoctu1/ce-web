@@ -43,7 +43,15 @@ export default async function DashboardPage() {
     redirect('/login?callbackUrl=/dashboard');
   }
 
+  // Debug: Log session user ID
+  console.log('[Dashboard] Session user ID:', session.user.id);
+  console.log('[Dashboard] Session user email:', session.user.email);
+
   const { profile, orders } = await getCustomerData(session.user.id);
+  
+  // Debug: Log query results
+  console.log('[Dashboard] Orders found:', orders.length);
+  console.log('[Dashboard] Profile found:', !!profile);
   const loyaltyPoints = profile?.loyaltyPoints || 0;
   const pointsToNext = Math.max(1000 - loyaltyPoints, 0);
 
