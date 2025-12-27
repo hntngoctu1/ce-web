@@ -122,12 +122,22 @@ export class OrderRepository {
     noteInternal?: string | null;
     noteCustomer?: string | null;
   }) {
+    // Validate actorAdminId exists to avoid foreign key violation
+    let validActorId: string | null = null;
+    if (data.actorAdminId) {
+      const userExists = await this.db.user.findUnique({
+        where: { id: data.actorAdminId },
+        select: { id: true },
+      });
+      validActorId = userExists ? data.actorAdminId : null;
+    }
+
     return this.db.orderStatusHistory.create({
       data: {
         orderId: data.orderId,
         fromStatus: data.fromStatus as any,
         toStatus: data.toStatus as any,
-        actorAdminId: data.actorAdminId ?? null,
+        actorAdminId: validActorId,
         noteInternal: data.noteInternal ?? null,
         noteCustomer: data.noteCustomer ?? null,
       },
