@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/shared/database';
 import { handleError, successResponse } from '@/shared/api';
 import { AppError } from '@/shared/errors';
@@ -23,7 +22,7 @@ const applySchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     const body = await request.json();
     const { code, items, subtotal } = applySchema.parse(body);
 

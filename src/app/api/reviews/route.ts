@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/shared/database';
 import { handleError, successResponse, createdResponse } from '@/shared/api';
 import { AppError } from '@/shared/errors';
 
 // GET - List reviews with filters and pagination
 const listSchema = z.object({
-  productId: z.string(),
+  productId: z.string().min(1, 'productId is required'),
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(50).default(10),
   sortBy: z.enum(['newest', 'helpful', 'rating_high', 'rating_low']).default('newest'),
@@ -20,9 +19,20 @@ const listSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    
+    // Check if productId is provided
+    if (!searchParams.get('productId')) {
+      return successResponse({
+        reviews: [],
+        pagination: { page: 1, limit: 10, total: 0, totalPages: 0 },
+        hasMore: false,
+        message: 'productId is required',
+      });
+    }
+    
     const params = listSchema.parse(Object.fromEntries(searchParams));
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     // Build where clause
     const where: any = {
@@ -155,7 +165,7 @@ const createSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session?.user?.id) {
       throw AppError.authRequired();
     }

@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/shared/database';
 import { handleError, successResponse, createdResponse } from '@/shared/api';
 import { AppError } from '@/shared/errors';
@@ -18,7 +17,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const params = listSchema.parse(Object.fromEntries(searchParams));
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     // If code is provided, check single coupon validity
     if (params.code) {
@@ -149,7 +148,7 @@ const createSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (session?.user?.role !== 'ADMIN' && session?.user?.role !== 'EDITOR') {
       throw AppError.forbidden();
     }
