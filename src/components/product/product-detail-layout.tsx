@@ -12,6 +12,7 @@ import { StickyQuoteForm } from '@/components/product/pdp/sticky-quote-form';
 import { StickyMiniCtaBar } from '@/components/product/pdp/sticky-mini-cta-bar';
 import { PdpPurchaseSection } from '@/components/product/pdp/pdp-purchase-section';
 import { SupplierTrustCard } from '@/components/product/pdp/supplier-trust-card';
+import { ProductReviewsSection } from '@/components/product/pdp/product-reviews-section';
 
 type ProductDetailLayoutProps = {
   locale: string;
@@ -232,6 +233,21 @@ export async function ProductDetailLayout({
               value: isVi ? s.valueVi : s.valueEn,
             }))}
           />
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="border-t border-slate-200 bg-slate-50">
+        <div className="mx-auto max-w-[1600px] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+          <div className="mb-8">
+            <p className="mb-1.5 text-xs font-bold uppercase tracking-widest text-ce-primary">
+              {tDetail('relatedKicker')}
+            </p>
+            <h2 className="text-xl font-bold text-slate-900 sm:text-2xl lg:text-3xl">
+              {tCommon('reviews') || 'Reviews'}
+            </h2>
+          </div>
+          <ProductReviewsSection productId={product.id} productName={name} />
         </div>
       </div>
 
