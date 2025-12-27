@@ -1,10 +1,9 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { Plus, Ticket, Search, MoreVertical, Copy, Trash2, Edit } from 'lucide-react';
 
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/shared/database';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -92,7 +91,7 @@ function getDiscountDisplay(coupon: any) {
 }
 
 export default async function AdminCouponsPage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   
   if (!session?.user || !['ADMIN', 'EDITOR'].includes(session.user.role as string)) {
     redirect('/login');

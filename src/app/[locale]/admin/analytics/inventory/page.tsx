@@ -35,55 +35,53 @@ async function getInventoryAnalytics() {
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
 
-  // Get all products with inventory
+  // Get all products with basic info and stock
   const products = await prisma.product.findMany({
     where: { isActive: true },
-    include: {
-      inventoryItems: {
-        include: {
-          warehouse: { select: { name: true } },
-        },
-      },
-      orderItems: {
-        where: {
-          order: {
-            createdAt: { gte: ninetyDaysAgo },
-            orderStatus: { in: ['CONFIRMED', 'PACKING', 'SHIPPED', 'DELIVERED'] },
-          },
-        },
-        select: {
-          quantity: true,
-          createdAt: true,
-        },
-      },
+    select: {
+      id: true,
+      nameVi: true,
+      nameEn: true,
+      sku: true,
+      price: true,
+      stockQuantity: true,
     },
   });
 
+  // Get order items for sales data
+  const orderItems = await prisma.orderItem.findMany({
+    where: {
+      order: {
+        createdAt: { gte: ninetyDaysAgo },
+        orderStatus: { in: ['CONFIRMED', 'PACKING', 'SHIPPED', 'DELIVERED'] },
+      },
+    },
+    select: {
+      productId: true,
+      quantity: true,
+      createdAt: true,
+    },
+  });
+
+  // Group sales by product
+  const salesByProduct = orderItems.reduce((acc, item) => {
+    if (!acc[item.productId]) {
+      acc[item.productId] = { last30: 0, last90: 0 };
+    }
+    acc[item.productId].last90 += item.quantity;
+    if (new Date(item.createdAt) >= thirtyDaysAgo) {
+      acc[item.productId].last30 += item.quantity;
+    }
+    return acc;
+  }, {} as Record<string, { last30: number; last90: number }>);
+
   // Calculate inventory metrics for each product
   const inventoryData = products.map((product) => {
-    const totalStock = product.inventoryItems.reduce(
-      (sum, i) => sum + Number(i.availableQty),
-      0
-    );
-    const reservedStock = product.inventoryItems.reduce(
-      (sum, i) => sum + Number(i.reservedQty),
-      0
-    );
-    const onHandStock = product.inventoryItems.reduce(
-      (sum, i) => sum + Number(i.onHandQty),
-      0
-    );
-
-    // Sales in last 30 days
-    const salesLast30 = product.orderItems
-      .filter((oi) => new Date(oi.createdAt) >= thirtyDaysAgo)
-      .reduce((sum, oi) => sum + oi.quantity, 0);
-
-    // Sales in last 90 days
-    const salesLast90 = product.orderItems.reduce((sum, oi) => sum + oi.quantity, 0);
+    const totalStock = product.stockQuantity || 0;
+    const sales = salesByProduct[product.id] || { last30: 0, last90: 0 };
 
     // Average daily sales
-    const avgDailySales = salesLast30 / 30;
+    const avgDailySales = sales.last30 / 30;
 
     // Days until stockout
     const daysUntilStockout = avgDailySales > 0
@@ -91,7 +89,7 @@ async function getInventoryAnalytics() {
       : totalStock > 0 ? 999 : 0;
 
     // Turnover rate (how many times stock is sold per month)
-    const turnoverRate = onHandStock > 0 ? salesLast30 / onHandStock : 0;
+    const turnoverRate = totalStock > 0 ? sales.last30 / totalStock : 0;
 
     // Category
     let turnoverCategory: TurnoverCategory;
@@ -101,15 +99,11 @@ async function getInventoryAnalytics() {
     else turnoverCategory = 'deadStock';
 
     // Reorder recommendation
-    const reorderPoint = product.inventoryItems[0]?.reorderPointQty
-      ? Number(product.inventoryItems[0].reorderPointQty)
-      : avgDailySales * 14; // 2 weeks safety stock
-    const needsReorder = totalStock <= reorderPoint;
+    const reorderPoint = avgDailySales * 14; // 2 weeks safety stock
+    const needsReorder = totalStock <= reorderPoint && totalStock > 0;
 
     // Recommended order quantity
-    const reorderQty = product.inventoryItems[0]?.reorderQty
-      ? Number(product.inventoryItems[0].reorderQty)
-      : Math.ceil(avgDailySales * 30); // 1 month supply
+    const reorderQty = Math.ceil(avgDailySales * 30); // 1 month supply
 
     return {
       id: product.id,
@@ -117,10 +111,10 @@ async function getInventoryAnalytics() {
       sku: product.sku,
       price: Number(product.price),
       totalStock,
-      reservedStock,
-      onHandStock,
-      salesLast30,
-      salesLast90,
+      reservedStock: 0,
+      onHandStock: totalStock,
+      salesLast30: sales.last30,
+      salesLast90: sales.last90,
       avgDailySales,
       daysUntilStockout,
       turnoverRate,
