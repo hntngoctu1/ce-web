@@ -18,6 +18,10 @@ import {
   Boxes,
   ClipboardList,
   Building2,
+  PieChart,
+  Ticket,
+  Star,
+  TrendingUp,
 } from 'lucide-react';
 import { Logo } from '@/components/layout/logo';
 import { Button } from '@/components/ui/button';
@@ -113,6 +117,51 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                     href: '/admin/warehouse/warehouses',
                     label: t('warehouse.warehouses'),
                     icon: Building2,
+                  },
+                ].map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                  >
+                    <link.icon className="h-4 w-4" />
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Analytics & Marketing */}
+            <div className="mt-5">
+              <p className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+                Analytics & Marketing
+              </p>
+              <div className="space-y-0.5">
+                {[
+                  {
+                    href: '/admin/analytics',
+                    label: 'Dashboard',
+                    icon: PieChart,
+                  },
+                  {
+                    href: '/admin/analytics/customers',
+                    label: 'Khách hàng',
+                    icon: Users,
+                  },
+                  {
+                    href: '/admin/analytics/inventory',
+                    label: 'Tồn kho',
+                    icon: Boxes,
+                  },
+                  {
+                    href: '/admin/analytics/marketing',
+                    label: 'Marketing',
+                    icon: TrendingUp,
+                  },
+                  {
+                    href: '/admin/coupons',
+                    label: 'Mã giảm giá',
+                    icon: Ticket,
                   },
                 ].map((link) => (
                   <Link
