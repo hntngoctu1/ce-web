@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import {
   TrendingUp,
   TrendingDown,
@@ -11,6 +12,9 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   RefreshCw,
+  BarChart3,
+  PieChart,
+  Activity,
 } from 'lucide-react';
 
 import { authOptions } from '@/lib/auth';
@@ -325,6 +329,48 @@ export default async function AnalyticsDashboard() {
           <RefreshCw className="h-4 w-4" />
           Làm mới
         </button>
+      </div>
+
+      {/* Quick Links to Sub-pages */}
+      <div className="mb-8 grid gap-4 md:grid-cols-3">
+        <Link
+          href="/admin/analytics/customers"
+          className="group flex items-center gap-4 rounded-xl border bg-gradient-to-r from-blue-50 to-indigo-50 p-4 transition-all hover:shadow-md"
+        >
+          <div className="rounded-full bg-blue-100 p-3 group-hover:bg-blue-200">
+            <Users className="h-6 w-6 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">Customer Analytics</h3>
+            <p className="text-sm text-gray-500">RFM, Cohort, LTV</p>
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/analytics/inventory"
+          className="group flex items-center gap-4 rounded-xl border bg-gradient-to-r from-green-50 to-emerald-50 p-4 transition-all hover:shadow-md"
+        >
+          <div className="rounded-full bg-green-100 p-3 group-hover:bg-green-200">
+            <Package className="h-6 w-6 text-green-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">Inventory Analytics</h3>
+            <p className="text-sm text-gray-500">Turnover, Forecast, Alerts</p>
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/analytics/marketing"
+          className="group flex items-center gap-4 rounded-xl border bg-gradient-to-r from-purple-50 to-pink-50 p-4 transition-all hover:shadow-md"
+        >
+          <div className="rounded-full bg-purple-100 p-3 group-hover:bg-purple-200">
+            <BarChart3 className="h-6 w-6 text-purple-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">Marketing Analytics</h3>
+            <p className="text-sm text-gray-500">Traffic, Coupons, Campaigns</p>
+          </div>
+        </Link>
       </div>
 
       {/* KPI Cards */}
