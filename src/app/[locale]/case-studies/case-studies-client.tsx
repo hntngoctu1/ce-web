@@ -385,7 +385,7 @@ function CaseCard({
               <div className="mt-4 rounded-lg bg-ce-primary-50 p-4">
                 <Quote className="mb-2 h-5 w-5 text-ce-primary/50" />
                 <p className="text-sm italic text-ce-primary-700">
-                  "{isVi ? useCase.testimonialVi : useCase.testimonialEn}"
+                  &ldquo;{isVi ? useCase.testimonialVi : useCase.testimonialEn}&rdquo;
                 </p>
                 {useCase.testimonialAuthor && (
                   <div className="mt-3 text-xs">

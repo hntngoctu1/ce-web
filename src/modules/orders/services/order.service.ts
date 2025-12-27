@@ -229,7 +229,8 @@ export class OrderService {
 
       // Validate payment amount
       const totalPaid = await repo.getTotalPaid(orderId);
-      const outstanding = order.total - totalPaid;
+      const orderTotal = Number(order.total);
+      const outstanding = orderTotal - totalPaid;
 
       if (input.amount > outstanding) {
         throw new AppError(
@@ -252,7 +253,7 @@ export class OrderService {
       // Update order payment state
       const newTotalPaid = totalPaid + input.amount;
       let paymentState: 'UNPAID' | 'PARTIAL' | 'PAID' = 'UNPAID';
-      if (newTotalPaid >= order.total) {
+      if (newTotalPaid >= orderTotal) {
         paymentState = 'PAID';
       } else if (newTotalPaid > 0) {
         paymentState = 'PARTIAL';
@@ -260,7 +261,7 @@ export class OrderService {
 
       await repo.update(orderId, {
         paidAmount: newTotalPaid,
-        outstandingAmount: order.total - newTotalPaid,
+        outstandingAmount: orderTotal - newTotalPaid,
         paymentState,
         paymentStatus: paymentState === 'PAID' ? 'PAID' : 'PENDING',
       });

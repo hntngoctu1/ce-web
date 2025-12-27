@@ -144,17 +144,18 @@ async function main() {
           const { orderCode } = await allocateOrderCode(tx as any);
           const items = products.slice(0, Math.min(2, products.length)).map((p, idx) => {
             const qty = idx + 1;
+            const price = Number(p.price);
             return {
               productId: p.id,
               productName: p.nameEn,
               productSku: p.sku,
               quantity: qty,
-              unitPrice: p.price,
-              totalPrice: p.price * qty,
+              unitPrice: price,
+              totalPrice: price * qty,
             };
           });
 
-          const subtotal = items.reduce((acc, it) => acc + it.totalPrice, 0);
+          const subtotal = items.reduce((acc, it) => acc + Number(it.totalPrice), 0);
           const total = subtotal;
           const orderDate = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000); // Random date within last 30 days
 

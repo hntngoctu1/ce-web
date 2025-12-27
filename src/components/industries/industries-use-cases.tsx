@@ -99,7 +99,7 @@ function UseCaseCard({ useCase, isVi, variant = 'compact' }: UseCaseCardProps) {
             <div className="mb-4 rounded-lg bg-ce-primary-50/50 p-3">
               <Quote className="mb-1 h-4 w-4 text-ce-primary/50" />
               <p className="text-xs italic text-muted-foreground line-clamp-2">
-                "{testimonial}"
+                &ldquo;{testimonial}&rdquo;
               </p>
               {useCase.testimonialAuthor && (
                 <p className="mt-1 text-xs font-semibold text-ce-primary">
@@ -405,7 +405,7 @@ function FeaturedCaseCard({ useCase, isVi }: { useCase: UseCase; isVi: boolean }
         {testimonial && (
           <div className="mb-6 rounded-xl bg-ce-primary-900 p-4 text-white">
             <Quote className="mb-2 h-5 w-5 text-ce-accent-teal" />
-            <p className="mb-3 text-sm italic leading-relaxed text-white/90">"{testimonial}"</p>
+            <p className="mb-3 text-sm italic leading-relaxed text-white/90">&ldquo;{testimonial}&rdquo;</p>
             {useCase.testimonialAuthor && (
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-xs font-bold">

@@ -5,12 +5,28 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Convert any value to number (handles Prisma Decimal, string, number)
+ */
+export function toNumber(value: unknown): number {
+  if (value === null || value === undefined) return 0;
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') return parseFloat(value) || 0;
+  // Handle Prisma Decimal type
+  if (typeof value === 'object' && value !== null) {
+    const obj = value as { toNumber?: () => number; toString?: () => string };
+    if (typeof obj.toNumber === 'function') return obj.toNumber();
+    if (typeof obj.toString === 'function') return parseFloat(obj.toString()) || 0;
+  }
+  return 0;
+}
+
 export function formatPrice(
-  price: number | string,
+  price: number | string | unknown,
   currency: string = 'VND',
   locale: string = 'vi-VN'
 ): string {
-  const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+  const numPrice = toNumber(price);
 
   return new Intl.NumberFormat(locale, {
     style: 'currency',

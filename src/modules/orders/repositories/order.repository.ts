@@ -191,7 +191,7 @@ export class OrderRepository {
       where: { orderId },
       _sum: { amount: true },
     });
-    return result._sum.amount ?? 0;
+    return Number(result._sum.amount) || 0;
   }
 
   /**

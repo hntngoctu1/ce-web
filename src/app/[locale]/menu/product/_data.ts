@@ -31,8 +31,8 @@ export const getProductListOptionsCached = unstable_cache(
       industries,
       brands,
       priceRange: {
-        min: Math.floor(priceStats._min.price || 0),
-        max: Math.ceil(priceStats._max.price || 1000000),
+        min: Math.floor(Number(priceStats._min.price) || 0),
+        max: Math.ceil(Number(priceStats._max.price) || 1000000),
       },
     };
   },

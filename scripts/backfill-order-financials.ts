@@ -49,7 +49,7 @@ async function main() {
 
         // Set totalAmount from total if missing
         const totalAmount =
-          order.totalAmount && order.totalAmount > 0 ? order.totalAmount : order.total;
+          order.totalAmount && Number(order.totalAmount) > 0 ? order.totalAmount : order.total;
 
         // Set customerKind from buyerType
         const customerKind = order.buyerType === 'BUSINESS' ? 'BUSINESS' : 'INDIVIDUAL';
