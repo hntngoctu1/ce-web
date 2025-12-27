@@ -345,7 +345,7 @@ async function main() {
   console.log(`   ├─ Paid: ${metrics[6]}`);
   console.log(`   └─ Unpaid: ${metrics[7]}`);
   console.log('');
-  console.log(`📈 Total Revenue: ${metrics[8]._sum.total?.toLocaleString('vi-VN')} VND`);
+  console.log(`📈 Total Revenue: ${Number(metrics[8]._sum.total || 0).toLocaleString('vi-VN')} VND`);
 
   // Customer orders
   const customerOrders = await prisma.order.findMany({
@@ -357,7 +357,7 @@ async function main() {
 
   console.log(`\n👤 CUSTOMER ORDERS (${customer.email}):`);
   customerOrders.forEach((o, i) => {
-    console.log(`   ${i + 1}. ${o.orderNumber} | ${o.orderStatus} | ${o.total.toLocaleString('vi-VN')} VND`);
+    console.log(`   ${i + 1}. ${o.orderNumber} | ${o.orderStatus} | ${Number(o.total).toLocaleString('vi-VN')} VND`);
   });
 
   // ==================== SUMMARY ====================
