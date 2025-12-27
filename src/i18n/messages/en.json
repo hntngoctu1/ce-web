@@ -515,9 +515,11 @@
     "status": {
       "ALL": "All",
       "PENDING": "Pending",
+      "CONFIRMED": "Confirmed",
       "SHIPPED": "Shipped",
       "DELIVERED": "Delivered",
-      "CANCELLED": "Cancelled"
+      "CANCELLED": "Cancelled",
+      "RETURN_REQUESTED": "Return Requested"
     },
     "paymentMethod": {
       "cod": "COD",

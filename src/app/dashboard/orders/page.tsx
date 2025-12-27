@@ -19,7 +19,21 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-type StatusKey = 'ALL' | 'PENDING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+// Use new OrderStatus enum values for consistent filtering
+type StatusFilter = 'ALL' | 'PENDING_CONFIRMATION' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELED';
+
+// Map URL params to OrderStatus values
+const STATUS_MAP: Record<string, StatusFilter> = {
+  'ALL': 'ALL',
+  'PENDING': 'PENDING_CONFIRMATION',
+  'CONFIRMED': 'CONFIRMED',
+  'SHIPPED': 'SHIPPED',
+  'DELIVERED': 'DELIVERED',
+  'CANCELLED': 'CANCELED',
+  'CANCELED': 'CANCELED',
+  // Also support direct OrderStatus values
+  'PENDING_CONFIRMATION': 'PENDING_CONFIRMATION',
+};
 
 export default async function OrdersPage({ searchParams }: { searchParams?: { status?: string } }) {
   const locale = await getLocale();
@@ -31,22 +45,23 @@ export default async function OrdersPage({ searchParams }: { searchParams?: { st
     redirect('/login?callbackUrl=/dashboard/orders');
   }
 
-  const requested = (searchParams?.status || 'ALL').toUpperCase() as StatusKey;
-  const activeStatus: StatusKey = ['ALL', 'PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED'].includes(
-    requested
-  )
-    ? requested
-    : 'ALL';
+  const requested = (searchParams?.status || 'ALL').toUpperCase();
+  const activeStatus: StatusFilter = STATUS_MAP[requested] || 'ALL';
 
-  const statusConfig: Record<StatusKey, { badge: any }> = {
-    ALL: { badge: 'secondary' },
-    PENDING: { badge: 'secondary' },
-    SHIPPED: { badge: 'featured' },
-    DELIVERED: { badge: 'ce' },
-    CANCELLED: { badge: 'destructive' },
+  const statusConfig: Record<StatusFilter, { badge: any; label: string }> = {
+    ALL: { badge: 'secondary', label: 'ALL' },
+    PENDING_CONFIRMATION: { badge: 'secondary', label: 'PENDING' },
+    CONFIRMED: { badge: 'featured', label: 'CONFIRMED' },
+    SHIPPED: { badge: 'featured', label: 'SHIPPED' },
+    DELIVERED: { badge: 'ce', label: 'DELIVERED' },
+    CANCELED: { badge: 'destructive', label: 'CANCELLED' },
   };
 
-  const statusLabel = (k: StatusKey) => t(`status.${k}`);
+  const statusLabel = (k: StatusFilter) => {
+    // Use the mapped label for translations
+    const translationKey = statusConfig[k]?.label || k;
+    return t(`status.${translationKey}`);
+  };
 
   const paymentMethodLabel = (paymentMethod?: string | null) => {
     if (!paymentMethod) return t('paymentMethod.unknown');
@@ -69,7 +84,7 @@ export default async function OrdersPage({ searchParams }: { searchParams?: { st
     prisma.order.findMany({
       where: {
         userId: session.user.id,
-        ...(activeStatus === 'ALL' ? {} : { status: activeStatus }),
+        ...(activeStatus === 'ALL' ? {} : { orderStatus: activeStatus }),
       },
       orderBy: { createdAt: 'desc' },
       take: 50,
@@ -78,18 +93,21 @@ export default async function OrdersPage({ searchParams }: { searchParams?: { st
     Promise.all([
       prisma.order.count({ where: { userId: session.user.id } }).then((n) => ['ALL', n] as const),
       prisma.order
-        .count({ where: { userId: session.user.id, status: 'PENDING' } })
-        .then((n) => ['PENDING', n] as const),
+        .count({ where: { userId: session.user.id, orderStatus: 'PENDING_CONFIRMATION' } })
+        .then((n) => ['PENDING_CONFIRMATION', n] as const),
       prisma.order
-        .count({ where: { userId: session.user.id, status: 'SHIPPED' } })
+        .count({ where: { userId: session.user.id, orderStatus: 'CONFIRMED' } })
+        .then((n) => ['CONFIRMED', n] as const),
+      prisma.order
+        .count({ where: { userId: session.user.id, orderStatus: 'SHIPPED' } })
         .then((n) => ['SHIPPED', n] as const),
       prisma.order
-        .count({ where: { userId: session.user.id, status: 'DELIVERED' } })
+        .count({ where: { userId: session.user.id, orderStatus: 'DELIVERED' } })
         .then((n) => ['DELIVERED', n] as const),
       prisma.order
-        .count({ where: { userId: session.user.id, status: 'CANCELLED' } })
-        .then((n) => ['CANCELLED', n] as const),
-    ]).then((pairs) => Object.fromEntries(pairs) as Record<StatusKey, number>),
+        .count({ where: { userId: session.user.id, orderStatus: 'CANCELED' } })
+        .then((n) => ['CANCELED', n] as const),
+    ]).then((pairs) => Object.fromEntries(pairs) as Record<StatusFilter, number>),
   ]);
 
   return (
@@ -112,7 +130,7 @@ export default async function OrdersPage({ searchParams }: { searchParams?: { st
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {(['ALL', 'PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as StatusKey[]).map(
+              {(['ALL', 'PENDING_CONFIRMATION', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELED'] as StatusFilter[]).map(
                 (key) => {
                   const isActive = key === activeStatus;
                   const href =
@@ -182,14 +200,14 @@ export default async function OrdersPage({ searchParams }: { searchParams?: { st
                     </TableHeader>
                     <TableBody>
                       {orders.map((o) => {
-                        const st = (o.status?.toUpperCase() as StatusKey) || 'PENDING';
-                        const stMeta = statusConfig[st] ?? statusConfig.PENDING;
+                        const st = o.orderStatus as StatusFilter;
+                        const stMeta = statusConfig[st] ?? statusConfig.PENDING_CONFIRMATION;
                         const date = formatDate(o.createdAt, fmtLocale, {
                           month: 'short',
                           day: '2-digit',
                           year: 'numeric',
                         });
-                        const total = formatPrice(o.total, o.currency || 'VND', fmtLocale);
+                        const total = formatPrice(o.total.toNumber(), o.currency || 'VND', fmtLocale);
                         const itemsCount =
                           o.items?.reduce((acc, it) => acc + (it.quantity || 0), 0) ?? 0;
                         return (
@@ -226,10 +244,10 @@ export default async function OrdersPage({ searchParams }: { searchParams?: { st
                 {/* Mobile cards */}
                 <div className="grid gap-3 md:hidden">
                   {orders.map((o) => {
-                    const st = (o.status?.toUpperCase() as StatusKey) || 'PENDING';
-                    const stMeta = statusConfig[st] ?? statusConfig.PENDING;
+                    const st = o.orderStatus as StatusFilter;
+                    const stMeta = statusConfig[st] ?? statusConfig.PENDING_CONFIRMATION;
                     const date = formatDate(o.createdAt, fmtLocale);
-                    const total = formatPrice(o.total, o.currency || 'VND', fmtLocale);
+                    const total = formatPrice(o.total.toNumber(), o.currency || 'VND', fmtLocale);
                     const itemsCount =
                       o.items?.reduce((acc, it) => acc + (it.quantity || 0), 0) ?? 0;
                     return (

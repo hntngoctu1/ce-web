@@ -515,9 +515,11 @@
     "status": {
       "ALL": "Tất cả",
       "PENDING": "Chờ xử lý",
+      "CONFIRMED": "Đã xác nhận",
       "SHIPPED": "Đang giao",
       "DELIVERED": "Đã nhận",
-      "CANCELLED": "Đã huỷ"
+      "CANCELLED": "Đã huỷ",
+      "RETURN_REQUESTED": "Yêu cầu trả hàng"
     },
     "paymentMethod": {
       "cod": "COD",

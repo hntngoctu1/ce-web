@@ -96,10 +96,22 @@ export function OrderActions({
     const res = await fetch(input, init);
     const json = await res.json().catch(() => null);
     if (!res.ok) {
-      const base = (json?.error as string | undefined) || 'Request failed';
-      const msg =
-        json?.from && json?.to ? `${base}: ${String(json.from)} → ${String(json.to)}` : base;
-      throw new Error(msg);
+      // Handle structured error response: { success: false, error: { code, message, details } }
+      let errorMsg = 'Request failed';
+      if (json?.error) {
+        if (typeof json.error === 'string') {
+          errorMsg = json.error;
+        } else if (typeof json.error === 'object') {
+          errorMsg = json.error.message || json.error.code || 'Unknown error';
+          // Add transition details if available
+          if (json.error.details?.[0]?.from && json.error.details?.[0]?.to) {
+            errorMsg += `: ${json.error.details[0].from} → ${json.error.details[0].to}`;
+          }
+        }
+      } else if (json?.message) {
+        errorMsg = json.message;
+      }
+      throw new Error(errorMsg);
     }
     return json;
   }

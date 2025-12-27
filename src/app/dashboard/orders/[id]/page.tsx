@@ -19,7 +19,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-type StatusKey = 'PENDING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+import type { OrderStatus } from '@prisma/client';
 
 function safeJsonParse<T>(input: string | null | undefined): T | null {
   if (!input) return null;
@@ -30,12 +30,21 @@ function safeJsonParse<T>(input: string | null | undefined): T | null {
   }
 }
 
-function statusBadge(status?: string | null) {
-  const s = (status || 'PENDING').toUpperCase() as StatusKey;
-  if (s === 'DELIVERED') return { key: 'DELIVERED' as const, variant: 'ce' as const };
-  if (s === 'SHIPPED') return { key: 'SHIPPED' as const, variant: 'featured' as const };
-  if (s === 'CANCELLED') return { key: 'CANCELLED' as const, variant: 'destructive' as const };
-  return { key: 'PENDING' as const, variant: 'secondary' as const };
+// Map orderStatus to badge styling and translation keys
+function statusBadge(orderStatus: OrderStatus) {
+  const config: Record<OrderStatus, { key: string; variant: 'ce' | 'featured' | 'secondary' | 'destructive' }> = {
+    DRAFT: { key: 'PENDING', variant: 'secondary' },
+    PENDING_CONFIRMATION: { key: 'PENDING', variant: 'secondary' },
+    CONFIRMED: { key: 'CONFIRMED', variant: 'featured' },
+    PACKING: { key: 'CONFIRMED', variant: 'featured' },
+    SHIPPED: { key: 'SHIPPED', variant: 'featured' },
+    DELIVERED: { key: 'DELIVERED', variant: 'ce' },
+    RETURN_REQUESTED: { key: 'RETURN_REQUESTED', variant: 'destructive' },
+    RETURNED: { key: 'CANCELLED', variant: 'destructive' },
+    CANCELED: { key: 'CANCELLED', variant: 'destructive' },
+    FAILED: { key: 'CANCELLED', variant: 'destructive' },
+  };
+  return config[orderStatus] || { key: 'PENDING', variant: 'secondary' };
 }
 
 type AddressLabels = { company: string; taxId: string };
@@ -120,11 +129,11 @@ export default async function OrderDetailPage({ params }: { params: { id: string
     notFound();
   }
 
-  const badge = statusBadge(order.status);
+  const badge = statusBadge(order.orderStatus);
   const orderDate = formatDate(order.createdAt, fmtLocale);
   const currency = order.currency || 'VND';
-  const subtotal = formatPrice(order.subtotal, currency, fmtLocale);
-  const total = formatPrice(order.total, currency, fmtLocale);
+  const subtotal = formatPrice(order.subtotal.toNumber(), currency, fmtLocale);
+  const total = formatPrice(order.total.toNumber(), currency, fmtLocale);
 
   const buyer = safeJsonParse<BuyerSnapshot>(order.buyerSnapshot) || {
     customerType: order.buyerType as any,
@@ -226,10 +235,10 @@ export default async function OrderDetailPage({ params }: { params: { id: string
                         </TableCell>
                         <TableCell className="text-right">{it.quantity}</TableCell>
                         <TableCell className="text-right">
-                          {formatPrice(it.unitPrice, currency, fmtLocale)}
+                          {formatPrice(it.unitPrice.toNumber(), currency, fmtLocale)}
                         </TableCell>
                         <TableCell className="text-right font-medium">
-                          {formatPrice(it.totalPrice, currency, fmtLocale)}
+                          {formatPrice(it.totalPrice.toNumber(), currency, fmtLocale)}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -312,19 +321,19 @@ export default async function OrderDetailPage({ params }: { params: { id: string
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">{t('detail.discount')}</span>
                   <span className="font-medium">
-                    {formatPrice(order.discount || 0, currency, fmtLocale)}
+                    {formatPrice(order.discount?.toNumber() || 0, currency, fmtLocale)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">{t('detail.tax')}</span>
                   <span className="font-medium">
-                    {formatPrice(order.tax || 0, currency, fmtLocale)}
+                    {formatPrice(order.tax?.toNumber() || 0, currency, fmtLocale)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">{t('detail.shippingFee')}</span>
                   <span className="font-medium">
-                    {formatPrice(order.shippingCost || 0, currency, fmtLocale)}
+                    {formatPrice(order.shippingCost?.toNumber() || 0, currency, fmtLocale)}
                   </span>
                 </div>
                 <Separator />
