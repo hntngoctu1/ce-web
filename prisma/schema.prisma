@@ -112,6 +112,14 @@ model User {
   orderStatusHistory OrderStatusHistory[] @relation("OrderStatusHistoryActor")
   paymentsRecorded Payment[] @relation("PaymentActor")
   blogPosts       BlogPost[]       @relation("PostAuthor")
+  
+  // Reviews & Coupons
+  reviews         Review[]
+  reviewVotes     ReviewVote[]
+  reviewReports   ReviewReport[]
+  reviewerBadges  ReviewerBadge[]
+  couponCustomers CouponCustomer[]
+  couponUsages    CouponUsage[]
 
   @@index([role])
   @@index([createdAt])
@@ -316,7 +324,8 @@ model ProductGroup {
   updatedAt     DateTime  @updatedAt
 
   // Relations
-  products Product[]
+  products        Product[]
+  couponCategories CouponCategory[]
 
   @@map("product_groups")
 }
@@ -356,6 +365,12 @@ model Product {
   inventoryItems InventoryItem[]
   stockDocumentLines StockDocumentLine[]
   stockMovements StockMovement[]
+  
+  // Reviews & Coupons
+  reviews        Review[]
+  reviewStats    ProductReviewStats?
+  couponProducts CouponProduct[]
+  flashSaleItems FlashSaleItem[]
   
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -397,6 +412,363 @@ model ProductSpec {
 
   @@index([productId])
   @@map("product_specs")
+}
+
+// ==================== REVIEWS & RATINGS ====================
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FLAGGED
+  HIDDEN
+}
+
+enum ReviewMediaType {
+  IMAGE
+  VIDEO
+}
+
+model Review {
+  id              String       @id @default(cuid())
+  productId       String
+  userId          String
+  orderId         String?      // For Verified Purchase badge
+  
+  // Ratings (1-5 stars)
+  overallRating   Int          // Required: 1-5
+  qualityRating   Int?         // Optional: Product quality
+  valueRating     Int?         // Optional: Value for money
+  deliveryRating  Int?         // Optional: Delivery experience
+  
+  // Content
+  title           String?
+  content         String       @db.Text
+  pros            String?      @db.Text  // Advantages
+  cons            String?      @db.Text  // Disadvantages
+  
+  // Verification & Privacy
+  isVerifiedPurchase Boolean   @default(false)
+  isAnonymous        Boolean   @default(false)
+  
+  // Moderation
+  status          ReviewStatus @default(PENDING)
+  moderatedAt     DateTime?
+  moderatedBy     String?
+  rejectReason    String?      @db.Text
+  
+  // Engagement metrics
+  helpfulCount    Int          @default(0)
+  notHelpfulCount Int          @default(0)
+  reportCount     Int          @default(0)
+  
+  // Seller/Admin response
+  sellerResponse    String?    @db.Text
+  sellerRespondedAt DateTime?
+  sellerRespondedBy String?
+  
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  
+  // Relations
+  product         Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order           Order?       @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  media           ReviewMedia[]
+  votes           ReviewVote[]
+  reports         ReviewReport[]
+  
+  @@unique([productId, userId, orderId])  // One review per product per order
+  @@index([productId, status])
+  @@index([userId])
+  @@index([overallRating])
+  @@index([createdAt])
+  @@index([status, createdAt])
+  @@map("reviews")
+}
+
+model ReviewMedia {
+  id        String          @id @default(cuid())
+  reviewId  String
+  type      ReviewMediaType
+  url       String
+  thumbnail String?
+  caption   String?
+  duration  Int?            // For videos (seconds)
+  order     Int             @default(0)
+  createdAt DateTime        @default(now())
+  
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  
+  @@index([reviewId])
+  @@map("review_media")
+}
+
+model ReviewVote {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  isHelpful Boolean  // true = helpful, false = not helpful
+  createdAt DateTime @default(now())
+  
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([reviewId, userId])  // One vote per user per review
+  @@index([reviewId])
+  @@index([userId])
+  @@map("review_votes")
+}
+
+model ReviewReport {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  reason    String   // spam, inappropriate, fake, other
+  details   String?  @db.Text
+  isResolved Boolean @default(false)
+  resolvedAt DateTime?
+  resolvedBy String?
+  createdAt DateTime @default(now())
+  
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([reviewId, userId])  // One report per user per review
+  @@index([reviewId])
+  @@index([isResolved])
+  @@map("review_reports")
+}
+
+// Product review statistics (denormalized for performance)
+model ProductReviewStats {
+  id              String   @id @default(cuid())
+  productId       String   @unique
+  totalReviews    Int      @default(0)
+  averageRating   Decimal  @default(0) @db.Decimal(3, 2)
+  rating5Count    Int      @default(0)
+  rating4Count    Int      @default(0)
+  rating3Count    Int      @default(0)
+  rating2Count    Int      @default(0)
+  rating1Count    Int      @default(0)
+  verifiedCount   Int      @default(0)
+  withMediaCount  Int      @default(0)
+  updatedAt       DateTime @updatedAt
+  
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@map("product_review_stats")
+}
+
+// Reviewer badges & achievements
+model ReviewerBadge {
+  id          String   @id @default(cuid())
+  userId      String
+  badgeType   String   // TOP_REVIEWER, PHOTO_PRO, VIDEO_STAR, TRUSTED_VOICE, EARLY_ADOPTER
+  earnedAt    DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, badgeType])
+  @@index([userId])
+  @@map("reviewer_badges")
+}
+
+// ==================== COUPONS & DISCOUNTS ====================
+
+enum DiscountType {
+  PERCENTAGE        // 10% off
+  FIXED_AMOUNT      // 100,000 VND off
+  FIXED_PRICE       // Set price to X
+  BUY_X_GET_Y       // Buy 2 get 1 free
+  FREE_SHIPPING     // Free shipping
+  BUNDLE            // Bundle discount
+}
+
+enum CouponTarget {
+  ALL               // All products
+  SPECIFIC_PRODUCTS // Selected products only
+  SPECIFIC_CATEGORIES // Selected categories only
+  SPECIFIC_CUSTOMERS // VIP customers only
+  FIRST_ORDER       // New customers only
+  MINIMUM_AMOUNT    // Minimum cart value
+}
+
+enum CouponStatus {
+  ACTIVE
+  INACTIVE
+  EXPIRED
+  EXHAUSTED
+}
+
+model Coupon {
+  id              String       @id @default(cuid())
+  code            String       @unique
+  name            String
+  description     String?      @db.Text
+  
+  // Discount configuration
+  discountType    DiscountType
+  discountValue   Decimal      @db.Decimal(15, 2)  // Percentage or fixed amount
+  maxDiscount     Decimal?     @db.Decimal(15, 2)  // Cap for percentage discounts
+  
+  // Conditions
+  minOrderAmount  Decimal?     @db.Decimal(15, 2)
+  minQuantity     Int?
+  
+  // Usage limits
+  usageLimit      Int?         // Total uses allowed (null = unlimited)
+  usagePerUser    Int          @default(1)  // Uses per customer
+  usedCount       Int          @default(0)
+  
+  // Validity period
+  startsAt        DateTime
+  expiresAt       DateTime?
+  
+  // Status
+  status          CouponStatus @default(ACTIVE)
+  isStackable     Boolean      @default(false)  // Can combine with other coupons
+  priority        Int          @default(0)      // Higher = applied first
+  
+  // Targeting
+  targetType      CouponTarget @default(ALL)
+  
+  // Metadata
+  createdBy       String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  
+  // Relations
+  products        CouponProduct[]
+  categories      CouponCategory[]
+  customers       CouponCustomer[]
+  usages          CouponUsage[]
+  
+  @@index([code])
+  @@index([status, startsAt, expiresAt])
+  @@index([createdAt])
+  @@map("coupons")
+}
+
+model CouponProduct {
+  id        String @id @default(cuid())
+  couponId  String
+  productId String
+  
+  coupon  Coupon  @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@unique([couponId, productId])
+  @@map("coupon_products")
+}
+
+model CouponCategory {
+  id         String @id @default(cuid())
+  couponId   String
+  categoryId String  // ProductGroup ID
+  
+  coupon   Coupon       @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  category ProductGroup @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([couponId, categoryId])
+  @@map("coupon_categories")
+}
+
+model CouponCustomer {
+  id       String @id @default(cuid())
+  couponId String
+  userId   String
+  
+  coupon Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([couponId, userId])
+  @@map("coupon_customers")
+}
+
+model CouponUsage {
+  id           String   @id @default(cuid())
+  couponId     String
+  orderId      String   @unique
+  userId       String?
+  discountAmount Decimal @db.Decimal(15, 2)
+  usedAt       DateTime @default(now())
+  
+  coupon Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  order  Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([couponId])
+  @@index([userId])
+  @@index([usedAt])
+  @@map("coupon_usages")
+}
+
+// Automatic discounts (applied without code)
+model AutomaticDiscount {
+  id              String       @id @default(cuid())
+  name            String
+  description     String?      @db.Text
+  
+  // Trigger type
+  triggerType     String       // CART_TOTAL, CART_QUANTITY, SPECIFIC_PRODUCTS, TIME_BASED, FIRST_ORDER, BIRTHDAY
+  triggerConfig   Json         // Flexible configuration
+  
+  // Discount
+  discountType    DiscountType
+  discountValue   Decimal      @db.Decimal(15, 2)
+  maxDiscount     Decimal?     @db.Decimal(15, 2)
+  
+  // Limits
+  maxUsesTotal    Int?
+  maxUsesPerOrder Int          @default(1)
+  usedCount       Int          @default(0)
+  
+  // Validity
+  startsAt        DateTime
+  expiresAt       DateTime?
+  isActive        Boolean      @default(true)
+  priority        Int          @default(0)
+  
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  
+  @@index([isActive, startsAt, expiresAt])
+  @@index([priority])
+  @@map("automatic_discounts")
+}
+
+// Flash sales
+model FlashSale {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  startsAt    DateTime
+  endsAt      DateTime
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  items FlashSaleItem[]
+  
+  @@index([isActive, startsAt, endsAt])
+  @@map("flash_sales")
+}
+
+model FlashSaleItem {
+  id          String  @id @default(cuid())
+  flashSaleId String
+  productId   String
+  salePrice   Decimal @db.Decimal(15, 2)
+  stockLimit  Int?    // Max quantity for flash sale
+  soldCount   Int     @default(0)
+  
+  flashSale FlashSale @relation(fields: [flashSaleId], references: [id], onDelete: Cascade)
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@unique([flashSaleId, productId])
+  @@index([productId])
+  @@map("flash_sale_items")
 }
 
 // ==================== PARTNERS/BRANDS ====================
@@ -717,6 +1089,10 @@ model Order {
   statusHistory OrderStatusHistory[]
   notificationLogs NotificationLog[]
   payments  Payment[]
+  
+  // Reviews & Coupons
+  reviews      Review[]
+  couponUsage  CouponUsage?
   
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
