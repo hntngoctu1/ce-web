@@ -57,12 +57,20 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
       : doc.lines.map((line) => {
           const qty = new Prisma.Decimal(line.qty);
           const movementType = doc.type;
-          const qtyChangeOnHand =
-            movementType === 'ISSUE' || movementType === 'DEDUCT'
-              ? qty.neg()
-              : movementType === 'ADJUSTMENT'
-                ? qty
-                : qty;
+          
+          // For ADJUSTMENT type, check metadata for direction
+          let qtyChangeOnHand: Prisma.Decimal;
+          if (movementType === 'ISSUE' || movementType === 'DEDUCT') {
+            qtyChangeOnHand = qty.neg();
+          } else if (movementType === 'ADJUSTMENT') {
+            // Check metadata for direction (set by quick-adjust-modal)
+            const metadata = line.metadata as { direction?: 'IN' | 'OUT' } | null;
+            const direction = metadata?.direction || 'IN';
+            qtyChangeOnHand = direction === 'OUT' ? qty.neg() : qty;
+          } else {
+            // GRN - add stock
+            qtyChangeOnHand = qty;
+          }
 
           return {
             documentId: doc.id,

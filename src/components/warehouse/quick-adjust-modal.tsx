@@ -71,6 +71,7 @@ export function QuickAdjustModal({
 
     try {
       // Create an adjustment document
+      // Use signed qty: positive for IN, negative for OUT
       const createRes = await fetch('/api/warehouse/docs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -81,12 +82,8 @@ export function QuickAdjustModal({
           lines: [
             {
               productId,
-              qty: Math.abs(difference),
-              metadata: {
-                adjustmentType: difference > 0 ? 'IN' : 'OUT',
-                previousQty: currentOnHand,
-                newQty: calculatedNewQty,
-              },
+              qty: difference, // Use signed value directly
+              direction: difference > 0 ? 'IN' : 'OUT',
             },
           ],
         }),
@@ -97,10 +94,15 @@ export function QuickAdjustModal({
         throw new Error(data.error || 'Failed to create adjustment');
       }
 
-      const doc = await createRes.json();
+      const createData = await createRes.json();
+      const docId = createData.document?.id || createData.id;
+      
+      if (!docId) {
+        throw new Error('Failed to get document ID');
+      }
 
       // Post the document immediately
-      const postRes = await fetch(`/api/warehouse/docs/${doc.id}/post`, {
+      const postRes = await fetch(`/api/warehouse/docs/${docId}/post`, {
         method: 'POST',
       });
 

@@ -48,7 +48,7 @@ async function getInventoryAnalytics() {
     },
   });
 
-  // Get order items for sales data
+  // Get order items for sales data - include order.createdAt since OrderItem doesn't have createdAt
   const orderItems = await prisma.orderItem.findMany({
     where: {
       order: {
@@ -59,17 +59,20 @@ async function getInventoryAnalytics() {
     select: {
       productId: true,
       quantity: true,
-      createdAt: true,
+      order: {
+        select: { createdAt: true },
+      },
     },
   });
 
   // Group sales by product
   const salesByProduct = orderItems.reduce((acc, item) => {
+    if (!item.productId) return acc;
     if (!acc[item.productId]) {
       acc[item.productId] = { last30: 0, last90: 0 };
     }
     acc[item.productId].last90 += item.quantity;
-    if (new Date(item.createdAt) >= thirtyDaysAgo) {
+    if (new Date(item.order.createdAt) >= thirtyDaysAgo) {
       acc[item.productId].last30 += item.quantity;
     }
     return acc;

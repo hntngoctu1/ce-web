@@ -53,7 +53,7 @@ async function getInventoryAnalytics() {
         },
         select: {
           quantity: true,
-          createdAt: true,
+          order: { select: { createdAt: true } },
         },
       },
     },
@@ -76,7 +76,7 @@ async function getInventoryAnalytics() {
 
     // Sales in last 30 days
     const salesLast30 = product.orderItems
-      .filter((oi) => new Date(oi.createdAt) >= thirtyDaysAgo)
+      .filter((oi) => new Date(oi.order.createdAt) >= thirtyDaysAgo)
       .reduce((sum, oi) => sum + oi.quantity, 0);
 
     // Sales in last 90 days

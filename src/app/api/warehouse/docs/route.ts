@@ -8,9 +8,10 @@ import { ensureDefaultWarehouse, generateDocumentCode } from '@/lib/warehouse';
 
 const lineSchema = z.object({
   productId: z.string().min(1),
-  qty: z.number().positive(),
+  qty: z.number(), // Allow negative for adjustment OUT
   sourceLocationId: z.string().optional().nullable(),
   targetLocationId: z.string().optional().nullable(),
+  direction: z.enum(['IN', 'OUT']).optional(), // For ADJUSTMENT type
 });
 
 const createDocSchema = z.object({
@@ -19,7 +20,17 @@ const createDocSchema = z.object({
   targetWarehouseId: z.string().optional().nullable(),
   note: z.string().optional().nullable(),
   lines: z.array(lineSchema).min(1),
-});
+}).refine(
+  (data) => {
+    // For non-ADJUSTMENT types, qty must be positive
+    if (data.type !== 'ADJUSTMENT') {
+      return data.lines.every((line) => line.qty > 0);
+    }
+    // For ADJUSTMENT, qty can be any non-zero value
+    return data.lines.every((line) => line.qty !== 0);
+  },
+  { message: 'Quantity must be valid for the document type' }
+);
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -121,14 +132,24 @@ export async function POST(req: NextRequest) {
         note: data.note || null,
         createdBy: session.user.id,
         lines: {
-          create: data.lines.map((line) => ({
-            productId: line.productId,
-            qty: new Prisma.Decimal(line.qty),
-            skuSnapshot: '',
-            nameSnapshot: '',
-            sourceLocationId: line.sourceLocationId || null,
-            targetLocationId: line.targetLocationId || null,
-          })),
+          create: data.lines.map((line) => {
+            // For ADJUSTMENT, use absolute qty value, direction determines sign
+            const absQty = Math.abs(line.qty);
+            // Store direction as part of metadata or derive from signed qty
+            const effectiveDirection = line.direction || (line.qty >= 0 ? 'IN' : 'OUT');
+            
+            return {
+              productId: line.productId,
+              qty: new Prisma.Decimal(absQty),
+              skuSnapshot: '',
+              nameSnapshot: '',
+              sourceLocationId: line.sourceLocationId || null,
+              targetLocationId: line.targetLocationId || null,
+              // Store direction in metadata JSON field if available
+              // or use the sign of qty in post route
+              metadata: data.type === 'ADJUSTMENT' ? { direction: effectiveDirection } : undefined,
+            };
+          }),
         },
       },
       include: { lines: true },
